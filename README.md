@@ -14,6 +14,7 @@ trainer can touch how either is measured.
 
 | evidence | result | report |
 |---|---|---|
+| **Shape-grid re-bench, 376 cells (V2, H200)** | **32/32 ops geomean > 1.0 vs max-autotune (overall 1.494×), cache-cold verified; the 10% loss cells reported per-cell** | `reports/rebench_shapes_qwen3.6-27b.md` |
 | 5× stability re-bench vs max-autotune (H200) | **32/32 ops beat it reproducibly** (mean−spread > 1.0); 16 orig + 16 new, 30/32 model-authored | `reports/rebench_stability_qwen3.6-27b.md` |
 | Head-to-head vs expert Triton (Liger/Unsloth/tutorials) | ours faster on all 5 comparable ops (fixed-schedule condition) | `reports/headtohead_experts_qwen3.6-27b.md` |
 | RL vs continue-SFT on 16 unseen ops | RL self-distill taught them (16/16); continue-SFT stalled and was stopped | `reports/discovery_newops_qwen3.6-27b.md` |
