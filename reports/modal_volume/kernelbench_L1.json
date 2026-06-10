@@ -1,0 +1,23 @@
+{
+  "summary": {
+    "level": 1,
+    "n": 1,
+    "problem_ids": [
+      21
+    ],
+    "backend": "triton",
+    "adapter": "outputs/rl_adapter_newops",
+    "compiled": 0,
+    "correct": 0,
+    "correctness_rate": 0.0
+  },
+  "results": [
+    {
+      "problem_id": 21,
+      "gen_head": "import torch\nimport torch.nn as nn\nimport triton\nimport triton.language as tl\n\n@triton.jit\ndef k(x_ptr, out_ptr, n_elements, BLOCK_SIZE: tl.constexpr)",
+      "compiled": false,
+      "correct": false,
+      "note": "no ModelNew/run() in output"
+    }
+  ]
+}
