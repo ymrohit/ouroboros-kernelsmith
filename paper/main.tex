@@ -364,13 +364,14 @@ forward by design) and is excluded from any headline.
 
 A Qwen-style MLP block (add\_rmsnorm $\to$ gate/up GEMMs $\to$ swiglu $\to$ down GEMM)
 runs three ways on identical weights; output verified against eager
-(max err \eteErr) before timing. On H200 with trained kernels:
-$\eteEagerX\times$ vs eager and $\eteCompileX\times$ vs whole-block compile-MA --- \emph{a
-tie, reported as a tie}: GEMMs are \eteGemmFrac\% of the block and identical across paths,
-bounding the achievable win (Amdahl) — though the non-GEMM sub-path itself is
-$\eteNonGemmX\times$ faster. (On an RTX 4090 with gold seeds: $\eteEagerXLocal\times$ /
-$\eteCompileXLocal\times$.) The single-op wins survive composition; they cannot and do not
-claim block-level miracles.
+(max err \eteErr) before timing. With trained kernels (\eteDevice):
+$\eteEagerX\times$ vs eager and $\eteCompileX\times$ vs whole-block compile-MA --- the
+compile-MA comparison is \emph{a tie, reported as a tie}: GEMMs are \eteGemmFrac\% of the
+block and identical across paths, bounding the achievable win (Amdahl), though the
+non-GEMM sub-path itself is $\eteNonGemmX\times$ faster. (On an RTX 4090 with gold seeds the
+same block runs $\eteEagerXLocal\times$ / $\eteCompileXLocal\times$, where the compiler is
+weaker.) The single-op wins survive composition; they cannot and do not claim block-level
+miracles.
 
 \subsection{Teaching 37 unseen operators in one run}
 

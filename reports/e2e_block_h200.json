@@ -1,0 +1,22 @@
+{
+  "device": "NVIDIA H200",
+  "rows": 8192,
+  "hidden": 4096,
+  "ffn": 11008,
+  "kernels": "outputs/best_kernels",
+  "max_abs_err_vs_eager": 0.0029296875,
+  "block_ms": {
+    "eager": 4.118943929672241,
+    "compile_ma": 3.57585608959198,
+    "ours": 3.6028640270233154
+  },
+  "speedup": {
+    "vs_eager": 1.1432,
+    "vs_compile_ma": 0.9925
+  },
+  "nongemm_ms": {
+    "eager": 0.7784959971904755,
+    "ours": 0.07156800106167793
+  },
+  "gemm_fraction_of_eager_block": 0.811
+}
