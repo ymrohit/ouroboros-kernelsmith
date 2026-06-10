@@ -126,12 +126,23 @@ gated, three ways. H200 + trained kernels: **1.148× vs eager, 1.004× vs compil
 reported as a tie)**; 4090 + seeds: 1.085× / 1.301×. Non-GEMM sub-path 8.5–10.1× faster;
 Amdahl ceiling (GEMMs ≈ 83–88% of block) printed in the output. → `reports/e2e_block.json`.
 
-## V2.6 Discovery run on the 37 new ops — IN FLIGHT
-RL self-distill resumed from `rl_adapter_newops` over the 32 new chain ops + 5 standalone
-(111 rounds, H200, `outputs/rl_adapter_v2`). Early rounds: LM valid-rate 12%→71% within 3
-rounds; model already took the archive lead from its own gold seeds on the first 3 ops
-attempted (1.42×/1.48×/1.28× vs compile, all `[LM]`-authored). Verdict lands in
-`reports/kernelsmith_v2.json` + a stability re-bench before anything is claimed.
+## V2.6 Discovery run on the 37 new ops ✅ (validated; stability + grid gates running)
+RL self-distill resumed from `rl_adapter_newops` over the 32 new chain ops + 5 standalone:
+111 rounds, group 8, explore-frac 0.0 (the model wrote EVERY kernel), H200, ~4.5h. Adapter
+`rl_adapter_v2` saved + hard-guard-verified + pushed. → `reports/kernelsmith_v2.json`
+
+- **37/37 ops validated correct AND beat max-autotune on the fresh exit measurement**
+  (winner's-curse-corrected), range 1.16–2.09×. **35/37 winning kernels are LM-authored**
+  (only `softcap_softmax` 1.79× and `rope_interleaved` stayed with their gold seeds).
+- Standouts: `cross_entropy` **2.085×** MA (model beat its own 2.23×-compile gold seed),
+  `rmsnorm_mish` 1.616×, `layernorm_mish` 1.497× — mish/softplus need exp/log overflow
+  guards the model demonstrably LEARNED mid-run: pass-1 valid-rate on softplus ops was
+  1–3/8, pass-2 was 8/8 (self-distill on pass-1's verified winners taught the idiom).
+- Attribution: 617/888 LM kernels verified (69.5%), 101 archive lead-takes, explore arm
+  contributed **zero** kernels.
+- **Product: 69 model-era kernels** (32 v1 + 37 v2). Claims above are single-validation;
+  the 5× stability gate (all 69) and the shape-grid (the 37 new) are running — their
+  reports supersede this section's numbers when they land.
 
 ## V2.7 Hygiene (so the integrity is inspectable)
 Git history (v1 snapshot → every V2 change), top-level README (claim→evidence→bounds→repro),
