@@ -222,7 +222,8 @@ def _gpu_banner():
 
 def _push_hf(local_dir: str, repo_id: str, repo_type: str, label: str):
     """Push an artifact dir to a PRIVATE HF repo. Never crashes the pipeline — a push failure
-    is logged; the artifact is still safe in the Modal volume."""
+    is logged; the artifact is still safe in the Modal volume. reports/ go under a reports/
+    prefix on the hub (earlier pushes flattened them to the repo root — untidy)."""
     tok = os.environ.get("HF_TOKEN", "").strip()
     if not tok:
         print(f"[hf] no HF_TOKEN — skip pushing {label}", flush=True); return
@@ -232,7 +233,9 @@ def _push_hf(local_dir: str, repo_id: str, repo_type: str, label: str):
         from huggingface_hub import HfApi
         api = HfApi(token=tok)
         api.create_repo(repo_id, repo_type=repo_type, private=True, exist_ok=True)
+        prefix = "reports" if local_dir.rstrip("/").endswith("reports") else None
         api.upload_folder(folder_path=local_dir, repo_id=repo_id, repo_type=repo_type,
+                          path_in_repo=prefix,
                           commit_message=f"OUROBOROS: {label}",
                           ignore_patterns=["**/__pycache__/**", "*.lock", "*.tmp"])
         pre = "datasets/" if repo_type == "dataset" else ""
