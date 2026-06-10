@@ -145,10 +145,11 @@ RL self-distill resumed from `rl_adapter_newops` over the 32 new chain ops + 5 s
   1.480×), 37/37 cache-cold, 51/440 loss cells with 46 at the same 16384×2048 regime the
   v1 kernels lose in (two independent runs, one identical boundary).
   → `reports/rebench_shapes_v2_qwen3.6-27b.md`
-- 5× stability gate over all 69: first run completed all-DISCOVERY in every sampled window
-  but the script was print-only (no durable JSON — our own traceability rule); re-running
-  with the patched JSON-emitting script. Final verdict lands in
-  `reports/rebench_stability.json`.
+- **5× stability gate over ALL 69 kernels: PASSED — 69/69 DISCOVERIES** (mean − spread
+  > 1.0 vs max-autotune on 5 fresh runs each; mean of means 1.299×, max spread ±0.052;
+  weakest 1.113 ± 0.015, strongest `cross_entropy` 2.038 ± 0.031). Durable per-sample JSON:
+  `reports/rebench_stability_v2.json` (+ .md). The print-only first run was re-done after
+  it failed our own traceability rule — recorded in the report's provenance note.
 
 ## V2.7 Hygiene (so the integrity is inspectable)
 Git history (v1 snapshot → every V2 change), top-level README (claim→evidence→bounds→repro),

@@ -1,0 +1,1112 @@
+{
+  "k": 5,
+  "discovery_bar": "mean - pstdev > 1.0 vs max-autotune",
+  "n_ops": 69,
+  "n_discoveries": 69,
+  "per_op": {
+    "add_layernorm": {
+      "verdict": "DISCOVERY (beats max-autotune, robust)",
+      "mean_vs_maxauto": 1.1712,
+      "spread": 0.0121,
+      "min": 1.1565,
+      "max": 1.1934,
+      "mean_vs_compile": 1.2402,
+      "raw_vs_maxauto": [
+        1.1706,
+        1.1675,
+        1.1682,
+        1.1934,
+        1.1565
+      ],
+      "robust": true
+    },
+    "add_layernorm_elu": {
+      "verdict": "DISCOVERY (beats max-autotune, robust)",
+      "mean_vs_maxauto": 1.2206,
+      "spread": 0.0162,
+      "min": 1.1993,
+      "max": 1.2418,
+      "mean_vs_compile": 1.226,
+      "raw_vs_maxauto": [
+        1.2418,
+        1.2112,
+        1.2136,
+        1.1993,
+        1.2372
+      ],
+      "robust": true
+    },
+    "add_layernorm_gelu": {
+      "verdict": "DISCOVERY (beats max-autotune, robust)",
+      "mean_vs_maxauto": 1.263,
+      "spread": 0.0218,
+      "min": 1.2378,
+      "max": 1.2928,
+      "mean_vs_compile": 1.3103,
+      "raw_vs_maxauto": [
+        1.265,
+        1.2378,
+        1.2394,
+        1.2928,
+        1.2801
+      ],
+      "robust": true
+    },
+    "add_layernorm_gelu_erf": {
+      "verdict": "DISCOVERY (beats max-autotune, robust)",
+      "mean_vs_maxauto": 1.1132,
+      "spread": 0.0146,
+      "min": 1.0997,
+      "max": 1.1398,
+      "mean_vs_compile": 1.2324,
+      "raw_vs_maxauto": [
+        1.1398,
+        1.1069,
+        1.1175,
+        1.1023,
+        1.0997
+      ],
+      "robust": true
+    },
+    "add_layernorm_hardtanh": {
+      "verdict": "DISCOVERY (beats max-autotune, robust)",
+      "mean_vs_maxauto": 1.1718,
+      "spread": 0.0153,
+      "min": 1.1612,
+      "max": 1.2021,
+      "mean_vs_compile": 1.2005,
+      "raw_vs_maxauto": [
+        1.1612,
+        1.1688,
+        1.2021,
+        1.1636,
+        1.1634
+      ],
+      "robust": true
+    },
+    "add_layernorm_leaky_relu": {
+      "verdict": "DISCOVERY (beats max-autotune, robust)",
+      "mean_vs_maxauto": 1.1682,
+      "spread": 0.0096,
+      "min": 1.1507,
+      "max": 1.1768,
+      "mean_vs_compile": 1.1905,
+      "raw_vs_maxauto": [
+        1.1766,
+        1.1768,
+        1.1666,
+        1.1702,
+        1.1507
+      ],
+      "robust": true
+    },
+    "add_layernorm_mish": {
+      "verdict": "DISCOVERY (beats max-autotune, robust)",
+      "mean_vs_maxauto": 1.3597,
+      "spread": 0.0065,
+      "min": 1.3489,
+      "max": 1.3656,
+      "mean_vs_compile": 1.4663,
+      "raw_vs_maxauto": [
+        1.3656,
+        1.3637,
+        1.3554,
+        1.3647,
+        1.3489
+      ],
+      "robust": true
+    },
+    "add_layernorm_relu": {
+      "verdict": "DISCOVERY (beats max-autotune, robust)",
+      "mean_vs_maxauto": 1.1721,
+      "spread": 0.007,
+      "min": 1.1627,
+      "max": 1.1843,
+      "mean_vs_compile": 1.1938,
+      "raw_vs_maxauto": [
+        1.1843,
+        1.1627,
+        1.1715,
+        1.1693,
+        1.1728
+      ],
+      "robust": true
+    },
+    "add_layernorm_relu6": {
+      "verdict": "DISCOVERY (beats max-autotune, robust)",
+      "mean_vs_maxauto": 1.173,
+      "spread": 0.017,
+      "min": 1.144,
+      "max": 1.1918,
+      "mean_vs_compile": 1.1975,
+      "raw_vs_maxauto": [
+        1.165,
+        1.144,
+        1.1849,
+        1.1792,
+        1.1918
+      ],
+      "robust": true
+    },
+    "add_layernorm_selu": {
+      "verdict": "DISCOVERY (beats max-autotune, robust)",
+      "mean_vs_maxauto": 1.2083,
+      "spread": 0.0138,
+      "min": 1.1978,
+      "max": 1.2352,
+      "mean_vs_compile": 1.2039,
+      "raw_vs_maxauto": [
+        1.2064,
+        1.2352,
+        1.2029,
+        1.1978,
+        1.1993
+      ],
+      "robust": true
+    },
+    "add_layernorm_sigmoid": {
+      "verdict": "DISCOVERY (beats max-autotune, robust)",
+      "mean_vs_maxauto": 1.1487,
+      "spread": 0.0038,
+      "min": 1.1433,
+      "max": 1.1546,
+      "mean_vs_compile": 1.1469,
+      "raw_vs_maxauto": [
+        1.1462,
+        1.1487,
+        1.1505,
+        1.1546,
+        1.1433
+      ],
+      "robust": true
+    },
+    "add_layernorm_silu": {
+      "verdict": "DISCOVERY (beats max-autotune, robust)",
+      "mean_vs_maxauto": 1.1209,
+      "spread": 0.0035,
+      "min": 1.115,
+      "max": 1.1257,
+      "mean_vs_compile": 1.1217,
+      "raw_vs_maxauto": [
+        1.1257,
+        1.1208,
+        1.115,
+        1.1205,
+        1.1224
+      ],
+      "robust": true
+    },
+    "add_layernorm_softplus": {
+      "verdict": "DISCOVERY (beats max-autotune, robust)",
+      "mean_vs_maxauto": 1.2243,
+      "spread": 0.0211,
+      "min": 1.2043,
+      "max": 1.2567,
+      "mean_vs_compile": 1.3742,
+      "raw_vs_maxauto": [
+        1.2567,
+        1.2043,
+        1.2139,
+        1.2051,
+        1.2416
+      ],
+      "robust": true
+    },
+    "add_layernorm_square": {
+      "verdict": "DISCOVERY (beats max-autotune, robust)",
+      "mean_vs_maxauto": 1.1675,
+      "spread": 0.0026,
+      "min": 1.1636,
+      "max": 1.1705,
+      "mean_vs_compile": 1.2339,
+      "raw_vs_maxauto": [
+        1.1705,
+        1.1698,
+        1.1656,
+        1.1636,
+        1.168
+      ],
+      "robust": true
+    },
+    "add_layernorm_tanh": {
+      "verdict": "DISCOVERY (beats max-autotune, robust)",
+      "mean_vs_maxauto": 1.2326,
+      "spread": 0.0065,
+      "min": 1.2231,
+      "max": 1.2434,
+      "mean_vs_compile": 1.2951,
+      "raw_vs_maxauto": [
+        1.2301,
+        1.2337,
+        1.2326,
+        1.2231,
+        1.2434
+      ],
+      "robust": true
+    },
+    "add_rmsnorm": {
+      "verdict": "DISCOVERY (beats max-autotune, robust)",
+      "mean_vs_maxauto": 1.2112,
+      "spread": 0.0136,
+      "min": 1.1929,
+      "max": 1.2319,
+      "mean_vs_compile": 1.2099,
+      "raw_vs_maxauto": [
+        1.2201,
+        1.2031,
+        1.1929,
+        1.2319,
+        1.2079
+      ],
+      "robust": true
+    },
+    "add_rmsnorm_elu": {
+      "verdict": "DISCOVERY (beats max-autotune, robust)",
+      "mean_vs_maxauto": 1.2561,
+      "spread": 0.0176,
+      "min": 1.2378,
+      "max": 1.2851,
+      "mean_vs_compile": 1.2571,
+      "raw_vs_maxauto": [
+        1.2673,
+        1.2438,
+        1.2378,
+        1.2465,
+        1.2851
+      ],
+      "robust": true
+    },
+    "add_rmsnorm_gelu": {
+      "verdict": "DISCOVERY (beats max-autotune, robust)",
+      "mean_vs_maxauto": 1.2939,
+      "spread": 0.0109,
+      "min": 1.2788,
+      "max": 1.3106,
+      "mean_vs_compile": 1.2938,
+      "raw_vs_maxauto": [
+        1.2983,
+        1.3106,
+        1.2857,
+        1.2959,
+        1.2788
+      ],
+      "robust": true
+    },
+    "add_rmsnorm_gelu_erf": {
+      "verdict": "DISCOVERY (beats max-autotune, robust)",
+      "mean_vs_maxauto": 1.1658,
+      "spread": 0.0204,
+      "min": 1.1451,
+      "max": 1.1959,
+      "mean_vs_compile": 1.1641,
+      "raw_vs_maxauto": [
+        1.1594,
+        1.1831,
+        1.1959,
+        1.1457,
+        1.1451
+      ],
+      "robust": true
+    },
+    "add_rmsnorm_hardtanh": {
+      "verdict": "DISCOVERY (beats max-autotune, robust)",
+      "mean_vs_maxauto": 1.2356,
+      "spread": 0.0209,
+      "min": 1.205,
+      "max": 1.2646,
+      "mean_vs_compile": 1.2329,
+      "raw_vs_maxauto": [
+        1.224,
+        1.205,
+        1.2646,
+        1.2328,
+        1.2518
+      ],
+      "robust": true
+    },
+    "add_rmsnorm_leaky_relu": {
+      "verdict": "DISCOVERY (beats max-autotune, robust)",
+      "mean_vs_maxauto": 1.2242,
+      "spread": 0.0197,
+      "min": 1.186,
+      "max": 1.2404,
+      "mean_vs_compile": 1.2235,
+      "raw_vs_maxauto": [
+        1.2404,
+        1.2376,
+        1.186,
+        1.2272,
+        1.2297
+      ],
+      "robust": true
+    },
+    "add_rmsnorm_mish": {
+      "verdict": "DISCOVERY (beats max-autotune, robust)",
+      "mean_vs_maxauto": 1.4407,
+      "spread": 0.0077,
+      "min": 1.4313,
+      "max": 1.4542,
+      "mean_vs_compile": 1.4639,
+      "raw_vs_maxauto": [
+        1.4542,
+        1.4313,
+        1.4388,
+        1.4429,
+        1.4365
+      ],
+      "robust": true
+    },
+    "add_rmsnorm_relu": {
+      "verdict": "DISCOVERY (beats max-autotune, robust)",
+      "mean_vs_maxauto": 1.2555,
+      "spread": 0.0198,
+      "min": 1.2342,
+      "max": 1.2887,
+      "mean_vs_compile": 1.2513,
+      "raw_vs_maxauto": [
+        1.2887,
+        1.2666,
+        1.2342,
+        1.2469,
+        1.2412
+      ],
+      "robust": true
+    },
+    "add_rmsnorm_relu6": {
+      "verdict": "DISCOVERY (beats max-autotune, robust)",
+      "mean_vs_maxauto": 1.2239,
+      "spread": 0.0176,
+      "min": 1.2071,
+      "max": 1.2533,
+      "mean_vs_compile": 1.2179,
+      "raw_vs_maxauto": [
+        1.2345,
+        1.2093,
+        1.2071,
+        1.2151,
+        1.2533
+      ],
+      "robust": true
+    },
+    "add_rmsnorm_rope": {
+      "verdict": "DISCOVERY (beats max-autotune, robust)",
+      "mean_vs_maxauto": 1.1911,
+      "spread": 0.0519,
+      "min": 1.1367,
+      "max": 1.2734,
+      "mean_vs_compile": 1.191,
+      "raw_vs_maxauto": [
+        1.1684,
+        1.1367,
+        1.1486,
+        1.2734,
+        1.2286
+      ],
+      "robust": true
+    },
+    "add_rmsnorm_selu": {
+      "verdict": "DISCOVERY (beats max-autotune, robust)",
+      "mean_vs_maxauto": 1.2743,
+      "spread": 0.0168,
+      "min": 1.2597,
+      "max": 1.3067,
+      "mean_vs_compile": 1.2733,
+      "raw_vs_maxauto": [
+        1.2665,
+        1.2735,
+        1.265,
+        1.2597,
+        1.3067
+      ],
+      "robust": true
+    },
+    "add_rmsnorm_sigmoid": {
+      "verdict": "DISCOVERY (beats max-autotune, robust)",
+      "mean_vs_maxauto": 1.215,
+      "spread": 0.006,
+      "min": 1.2048,
+      "max": 1.2213,
+      "mean_vs_compile": 1.2193,
+      "raw_vs_maxauto": [
+        1.2162,
+        1.2048,
+        1.2124,
+        1.2213,
+        1.2201
+      ],
+      "robust": true
+    },
+    "add_rmsnorm_silu": {
+      "verdict": "DISCOVERY (beats max-autotune, robust)",
+      "mean_vs_maxauto": 1.1843,
+      "spread": 0.0133,
+      "min": 1.1687,
+      "max": 1.2019,
+      "mean_vs_compile": 1.1822,
+      "raw_vs_maxauto": [
+        1.1687,
+        1.1819,
+        1.1973,
+        1.2019,
+        1.1719
+      ],
+      "robust": true
+    },
+    "add_rmsnorm_softplus": {
+      "verdict": "DISCOVERY (beats max-autotune, robust)",
+      "mean_vs_maxauto": 1.1848,
+      "spread": 0.0131,
+      "min": 1.1658,
+      "max": 1.1993,
+      "mean_vs_compile": 1.2186,
+      "raw_vs_maxauto": [
+        1.1737,
+        1.1993,
+        1.1876,
+        1.1658,
+        1.1975
+      ],
+      "robust": true
+    },
+    "add_rmsnorm_square": {
+      "verdict": "DISCOVERY (beats max-autotune, robust)",
+      "mean_vs_maxauto": 1.2053,
+      "spread": 0.0084,
+      "min": 1.1909,
+      "max": 1.2171,
+      "mean_vs_compile": 1.2067,
+      "raw_vs_maxauto": [
+        1.2064,
+        1.2171,
+        1.2048,
+        1.1909,
+        1.2071
+      ],
+      "robust": true
+    },
+    "add_rmsnorm_tanh": {
+      "verdict": "DISCOVERY (beats max-autotune, robust)",
+      "mean_vs_maxauto": 1.2454,
+      "spread": 0.0228,
+      "min": 1.2209,
+      "max": 1.2817,
+      "mean_vs_compile": 1.2935,
+      "raw_vs_maxauto": [
+        1.2817,
+        1.2431,
+        1.2209,
+        1.2583,
+        1.2229
+      ],
+      "robust": true
+    },
+    "cross_entropy": {
+      "verdict": "DISCOVERY (beats max-autotune, robust)",
+      "mean_vs_maxauto": 2.0381,
+      "spread": 0.0308,
+      "min": 2.0027,
+      "max": 2.0955,
+      "mean_vs_compile": 2.6588,
+      "raw_vs_maxauto": [
+        2.0955,
+        2.0027,
+        2.0343,
+        2.0319,
+        2.0261
+      ],
+      "robust": true
+    },
+    "geglu": {
+      "verdict": "DISCOVERY (beats max-autotune, robust)",
+      "mean_vs_maxauto": 1.2499,
+      "spread": 0.0263,
+      "min": 1.2243,
+      "max": 1.2891,
+      "mean_vs_compile": 1.2517,
+      "raw_vs_maxauto": [
+        1.2891,
+        1.2243,
+        1.2733,
+        1.2286,
+        1.234
+      ],
+      "robust": true
+    },
+    "glu": {
+      "verdict": "DISCOVERY (beats max-autotune, robust)",
+      "mean_vs_maxauto": 1.2542,
+      "spread": 0.014,
+      "min": 1.2373,
+      "max": 1.2739,
+      "mean_vs_compile": 1.2541,
+      "raw_vs_maxauto": [
+        1.2739,
+        1.243,
+        1.2501,
+        1.2669,
+        1.2373
+      ],
+      "robust": true
+    },
+    "layernorm_elu": {
+      "verdict": "DISCOVERY (beats max-autotune, robust)",
+      "mean_vs_maxauto": 1.2993,
+      "spread": 0.0242,
+      "min": 1.2773,
+      "max": 1.3456,
+      "mean_vs_compile": 1.4792,
+      "raw_vs_maxauto": [
+        1.2929,
+        1.2773,
+        1.2832,
+        1.2974,
+        1.3456
+      ],
+      "robust": true
+    },
+    "layernorm_gelu": {
+      "verdict": "DISCOVERY (beats max-autotune, robust)",
+      "mean_vs_maxauto": 1.4273,
+      "spread": 0.0159,
+      "min": 1.4179,
+      "max": 1.4588,
+      "mean_vs_compile": 1.4839,
+      "raw_vs_maxauto": [
+        1.4185,
+        1.423,
+        1.4183,
+        1.4588,
+        1.4179
+      ],
+      "robust": true
+    },
+    "layernorm_gelu_erf": {
+      "verdict": "DISCOVERY (beats max-autotune, robust)",
+      "mean_vs_maxauto": 1.2309,
+      "spread": 0.0467,
+      "min": 1.1379,
+      "max": 1.2622,
+      "mean_vs_compile": 1.2664,
+      "raw_vs_maxauto": [
+        1.2622,
+        1.2486,
+        1.2516,
+        1.2542,
+        1.1379
+      ],
+      "robust": true
+    },
+    "layernorm_hardtanh": {
+      "verdict": "DISCOVERY (beats max-autotune, robust)",
+      "mean_vs_maxauto": 1.2991,
+      "spread": 0.0075,
+      "min": 1.29,
+      "max": 1.3096,
+      "mean_vs_compile": 1.4575,
+      "raw_vs_maxauto": [
+        1.3007,
+        1.29,
+        1.2914,
+        1.304,
+        1.3096
+      ],
+      "robust": true
+    },
+    "layernorm_leaky_relu": {
+      "verdict": "DISCOVERY (beats max-autotune, robust)",
+      "mean_vs_maxauto": 1.2735,
+      "spread": 0.0158,
+      "min": 1.2515,
+      "max": 1.2905,
+      "mean_vs_compile": 1.4124,
+      "raw_vs_maxauto": [
+        1.2576,
+        1.2905,
+        1.2815,
+        1.2863,
+        1.2515
+      ],
+      "robust": true
+    },
+    "layernorm_mish": {
+      "verdict": "DISCOVERY (beats max-autotune, robust)",
+      "mean_vs_maxauto": 1.4677,
+      "spread": 0.0048,
+      "min": 1.459,
+      "max": 1.4714,
+      "mean_vs_compile": 1.4995,
+      "raw_vs_maxauto": [
+        1.4711,
+        1.471,
+        1.459,
+        1.4714,
+        1.4661
+      ],
+      "robust": true
+    },
+    "layernorm_relu": {
+      "verdict": "DISCOVERY (beats max-autotune, robust)",
+      "mean_vs_maxauto": 1.2849,
+      "spread": 0.0239,
+      "min": 1.2613,
+      "max": 1.3277,
+      "mean_vs_compile": 1.4253,
+      "raw_vs_maxauto": [
+        1.2613,
+        1.3277,
+        1.2868,
+        1.2851,
+        1.2636
+      ],
+      "robust": true
+    },
+    "layernorm_relu6": {
+      "verdict": "DISCOVERY (beats max-autotune, robust)",
+      "mean_vs_maxauto": 1.2762,
+      "spread": 0.0113,
+      "min": 1.2639,
+      "max": 1.292,
+      "mean_vs_compile": 1.4394,
+      "raw_vs_maxauto": [
+        1.292,
+        1.2676,
+        1.2873,
+        1.2702,
+        1.2639
+      ],
+      "robust": true
+    },
+    "layernorm_selu": {
+      "verdict": "DISCOVERY (beats max-autotune, robust)",
+      "mean_vs_maxauto": 1.3024,
+      "spread": 0.0282,
+      "min": 1.2738,
+      "max": 1.355,
+      "mean_vs_compile": 1.4867,
+      "raw_vs_maxauto": [
+        1.355,
+        1.2984,
+        1.3018,
+        1.2828,
+        1.2738
+      ],
+      "robust": true
+    },
+    "layernorm_sigmoid": {
+      "verdict": "DISCOVERY (beats max-autotune, robust)",
+      "mean_vs_maxauto": 1.2506,
+      "spread": 0.0065,
+      "min": 1.2419,
+      "max": 1.2609,
+      "mean_vs_compile": 1.4169,
+      "raw_vs_maxauto": [
+        1.2609,
+        1.2462,
+        1.2419,
+        1.2498,
+        1.2541
+      ],
+      "robust": true
+    },
+    "layernorm_softplus": {
+      "verdict": "DISCOVERY (beats max-autotune, robust)",
+      "mean_vs_maxauto": 1.3563,
+      "spread": 0.0215,
+      "min": 1.3363,
+      "max": 1.3977,
+      "mean_vs_compile": 1.4781,
+      "raw_vs_maxauto": [
+        1.3529,
+        1.3497,
+        1.3447,
+        1.3363,
+        1.3977
+      ],
+      "robust": true
+    },
+    "layernorm_square": {
+      "verdict": "DISCOVERY (beats max-autotune, robust)",
+      "mean_vs_maxauto": 1.2983,
+      "spread": 0.0178,
+      "min": 1.2655,
+      "max": 1.317,
+      "mean_vs_compile": 1.4322,
+      "raw_vs_maxauto": [
+        1.3087,
+        1.2655,
+        1.317,
+        1.3045,
+        1.2958
+      ],
+      "robust": true
+    },
+    "layernorm_tanh": {
+      "verdict": "DISCOVERY (beats max-autotune, robust)",
+      "mean_vs_maxauto": 1.4502,
+      "spread": 0.0079,
+      "min": 1.4411,
+      "max": 1.4608,
+      "mean_vs_compile": 1.5196,
+      "raw_vs_maxauto": [
+        1.4505,
+        1.4417,
+        1.4567,
+        1.4411,
+        1.4608
+      ],
+      "robust": true
+    },
+    "qknorm_rope": {
+      "verdict": "DISCOVERY (beats max-autotune, robust)",
+      "mean_vs_maxauto": 1.2592,
+      "spread": 0.0412,
+      "min": 1.1944,
+      "max": 1.3171,
+      "mean_vs_compile": 1.2542,
+      "raw_vs_maxauto": [
+        1.2675,
+        1.2378,
+        1.2791,
+        1.3171,
+        1.1944
+      ],
+      "robust": true
+    },
+    "reglu": {
+      "verdict": "DISCOVERY (beats max-autotune, robust)",
+      "mean_vs_maxauto": 1.265,
+      "spread": 0.017,
+      "min": 1.2453,
+      "max": 1.2905,
+      "mean_vs_compile": 1.2611,
+      "raw_vs_maxauto": [
+        1.2905,
+        1.2502,
+        1.2609,
+        1.2779,
+        1.2453
+      ],
+      "robust": true
+    },
+    "rmsnorm_elu": {
+      "verdict": "DISCOVERY (beats max-autotune, robust)",
+      "mean_vs_maxauto": 1.307,
+      "spread": 0.0196,
+      "min": 1.2873,
+      "max": 1.3442,
+      "mean_vs_compile": 1.4304,
+      "raw_vs_maxauto": [
+        1.3442,
+        1.2873,
+        1.3047,
+        1.3026,
+        1.2961
+      ],
+      "robust": true
+    },
+    "rmsnorm_gelu": {
+      "verdict": "DISCOVERY (beats max-autotune, robust)",
+      "mean_vs_maxauto": 1.4942,
+      "spread": 0.0267,
+      "min": 1.453,
+      "max": 1.5255,
+      "mean_vs_compile": 1.5409,
+      "raw_vs_maxauto": [
+        1.453,
+        1.5189,
+        1.4774,
+        1.5255,
+        1.4962
+      ],
+      "robust": true
+    },
+    "rmsnorm_gelu_erf": {
+      "verdict": "DISCOVERY (beats max-autotune, robust)",
+      "mean_vs_maxauto": 1.1662,
+      "spread": 0.0413,
+      "min": 1.1261,
+      "max": 1.2446,
+      "mean_vs_compile": 1.3335,
+      "raw_vs_maxauto": [
+        1.1512,
+        1.1429,
+        1.1661,
+        1.1261,
+        1.2446
+      ],
+      "robust": true
+    },
+    "rmsnorm_gemma": {
+      "verdict": "DISCOVERY (beats max-autotune, robust)",
+      "mean_vs_maxauto": 1.2664,
+      "spread": 0.0142,
+      "min": 1.2551,
+      "max": 1.2942,
+      "mean_vs_compile": 1.3414,
+      "raw_vs_maxauto": [
+        1.259,
+        1.2588,
+        1.2942,
+        1.2551,
+        1.2651
+      ],
+      "robust": true
+    },
+    "rmsnorm_hardtanh": {
+      "verdict": "DISCOVERY (beats max-autotune, robust)",
+      "mean_vs_maxauto": 1.2754,
+      "spread": 0.0197,
+      "min": 1.2551,
+      "max": 1.3042,
+      "mean_vs_compile": 1.4367,
+      "raw_vs_maxauto": [
+        1.3042,
+        1.2615,
+        1.2625,
+        1.2936,
+        1.2551
+      ],
+      "robust": true
+    },
+    "rmsnorm_leaky_relu": {
+      "verdict": "DISCOVERY (beats max-autotune, robust)",
+      "mean_vs_maxauto": 1.2814,
+      "spread": 0.022,
+      "min": 1.2646,
+      "max": 1.3246,
+      "mean_vs_compile": 1.3694,
+      "raw_vs_maxauto": [
+        1.3246,
+        1.2765,
+        1.2738,
+        1.2646,
+        1.2674
+      ],
+      "robust": true
+    },
+    "rmsnorm_mish": {
+      "verdict": "DISCOVERY (beats max-autotune, robust)",
+      "mean_vs_maxauto": 1.5557,
+      "spread": 0.0084,
+      "min": 1.5441,
+      "max": 1.5697,
+      "mean_vs_compile": 1.5573,
+      "raw_vs_maxauto": [
+        1.5581,
+        1.5538,
+        1.5697,
+        1.5441,
+        1.5526
+      ],
+      "robust": true
+    },
+    "rmsnorm_relu": {
+      "verdict": "DISCOVERY (beats max-autotune, robust)",
+      "mean_vs_maxauto": 1.3193,
+      "spread": 0.0142,
+      "min": 1.2969,
+      "max": 1.3387,
+      "mean_vs_compile": 1.4132,
+      "raw_vs_maxauto": [
+        1.3182,
+        1.3291,
+        1.3135,
+        1.2969,
+        1.3387
+      ],
+      "robust": true
+    },
+    "rmsnorm_relu6": {
+      "verdict": "DISCOVERY (beats max-autotune, robust)",
+      "mean_vs_maxauto": 1.3082,
+      "spread": 0.0263,
+      "min": 1.2764,
+      "max": 1.3476,
+      "mean_vs_compile": 1.455,
+      "raw_vs_maxauto": [
+        1.3476,
+        1.3007,
+        1.2764,
+        1.3286,
+        1.2877
+      ],
+      "robust": true
+    },
+    "rmsnorm_selu": {
+      "verdict": "DISCOVERY (beats max-autotune, robust)",
+      "mean_vs_maxauto": 1.3302,
+      "spread": 0.0179,
+      "min": 1.3064,
+      "max": 1.3497,
+      "mean_vs_compile": 1.4427,
+      "raw_vs_maxauto": [
+        1.313,
+        1.3489,
+        1.3331,
+        1.3497,
+        1.3064
+      ],
+      "robust": true
+    },
+    "rmsnorm_sigmoid": {
+      "verdict": "DISCOVERY (beats max-autotune, robust)",
+      "mean_vs_maxauto": 1.3101,
+      "spread": 0.0349,
+      "min": 1.2685,
+      "max": 1.3636,
+      "mean_vs_compile": 1.4645,
+      "raw_vs_maxauto": [
+        1.2923,
+        1.2685,
+        1.3374,
+        1.2889,
+        1.3636
+      ],
+      "robust": true
+    },
+    "rmsnorm_silu": {
+      "verdict": "DISCOVERY (beats max-autotune, robust)",
+      "mean_vs_maxauto": 1.2893,
+      "spread": 0.0268,
+      "min": 1.263,
+      "max": 1.3294,
+      "mean_vs_compile": 1.4441,
+      "raw_vs_maxauto": [
+        1.2754,
+        1.266,
+        1.263,
+        1.3127,
+        1.3294
+      ],
+      "robust": true
+    },
+    "rmsnorm_softplus": {
+      "verdict": "DISCOVERY (beats max-autotune, robust)",
+      "mean_vs_maxauto": 1.4196,
+      "spread": 0.0204,
+      "min": 1.3947,
+      "max": 1.447,
+      "mean_vs_compile": 1.5054,
+      "raw_vs_maxauto": [
+        1.447,
+        1.4402,
+        1.4115,
+        1.3947,
+        1.4047
+      ],
+      "robust": true
+    },
+    "rmsnorm_square": {
+      "verdict": "DISCOVERY (beats max-autotune, robust)",
+      "mean_vs_maxauto": 1.277,
+      "spread": 0.0241,
+      "min": 1.2594,
+      "max": 1.3236,
+      "mean_vs_compile": 1.3575,
+      "raw_vs_maxauto": [
+        1.2606,
+        1.2594,
+        1.2644,
+        1.3236,
+        1.2768
+      ],
+      "robust": true
+    },
+    "rmsnorm_tanh": {
+      "verdict": "DISCOVERY (beats max-autotune, robust)",
+      "mean_vs_maxauto": 1.4485,
+      "spread": 0.0404,
+      "min": 1.4164,
+      "max": 1.5283,
+      "mean_vs_compile": 1.5608,
+      "raw_vs_maxauto": [
+        1.5283,
+        1.4282,
+        1.4347,
+        1.4351,
+        1.4164
+      ],
+      "robust": true
+    },
+    "rope_interleaved": {
+      "verdict": "DISCOVERY (beats max-autotune, robust)",
+      "mean_vs_maxauto": 1.2295,
+      "spread": 0.0312,
+      "min": 1.188,
+      "max": 1.2741,
+      "mean_vs_compile": 1.2419,
+      "raw_vs_maxauto": [
+        1.188,
+        1.2522,
+        1.2741,
+        1.2039,
+        1.2293
+      ],
+      "robust": true
+    },
+    "softcap_softmax": {
+      "verdict": "DISCOVERY (beats max-autotune, robust)",
+      "mean_vs_maxauto": 1.7765,
+      "spread": 0.0181,
+      "min": 1.7565,
+      "max": 1.8053,
+      "mean_vs_compile": 1.9281,
+      "raw_vs_maxauto": [
+        1.8053,
+        1.7653,
+        1.7658,
+        1.7565,
+        1.7896
+      ],
+      "robust": true
+    },
+    "softmax": {
+      "verdict": "DISCOVERY (beats max-autotune, robust)",
+      "mean_vs_maxauto": 1.8478,
+      "spread": 0.0281,
+      "min": 1.8262,
+      "max": 1.8983,
+      "mean_vs_compile": 2.045,
+      "raw_vs_maxauto": [
+        1.859,
+        1.8264,
+        1.8262,
+        1.8292,
+        1.8983
+      ],
+      "robust": true
+    },
+    "softmax_scale": {
+      "verdict": "DISCOVERY (beats max-autotune, robust)",
+      "mean_vs_maxauto": 1.4579,
+      "spread": 0.0138,
+      "min": 1.4394,
+      "max": 1.482,
+      "mean_vs_compile": 1.6928,
+      "raw_vs_maxauto": [
+        1.482,
+        1.4573,
+        1.453,
+        1.458,
+        1.4394
+      ],
+      "robust": true
+    },
+    "swiglu": {
+      "verdict": "DISCOVERY (beats max-autotune, robust)",
+      "mean_vs_maxauto": 1.2739,
+      "spread": 0.0176,
+      "min": 1.2436,
+      "max": 1.2932,
+      "mean_vs_compile": 1.275,
+      "raw_vs_maxauto": [
+        1.2895,
+        1.2932,
+        1.2717,
+        1.2714,
+        1.2436
+      ],
+      "robust": true
+    }
+  }
+}

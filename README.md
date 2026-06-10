@@ -2,9 +2,11 @@
 
 **Claim, in one sentence:** a Qwen3.6-27B fine-tuned only by an *immutable verifier*
 (compile → `allclose` vs PyTorch across adversarial shapes/dtypes/magnitudes → CUDA-event
-benchmark) writes Triton fusion kernels that **reproducibly beat `torch.compile`
-max-autotune** — 32/32 ops on H200 in the recorded run — and match-or-beat expert
-hand-written Triton on the comparable ops.
+benchmark) wrote **69 Triton fusion kernels that ALL beat `torch.compile` max-autotune
+reproducibly** (69/69 across 5× fresh runs; geomean > 1.0 for every kernel across a
+shape/dtype grid, cache-cold verified) — and match-or-beat expert hand-written Triton on
+the comparable ops. 67/69 winning kernels are model-authored; the explore arm contributed
+zero.
 
 **The harness is the product.** The model is replaceable; the thing that cannot be faked is
 the referee. Correctness is a boolean, speed is a number, and neither the proposer nor any
@@ -18,6 +20,7 @@ trainer can touch how either is measured.
 | 5× stability re-bench vs max-autotune (H200) | **32/32 ops beat it reproducibly** (mean−spread > 1.0); 16 orig + 16 new, 30/32 model-authored | `reports/rebench_stability_qwen3.6-27b.md` |
 | **V2 discovery run: 37 unseen ops (H200)** | **37/37 validated + beat max-autotune fresh (1.16–2.09×), 35/37 model-authored, explore arm zero** — product now 69 kernels | `reports/kernelsmith_v2.json` |
 | **V2 shape-grid, the 37 new kernels (440 cells)** | **37/37 geomean > 1.0 (overall 1.480×), 37/37 cache-cold; 51 loss cells, 46 in the one known regime** | `reports/rebench_shapes_v2_qwen3.6-27b.md` |
+| **V2 final stability gate, ALL 69 kernels (5× each)** | **69/69 DISCOVERIES** — every kernel beats max-autotune reproducibly; per-sample JSON in-repo | `reports/rebench_stability_v2.md` |
 | Head-to-head vs expert Triton (Liger/Unsloth/tutorials) | ours faster on all 5 comparable ops (fixed-schedule condition) | `reports/headtohead_experts_qwen3.6-27b.md` |
 | RL vs continue-SFT on 16 unseen ops | RL self-distill taught them (16/16); continue-SFT stalled and was stopped | `reports/discovery_newops_qwen3.6-27b.md` |
 | Harness selftest (V2, 30 cases) | 14 gold pass · 13 negative controls rejected · **3 anti-gaming cheats rejected** | `ouroboros/reports/harness_selftest.json` |
