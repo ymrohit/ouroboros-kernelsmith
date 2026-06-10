@@ -1,92 +1,156 @@
 {
-  "layernorm": {
+  "_api_unavailable": [],
+  "cross_entropy": {
     "experts": {
-      "tutorial/layernorm": {
-        "latency_ms": 0.0667,
-        "vs_maxauto": 1.063,
-        "vs_compile": 1.18,
-        "status": "ok"
-      },
-      "unsloth/layernorm": {
-        "latency_ms": 0.0618,
-        "vs_maxauto": 1.109,
-        "vs_compile": 1.228,
+      "liger_api/cross_entropy": {
+        "condition": "library_api",
+        "latency_ms": 0.2257,
+        "vs_maxauto": 0.358,
+        "vs_compile": 0.471,
         "status": "ok"
       }
     },
     "ours": {
       "author": "gold_seed",
-      "latency_ms": 0.0614,
-      "vs_maxauto": 1.164,
-      "vs_compile": 1.287,
+      "latency_ms": 0.0482,
+      "vs_maxauto": 1.711,
+      "vs_compile": 2.237,
+      "status": "ok"
+    }
+  },
+  "geglu": {
+    "experts": {
+      "liger_api/geglu": {
+        "condition": "library_api",
+        "latency_ms": 0.0817,
+        "vs_maxauto": 0.998,
+        "vs_compile": 1.004,
+        "status": "ok"
+      }
+    },
+    "ours": {
+      "author": "MODEL",
+      "latency_ms": 0.0658,
+      "vs_maxauto": 1.246,
+      "vs_compile": 1.242,
+      "status": "ok"
+    }
+  },
+  "layernorm": {
+    "experts": {
+      "tutorial/layernorm": {
+        "condition": "fixed_schedule",
+        "latency_ms": 0.0657,
+        "vs_maxauto": 1.048,
+        "vs_compile": 1.166,
+        "status": "ok"
+      },
+      "unsloth/layernorm": {
+        "condition": "fixed_schedule",
+        "latency_ms": 0.0617,
+        "vs_maxauto": 1.111,
+        "vs_compile": 1.23,
+        "status": "ok"
+      },
+      "liger_api/layer_norm": {
+        "condition": "library_api",
+        "latency_ms": 0.0827,
+        "vs_maxauto": 0.829,
+        "vs_compile": 0.919,
+        "status": "ok"
+      }
+    },
+    "ours": {
+      "author": "gold_seed",
+      "latency_ms": 0.0625,
+      "vs_maxauto": 1.111,
+      "vs_compile": 1.228,
       "status": "ok"
     }
   },
   "relu2": {
     "experts": {
       "liger/relu_squared": {
-        "latency_ms": 0.0547,
-        "vs_maxauto": 1.186,
-        "vs_compile": 1.193,
+        "condition": "fixed_schedule",
+        "latency_ms": 0.0563,
+        "vs_maxauto": 1.217,
+        "vs_compile": 1.221,
         "status": "ok"
       }
     },
     "ours": {
       "author": "gold_seed",
-      "latency_ms": 0.0515,
-      "vs_maxauto": 1.259,
-      "vs_compile": 1.26,
+      "latency_ms": 0.0525,
+      "vs_maxauto": 1.264,
+      "vs_compile": 1.261,
       "status": "ok"
     }
   },
   "rmsnorm": {
     "experts": {
       "unsloth/rms_layernorm": {
-        "latency_ms": 0.0598,
-        "vs_maxauto": 1.166,
-        "vs_compile": 1.228,
+        "condition": "fixed_schedule",
+        "latency_ms": 0.0597,
+        "vs_maxauto": 1.139,
+        "vs_compile": 1.201,
+        "status": "ok"
+      },
+      "liger_api/rms_norm": {
+        "condition": "library_api",
+        "latency_ms": 0.0821,
+        "vs_maxauto": 0.816,
+        "vs_compile": 0.868,
         "status": "ok"
       }
     },
     "ours": {
       "author": "gold_seed",
-      "latency_ms": 0.053,
-      "vs_maxauto": 1.256,
-      "vs_compile": 1.325,
+      "latency_ms": 0.0537,
+      "vs_maxauto": 1.337,
+      "vs_compile": 1.401,
       "status": "ok"
     }
   },
   "softmax": {
     "experts": {
       "tutorial/softmax": {
-        "latency_ms": 0.0544,
-        "vs_maxauto": 1.779,
+        "condition": "fixed_schedule",
+        "latency_ms": 0.0555,
+        "vs_maxauto": 1.782,
         "vs_compile": 2.013,
         "status": "ok"
       }
     },
     "ours": {
       "author": "MODEL",
-      "latency_ms": 0.0535,
-      "vs_maxauto": 1.846,
-      "vs_compile": 2.068,
+      "latency_ms": 0.0562,
+      "vs_maxauto": 1.833,
+      "vs_compile": 2.041,
       "status": "ok"
     }
   },
   "swiglu": {
     "experts": {
       "liger/swiglu": {
+        "condition": "fixed_schedule",
         "latency_ms": 0.0697,
-        "vs_maxauto": 1.142,
-        "vs_compile": 1.159,
+        "vs_maxauto": 1.175,
+        "vs_compile": 1.185,
+        "status": "ok"
+      },
+      "liger_api/swiglu": {
+        "condition": "library_api",
+        "latency_ms": 0.0871,
+        "vs_maxauto": 0.985,
+        "vs_compile": 0.986,
         "status": "ok"
       }
     },
     "ours": {
       "author": "MODEL",
-      "latency_ms": 0.066,
-      "vs_maxauto": 1.235,
-      "vs_compile": 1.224,
+      "latency_ms": 0.0665,
+      "vs_maxauto": 1.229,
+      "vs_compile": 1.235,
       "status": "ok"
     }
   }

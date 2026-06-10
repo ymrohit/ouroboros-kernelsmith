@@ -148,14 +148,21 @@ def main():
           f"~{1/ (1 - (t_ng_eager - t_ng_ours)/t_eager):.3f}x (Amdahl).")
 
     Path(args.out).parent.mkdir(parents=True, exist_ok=True)
-    Path(args.out).write_text(json.dumps({
+    # ALSO write a device-tagged copy so concurrent containers on different GPUs can never
+    # alias each other's e2e result (the 4090 local file once overwrote the H200 one).
+    dev_tag = "h200" if "H200" in torch.cuda.get_device_name(0) else (
+        "4090" if "4090" in torch.cuda.get_device_name(0) else "other")
+    tagged = str(Path(args.out).with_name(f"e2e_block_{dev_tag}.json"))
+    payload = json.dumps({
         "device": torch.cuda.get_device_name(0), "rows": R, "hidden": H, "ffn": F,
         "kernels": str(kdir), "max_abs_err_vs_eager": err,
         "block_ms": {"eager": t_eager, "compile_ma": t_comp, "ours": t_ours},
         "speedup": {"vs_eager": round(t_eager / t_ours, 4), "vs_compile_ma": round(t_comp / t_ours, 4)},
         "nongemm_ms": {"eager": t_ng_eager, "ours": t_ng_ours},
-        "gemm_fraction_of_eager_block": round(gemm_frac, 4)}, indent=2))
-    print(f"  report -> {args.out}")
+        "gemm_fraction_of_eager_block": round(gemm_frac, 4)}, indent=2)
+    Path(args.out).write_text(payload)
+    Path(tagged).write_text(payload)
+    print(f"  report -> {args.out}  (+ device-tagged {tagged})")
 
 
 if __name__ == "__main__":
