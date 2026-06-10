@@ -94,7 +94,7 @@ outranks intuition; the system is designed so that this is cheap to discover."*
 
 Beliefs queued for trial, each cheap to adjudicate with existing infra:
 
-- [ ] **F1 — "The other 46 loss cells need new training ideas."** Belief: the remaining
+- [x] F1 RATIFIED (10/10 flipped) — see reports/f1_transfer_verdict.md
   short-row losses (10 worst chain ops) require something beyond what the invention run
   learned. *Prediction (Claude): NO — resuming from `rl_adapter_invent`, the whole-row
   style transfers immediately (lead-takes in pass 1) and ≥8/10 ops flip to >1.0 vs MA at
@@ -128,3 +128,13 @@ Beliefs queued for trial, each cheap to adjudicate with existing infra:
    ~97% of control. The GRPO term earns nothing on familiar ops; self-distillation +
    verified search carry the loop. Learning's value concentrates on FOREIGN ops (the
    V2/invention runs are the contrast). Single-seed caveat stated. → `reports/ablations.md`.
+
+## F1 adjudicated (2026-06-11) — prediction RATIFIED (the ledger cuts both ways)
+
+F1 ("the loss-cell fix transfers"): **CONFIRMED — 10/10** worst-losing chain ops flipped to
+wins at 16384×2048 (1.20–1.44× vs max-autotune, all model-authored, explore-arm zero),
+resuming from `rl_adapter_invent`. The whole-row schedule family is a transferable skill,
+not per-op luck; the product's one characterized weakness is closed for the chain family.
+→ `reports/f1_transfer_verdict.md`. Note: this prediction was *correct* — pre-registration
+grades the human in both directions, and the referee here ratified rather than overruled.
+Standing falsifications remain at nine; confirmed predictions now one.
