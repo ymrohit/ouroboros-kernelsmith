@@ -1,0 +1,4 @@
+# Local driver only — installed into .venv-modal. The actual training deps (torch, triton,
+# transformers, peft, accelerate, datasets) live in the Modal image (see modal_app.py) and
+# run on Modal's GPU containers, not locally.
+modal>=0.73

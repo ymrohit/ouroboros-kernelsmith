@@ -1,0 +1,8 @@
+.venv-modal/
+__pycache__/
+*.pyc
+trained/
+outputs/
+external/
+*.log
+.hf-cache/
