@@ -173,6 +173,27 @@ def _restore():
             shutil.copytree(src, f"{WORK}/{d}", dirs_exist_ok=True)
 
 
+def _start_periodic_save(interval_s: int = 900):
+    """Commit working-tree artifacts to the volume every `interval_s` while a long phase
+    runs, so a 12h-timeout kill can NEVER lose the in-run checkpoints (the in-container
+    checkpoint files only persist once the volume is committed — previously that happened
+    only AFTER the subprocess exited cleanly). Returns a stop() callable."""
+    import threading
+    stop = threading.Event()
+
+    def _loop():
+        while not stop.wait(interval_s):
+            try:
+                _save()
+                print("[periodic-save] checkpoints committed to volume", flush=True)
+            except Exception as e:  # noqa: BLE001 — never kill the training over a save
+                print(f"[periodic-save] FAILED ({type(e).__name__}: {e}) — will retry", flush=True)
+
+    t = threading.Thread(target=_loop, daemon=True)
+    t.start()
+    return stop.set
+
+
 def _gpu_banner():
     import torch
     print(f"[gpu] cuda={torch.cuda.is_available()} "
@@ -348,10 +369,14 @@ def rl(
     _gpu_banner(); _restore(); _prep_dirs()
     if not os.path.isdir(f"{WORK}/{adapter}"):
         raise RuntimeError(f"adapter '{adapter}' not found in the volume — run `sft` first.")
-    _run([sys.executable, "-u", "rl_kernelsmith.py",
-          "--model", model, "--ops", ops, "--rounds", str(rounds), "--group", str(group),
-          "--no-kl", "--explore-frac", str(explore_frac), "--max-new", str(max_new),
-          "--load-adapter", adapter, "--save-adapter", save_adapter, "--out", out])
+    stop_saver = _start_periodic_save()
+    try:
+        _run([sys.executable, "-u", "rl_kernelsmith.py",
+              "--model", model, "--ops", ops, "--rounds", str(rounds), "--group", str(group),
+              "--no-kl", "--explore-frac", str(explore_frac), "--max-new", str(max_new),
+              "--load-adapter", adapter, "--save-adapter", save_adapter, "--out", out])
+    finally:
+        stop_saver()
     _save()
     # HARD GUARD: do not claim success / push a misleading "done" if the RL adapter didn't save.
     rl_ckpt = f"{WORK}/{save_adapter}/adapter_model.safetensors"
@@ -637,10 +662,14 @@ def train_all(
     _save(); _push_hf(f"{WORK}/outputs", MODEL_REPO, "model", "SFT adapter")
 
     print("\n===== [4/5] RL / self-distill (fusion-heavy ops) → push RL adapter =====", flush=True)
-    _run([sys.executable, "-u", "rl_kernelsmith.py", "--model", model, "--ops", rl_ops,
-          "--rounds", str(rounds), "--group", str(group), "--no-kl", "--explore-frac", "0.0",
-          "--max-new", "1024", "--load-adapter", "outputs/sft_adapter",
-          "--out", "reports/kernelsmith_rl.json"])
+    stop_saver = _start_periodic_save()
+    try:
+        _run([sys.executable, "-u", "rl_kernelsmith.py", "--model", model, "--ops", rl_ops,
+              "--rounds", str(rounds), "--group", str(group), "--no-kl", "--explore-frac", "0.0",
+              "--max-new", "1024", "--load-adapter", "outputs/sft_adapter",
+              "--out", "reports/kernelsmith_rl.json"])
+    finally:
+        stop_saver()
     _save(); _push_hf(f"{WORK}/outputs", MODEL_REPO, "model", "RL final adapter + best kernels")
 
     print("\n===== [5/5] 5x stability re-bench → push reports =====", flush=True)
