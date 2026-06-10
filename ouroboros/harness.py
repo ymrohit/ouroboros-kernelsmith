@@ -46,6 +46,10 @@ from pathlib import Path
 HERE = Path(__file__).resolve().parent
 
 
+class _BenchVerifyError(Exception):
+    """The timed output failed the post-bench allclose — a caching/memoizing kernel."""
+
+
 # ----------------------------------------------------------------------------------------
 @dataclass
 class Result:
@@ -69,7 +73,7 @@ class Result:
 # ============================ PARENT: subprocess driver =================================
 def evaluate(kernel_src: str, spec_name: str, n_shapes: int = 8, n_iters: int = 100,
              seed: int = 0, strong: bool = False, correctness_only: bool = False,
-             timeout: float | None = None) -> Result:
+             rotate: bool = False, timeout: float | None = None) -> Result:
     """Run a candidate kernel through the full referee in an ISOLATED child process.
 
     The child can segfault or hang freely; we reap it. Only a clean JSON verdict on stdout
@@ -78,12 +82,15 @@ def evaluate(kernel_src: str, spec_name: str, n_shapes: int = 8, n_iters: int = 
     strong=True also benchmarks torch.compile(mode="max-autotune") — the strongest honest
     baseline — at the cost of a slow one-time autotune compile (hence the longer timeout).
     correctness_only=True skips ALL benchmarking (returns ok/incorrect from allclose alone) —
-    much cheaper, for building/filtering the SFT corpus where the boolean is all that matters."""
+    much cheaper, for building/filtering the SFT corpus where the boolean is all that matters.
+    rotate=True cycles among 4 distinct input clones inside the timed loop (kernel AND
+    baselines alike) so nothing stays L2-resident across iterations — the cache-cold
+    cross-check for headline numbers."""
     if timeout is None:
         timeout = 300.0 if strong else (20.0 if correctness_only else 40.0)
     req = json.dumps({"kernel_src": kernel_src, "spec_name": spec_name,
                       "n_shapes": n_shapes, "n_iters": n_iters, "seed": seed, "strong": strong,
-                      "correctness_only": correctness_only})
+                      "correctness_only": correctness_only, "rotate": rotate})
     try:
         proc = subprocess.run([sys.executable, str(HERE / "harness.py"), "--worker"],
                               input=req, capture_output=True, text=True, timeout=timeout)
@@ -136,21 +143,33 @@ def _worker(req: dict) -> Result:
         return Result(status="compile_fail", feedback="kernel defines no callable `run(*inputs)`")
 
     # ---- 2. CORRECTNESS: GUARANTEED stress cases (high-scale fp16/bf16, odd N) FIRST, then
-    #         adversarial random sweep. The stress cases make the negative controls fail
-    #         DETERMINISTICALLY — never by seed luck. ----------------------------------------
+    #         THE BENCH SHAPE ITSELF, then the adversarial random sweep. The stress cases make
+    #         the negative controls fail DETERMINISTICALLY — never by seed luck. The bench
+    #         inputs are included so a kernel cannot special-case the (public, fixed) timing
+    #         shape: anything it returns at the bench shape is allclose-checked here first. --
     rng = random.Random(req["seed"])
-    cases = list(spec.stress_inputs()) + [spec.make_inputs(rng) for _ in range(req["n_shapes"])]
+    cases = (list(spec.stress_inputs()) + [spec.bench_inputs()]
+             + [spec.make_inputs(rng) for _ in range(req["n_shapes"])])
     passed = 0
     worst = 0.0
     for inputs in cases:
         ref = spec.reference(*inputs)
         rtol, atol = spec.tol(inputs[0].dtype)
+        clones = [t.clone() for t in inputs]           # kernel gets clones; originals stay pristine
         try:
-            out = run(*[t.clone() for t in inputs])    # clone: kernel must not mutate caller's inputs
+            out = run(*clones)
         except Exception as e:
             torch.cuda.synchronize()
             return Result(status="runtime_fail", n_shapes_passed=passed,
                           feedback=f"{type(e).__name__} on shape {tuple(inputs[0].shape)}/{inputs[0].dtype}: {str(e)[:160]}")
+        # CONTRACT: run() must write a fresh output, never mutate its inputs. Enforced, not
+        # assumed — the bench loop reuses identical args across iters, which is only sound
+        # because this check rejects in-place kernels.
+        for orig, cl in zip(inputs, clones):
+            if not torch.equal(orig, cl):
+                return Result(status="incorrect", n_shapes_passed=passed,
+                              feedback=(f"kernel MUTATES its input ({tuple(orig.shape)}/{orig.dtype}) — "
+                                        "run() must write a fresh output tensor"))
         if out is None or out.shape != ref.shape:
             return Result(status="incorrect", n_shapes_passed=passed,
                           feedback=f"wrong shape: got {None if out is None else tuple(out.shape)} want {tuple(ref.shape)}")
@@ -164,6 +183,7 @@ def _worker(req: dict) -> Result:
                                     f"scale~{inputs[0].float().abs().max():.0f} ({bad} elems over tol {atol:.1e}/{rtol:.1e}) "
                                     f"— likely a reduction/stability bug, not a shape bug"))
         passed += 1
+        del clones, out, ref
 
     # correctness-only mode: the kernel is correct across all adversarial cases; skip the
     # (expensive) benchmark entirely. Used to build/filter the SFT corpus.
@@ -179,18 +199,39 @@ def _worker(req: dict) -> Result:
     except Exception:
         compiled = spec.reference                       # fall back; still honest vs eager
 
-    def _bench(fn, n_iters):
+    rotate = bool(req.get("rotate"))
+
+    def _bench(fn, n_iters, verify_tol=None):
         # Clone the inputs ONCE, OUTSIDE the timed window. Cloning 8192x4096 fp16 tensors is
         # itself a ~134MB GPU memcpy; doing it inside the CUDA-event window would time the
         # copy too and pull every ratio toward 1.0 (the exact contamination this harness
-        # exists to prevent). Kernels write to a fresh output and don't mutate inputs (the
-        # correctness phase enforced that), so identical args across iters is correct.
-        args = [t.clone() for t in bench]
+        # exists to prevent). Kernels write a fresh output and never mutate inputs (the
+        # correctness phase ENFORCES that now), so identical args across iters is correct.
+        #
+        # ANTI-MEMOIZATION: before every timed iteration (outside the event window) one
+        # element of the first input is overwritten with a LARGE in-distribution value (the
+        # stress sweep already uses x64 magnitudes), so a run() that caches its output by
+        # input pointer returns a STALE result whose error is far above the tolerance
+        # envelope — caught by the verify-after-bench allclose below. (A subtle poke is not
+        # enough: perturbing one softmax logit moves outputs ~1e-4, inside fp16 tol.) The
+        # poke is identical for the candidate and both baselines (fair), and is a
+        # single-element write enqueued before the start event (never inside the window).
+        #
+        # rotate=True: cycle among 4 distinct clone-sets so inputs cannot stay L2-resident
+        # across iterations (the cache-cold cross-check). Applied to candidate AND baselines.
+        n_sets = 4 if rotate else 1
+        arg_sets = [[t.clone() for t in bench] for _ in range(n_sets)]
         for _ in range(25):
-            o = fn(*args)                               # warmup: JIT/inductor compile + clock settle
+            o = fn(*arg_sets[0])                        # warmup: JIT/inductor compile + clock settle
         torch.cuda.synchronize()
         times = []
-        for _ in range(n_iters):
+        o = None
+        flat0 = [a[0].view(-1) for a in arg_sets]
+        poke_val = 60.0 if flat0[0].is_floating_point() else 100
+        for i in range(n_iters):
+            args = arg_sets[i % n_sets]
+            f = flat0[i % n_sets]
+            f[i % f.numel()] = poke_val                 # poke: stale caches now err >> tol
             a = torch.cuda.Event(enable_timing=True)
             b = torch.cuda.Event(enable_timing=True)
             a.record()
@@ -198,13 +239,24 @@ def _worker(req: dict) -> Result:
             b.record()
             torch.cuda.synchronize()
             times.append(a.elapsed_time(b))
-            del o
+        if verify_tol is not None:
+            # VERIFY-AFTER-BENCH: the final timed iteration's output must match the reference
+            # on the final (poked) input state. A memoizing/caching run() fails here.
+            rtol, atol = verify_tol
+            final_args = arg_sets[(n_iters - 1) % n_sets]
+            ref_final = spec.reference(*final_args)
+            if o is None or not torch.allclose(o.float(), ref_final.float(), rtol=rtol, atol=atol):
+                raise _BenchVerifyError(
+                    "bench-output verification FAILED: the timed output does not match the "
+                    "reference on the live input state (memoization/caching suspected)")
         return statistics.median(times)
 
     try:
-        t_kernel = _bench(run, req["n_iters"])
+        t_kernel = _bench(run, req["n_iters"], verify_tol=spec.tol(bench[0].dtype))
         t_eager = _bench(eager, req["n_iters"])
         t_comp = _bench(compiled, req["n_iters"])
+    except _BenchVerifyError as e:
+        return Result(status="incorrect", n_shapes_passed=passed, feedback=str(e))
     except Exception as e:
         return Result(status="runtime_fail", correct=True, n_shapes_passed=passed,
                       feedback=f"correct but bench failed: {type(e).__name__}: {str(e)[:160]}")
@@ -254,6 +306,10 @@ def _selftest():
         ("add_layernorm", "add_layernorm_wrong.py", "NEGATIVE-CONTROL (drops residual in stat)", "incorrect"),
         ("geglu", "geglu_wrong.py", "NEGATIVE-CONTROL (SiLU instead of GELU)", "incorrect"),
         ("qknorm_rope", "qknorm_rope_wrong.py", "NEGATIVE-CONTROL (rms scale dropped on rotated half)", "incorrect"),
+        # V2 ANTI-GAMING controls — exploits the v1 harness would have ACCEPTED:
+        ("softmax", "softmax_cheat_shape.py", "ANTI-GAMING (special-cases bench shape)", "incorrect"),
+        ("softmax", "softmax_cheat_memo.py", "ANTI-GAMING (memoizes by input pointer)", "incorrect"),
+        ("silu", "silu_mutate.py", "ANTI-GAMING (mutates input in-place)", "incorrect"),
     ]
     report = {"machine": None, "cases": []}
     try:
