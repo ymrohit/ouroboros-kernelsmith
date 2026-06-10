@@ -69,7 +69,7 @@ the referee to be honest about *whether*.
 From now on, every diagnosis/prediction gets **written down before the run**, so the
 referee can grade the human too. Open predictions to adjudicate next:
 
-- [ ] *Prediction (Claude):* the ablation arms will rank control > distill-only >
+- [x] FALSIFIED (entry 9) — *Prediction (Claude):* the ablation arms will rank control > distill-only >
       no-feedback > no-learn on discoveries; feedback matters most for valid-rate,
       GRPO matters most for speedup. → adjudicated by `reports/ablation_*.json`.
 - [ ] *Prediction (Claude):* entropy/kl_div golds fall to the model given a corpus of
@@ -121,3 +121,10 @@ Beliefs queued for trial, each cheap to adjudicate with existing infra:
   chains; clear gap on cross_entropy/qknorm-class fusions.*
 - [ ] **F7 — "the prompt exemplar is load-bearing."** Arm with signature-only prompts.
   *Prediction: familiar ops barely affected; cold-op valid-rate halves.*
+
+9. **The ablation prediction — mostly falsified (adjudicated 2026-06-10 late).** Predicted
+   control > distill-only > no-feedback > no-learn; measured: all arms 8/8 discoveries,
+   **distill-only BEAT control on geomean (1.361 vs 1.338)**, frozen best-of-N captured
+   ~97% of control. The GRPO term earns nothing on familiar ops; self-distillation +
+   verified search carry the loop. Learning's value concentrates on FOREIGN ops (the
+   V2/invention runs are the contrast). Single-seed caveat stated. → `reports/ablations.md`.

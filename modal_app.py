@@ -174,14 +174,32 @@ def _run(cmd: list[str]):
         raise subprocess.CalledProcessError(rc, cmd)
 
 
+import time as _time
+_CONTAINER_START = _time.time()    # container boot; _restore's copytree PRESERVES old mtimes,
+                                   # so restore-time copies sort below this baseline.
+
+
 def _save():
-    """Persist produced artifacts to the volume."""
+    """Persist produced artifacts to the volume — but ONLY files this container actually
+    modified (mtime >= container start). Without the guard, concurrent apps re-write the
+    STALE restore-time copies of each other's reports and can overwrite a newer file with
+    an older one (this bit us: a finished arm's final JSON was clobbered back to a mid-run
+    checkpoint by another app's end-of-run save)."""
+    n = 0
     for d in ("outputs", "reports", "datasets"):
         src = f"{WORK}/{d}"
-        if os.path.isdir(src):
-            shutil.copytree(src, f"{VOL}/{d}", dirs_exist_ok=True)
+        if not os.path.isdir(src):
+            continue
+        for root, _dirs, files in os.walk(src):
+            for fn in files:
+                sp = os.path.join(root, fn)
+                if os.path.getmtime(sp) < _CONTAINER_START - 5:
+                    continue                      # restore-time copy of someone else's file
+                dp = f"{VOL}/{d}" + sp[len(src):]
+                os.makedirs(os.path.dirname(dp), exist_ok=True)
+                shutil.copy2(sp, dp); n += 1
     outputs.commit()
-    print(f"[saved] artifacts committed to volume 'ouroboros-outputs'", flush=True)
+    print(f"[saved] {n} container-modified files committed to volume", flush=True)
 
 
 def _restore():

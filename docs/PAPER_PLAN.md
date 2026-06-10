@@ -66,8 +66,8 @@ KernelBench leaderboard entrants. "LLM writes kernels" framing = mental desk-rej
 
 **Ablations (all runnable on Modal with existing code):**
 - [ ] Feedback ablation: loop WITHOUT harness feedback in the prompt (no fix→retry signal).
-- [ ] RL ablation: rejection-sampling + distillation only (no GRPO term) vs full loop.
-- [ ] SFT-only baseline: sample N kernels/op from the SFT adapter, report best-of-N vs RL.
+- [x] RL ablation: DONE (distill-only BEAT control on geomean; GRPO earns nothing on familiar ops).
+- [x] SFT-only best-of-N: DONE (captures ~97% of control geomean on familiar ops).
 - [ ] Explore-arm ablation: explore-frac 0.0 (recorded) vs 0.5 — who finds the wins?
 - [ ] Group size sensitivity (4 vs 8).
 - [ ] Anti-gaming OFF ablation (v1 harness) on an adversarial proposer: demonstrate a cheat
