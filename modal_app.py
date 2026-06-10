@@ -390,6 +390,19 @@ def rebench_shapes(ops: str = "", dtypes: str = "fp16,bf16", n_iters: int = 50,
     _push_hf(f"{WORK}/reports", MODEL_REPO, "model", "shape-grid rebench")
 
 
+@app.function(**COMMON)
+def e2e(rows: int = 8192, kernels: str = "outputs/best_kernels"):
+    """V2 END-TO-END demo: a Qwen-style MLP block on OUR kernels vs eager vs compile-MA.
+    Correctness-gated before timing; Amdahl bound reported (GEMMs dominate and are shared)."""
+    _gpu_banner(); _restore(); _prep_dirs()
+    kd = kernels if os.path.isdir(f"{WORK}/{kernels}") else "seed_kernels"
+    if kd != kernels:
+        print(f"[e2e] {kernels} not in volume; falling back to {kd}", flush=True)
+    _run([sys.executable, "-u", "e2e_block_bench.py", "--kernels", kd, "--rows", str(rows)])
+    _save()
+    _push_hf(f"{WORK}/reports", MODEL_REPO, "model", "e2e block bench")
+
+
 @app.function(gpu="L4", timeout=1200)
 def verify_chains():
     """DOCTRINE GATE for the EXPANDED fusion grammar (chains.py): every NEW chain op's template
