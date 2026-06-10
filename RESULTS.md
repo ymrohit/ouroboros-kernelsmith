@@ -151,7 +151,20 @@ RL self-distill resumed from `rl_adapter_newops` over the 32 new chain ops + 5 s
   `reports/rebench_stability_v2.json` (+ .md). The print-only first run was re-done after
   it failed our own traceability rule — recorded in the report's provenance note.
 
-## V2.7 Hygiene (so the integrity is inspectable)
+## V2.7 Invention experiment ✅ — the loss regime FLIPPED, and the referee overruled the human
+`rl_adapter_v2` + 42 RL rounds on 7 never-trained problems (cumsum scan class, entropy +
+kl_div double-reductions, 4 ops pinned to the characterized 16384×2048 loss regime).
+**7/7 validated + beat max-autotune; 5/7 model-authored.** The published loss cells became
+wins (`add_layernorm_sigmoid` 0.69×→**1.22×**, `layernorm_gelu` 0.88×→**1.45×**) — and NOT
+via the split-row schedules the human diagnosis predicted: the model's simpler whole-row
+kernels falsified the stated hypothesis. `cumsum`: loop-free `tl.cumsum` whole-row beats
+the human carry-loop gold by 47% (invention-lite: primitive selection, labeled precisely).
+`entropy`/`kl_div` resisted (capability boundary, stated). LM valid-rate 49.7% on foreign
+problems vs ~69% familiar. Product → **76 kernels** (stability gate on the 7 running).
+→ `reports/invention_verdict.md` · the referee-overruled-the-human catalog:
+`docs/KEY_FINDINGS.md` (8 recorded instances + open falsifiable predictions).
+
+## V2.8 Hygiene (so the integrity is inspectable)
 Git history (v1 snapshot → every V2 change), top-level README (claim→evidence→bounds→repro),
 MIT LICENSE, CI + 11 CPU tests, `_2068` dataset naming fixed to actual counts, pseudo-KL
 relabeled as the |Δ seq-logprob| drift penalty it is, README_MODAL marked historical,

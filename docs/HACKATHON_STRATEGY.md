@@ -102,3 +102,39 @@ mint your own verified GPU kernel, live."**
   failure mode (model valid-rate ~70–95% per family; sample k=8, take best).
 - Each visitor mint = a new verified kernel for the corpus — the demo feeds the flywheel
   (closing line of the pitch).
+
+---
+
+# Addendum: fun non-kernel domains for the framework (competition angles)
+
+The recipe (small proposer + un-cheatable referee + MEASURED reward + negative controls +
+self-distill) ported to maximum-fun domains, ranked:
+
+1. **OUROBOROS Arcade** (Thousand Token Wood + Best Agent): model writes game POLICIES
+   (`def move(board) -> dir`) for 2048/Snake/Tetris; the engine is the referee, the score
+   is the measured reward, replay re-simulation is the allclose (a policy that lies about
+   its score is caught), the negative control is a policy that monkeypatches the
+   scoreboard — publicly REJECTED. You can WATCH the learning: gen-1 snake hits walls,
+   gen-30 plays properly, live on a projector. Best-Agent bonus on a plate.
+2. **Constrained-Writing Forge** (Thousand Token Wood, sleeper hit): formal constraints
+   are BOOLEAN — lipograms (no letter 'e'), perfect palindromes, pangrams, acrostics,
+   exact-N-word sentences. Referee = string check (instant, CPU, ungameable). Small
+   models fail hilariously cold and visibly improve through the loop — failure is as
+   entertaining as success. Cheapest infra; perfect ≤4B Tiny Titan story.
+3. **Pixel-Perfect Forge** (CSS Battle with an AI player): target image → model writes
+   HTML/CSS → headless render → pixel-match % is the measured score. Human-vs-model on
+   the same target. Visual wow; heavier plumbing (headless Chrome).
+4. **SQL Speedrun** (Backyard AI): model rewrites slow queries; DuckDB proves result
+   equivalence on adversarial data (NULLs/dupes/empty = our odd shapes) + times both.
+   Kernels-for-data-people; practical, CPU-cheap.
+5. **Regex Golf Duel / Puzzle Forge**: versus-game with trivial referee / verified-
+   solvable puzzle generation (solver = referee; unique-solvability is the negative
+   control; solver-steps measure difficulty).
+
+**Why enter one of these alongside kernels:** it proves the FRAMEWORK claim instead of
+asserting it — "same loop, same referee discipline: yesterday it beat torch.compile,
+today it taught itself Snake and wrote a lipogram." Multi-submission rules invite exactly
+this. All reuse the SFT→RL codebase with harness.py/specs.py swapped; train on Modal
+(prize synergy), serve small models on ZeroGPU.
+
+Top picks: **Arcade** (spectacle + Best Agent) or **Forge** (minimal infra + charm).
