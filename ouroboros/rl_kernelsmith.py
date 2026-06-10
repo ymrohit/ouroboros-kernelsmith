@@ -279,6 +279,9 @@ def main():
                     help="fraction of the group spent on templated mutations of the best "
                          "(0.0 = MODEL ONLY: the model must write every kernel itself)")
     ap.add_argument("--out", default=str(HERE / "reports" / "kernelsmith.json"))
+    ap.add_argument("--kernels-dir", default="outputs/best_kernels", dest="kernels_dir",
+                    help="where to checkpoint/save the best kernels (relative to the repo). "
+                         "Ablation arms MUST use their own dir so they never clobber the product.")
     ap.add_argument("--save-adapter", default=None, dest="save_adapter",
                     help="save the RL-trained LoRA adapter here when done (else the RL weights are LOST)")
     # --- ABLATION ARMS (paper section 4; each isolates one ingredient of the loop) ---------
@@ -419,7 +422,7 @@ def main():
         if r % 10 == 0:
             if prop is not None:
                 prop.torch.cuda.empty_cache()          # curb rank-128 VRAM spikes, periodically
-            ckpt = HERE / "outputs" / "best_kernels"; ckpt.mkdir(parents=True, exist_ok=True)
+            ckpt = HERE / args.kernels_dir; ckpt.mkdir(parents=True, exist_ok=True)
             for o in ops:
                 if o in best:
                     (ckpt / f"{o}.py").write_text(best[o][1])
@@ -434,7 +437,7 @@ def main():
     # clean re-measurement, not the lucky in-search peak.
     print("\n[validate] re-benchmarking the archived best per op (fresh + max-autotune) ...")
     Path(args.out).parent.mkdir(parents=True, exist_ok=True)
-    kern_dir = HERE / "outputs" / "best_kernels"; kern_dir.mkdir(parents=True, exist_ok=True)
+    kern_dir = HERE / args.kernels_dir; kern_dir.mkdir(parents=True, exist_ok=True)
     final = {}
     for op in ops:
         if op not in best:
