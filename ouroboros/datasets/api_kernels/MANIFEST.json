@@ -1,0 +1,37 @@
+[
+  {
+    "provenance": "liger_api/rms_norm",
+    "op": "rmsnorm",
+    "file": "liger_api_rms_norm.py",
+    "verified": true,
+    "note": ""
+  },
+  {
+    "provenance": "liger_api/layer_norm",
+    "op": "layernorm",
+    "file": "liger_api_layer_norm.py",
+    "verified": true,
+    "note": ""
+  },
+  {
+    "provenance": "liger_api/swiglu",
+    "op": "swiglu",
+    "file": "liger_api_swiglu.py",
+    "verified": true,
+    "note": ""
+  },
+  {
+    "provenance": "liger_api/geglu",
+    "op": "geglu",
+    "file": "liger_api_geglu.py",
+    "verified": true,
+    "note": ""
+  },
+  {
+    "provenance": "liger_api/cross_entropy",
+    "op": "cross_entropy",
+    "file": "liger_api_cross_entropy.py",
+    "verified": true,
+    "note": ""
+  }
+]

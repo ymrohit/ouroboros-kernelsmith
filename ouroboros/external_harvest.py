@@ -158,6 +158,74 @@ def build_source(recipe) -> str:
     return consts + body + "\n\n" + wrapper.strip() + "\n"
 
 
+# ---- V2 FAIRNESS CONDITION: the library's OWN public API --------------------------------
+# The fixed-schedule RECIPES above extract raw @triton.jit kernels with OUR wrappers and a
+# next_power_of_2 block — fine for "fixed schedule vs fixed schedule", but it bypasses the
+# library's own dispatch (calculate_settings, num_warps, in_place flags). A library failing
+# our odd-shape stress through OUR wrapper is NOT evidence the library is broken. This
+# condition calls Liger's public Function API exactly as shipped, through the same harness.
+# (Unsloth's API cannot be imported standalone — its package __init__ patches the whole
+# training stack — so the API condition covers Liger; the limitation is stated in the report.)
+API_RECIPES = [
+    ("liger_api/rms_norm", "rmsnorm", '''
+from liger_kernel.ops.rms_norm import LigerRMSNormFunction
+def run(x, w):
+    try:
+        return LigerRMSNormFunction.apply(x, w, 1e-6, 0.0, "llama", False)  # in_place=False
+    except TypeError:
+        return LigerRMSNormFunction.apply(x, w, 1e-6)
+'''),
+    ("liger_api/layer_norm", "layernorm", '''
+from liger_kernel.ops.layer_norm import LigerLayerNormFunction
+def run(x, w, b):
+    return LigerLayerNormFunction.apply(x, w, b, 1e-5)
+'''),
+    ("liger_api/swiglu", "swiglu", '''
+from liger_kernel.ops.swiglu import LigerSiLUMulFunction
+def run(gate, up):
+    return LigerSiLUMulFunction.apply(gate, up)
+'''),
+    ("liger_api/geglu", "geglu", '''
+from liger_kernel.ops.geglu import LigerGELUMulFunction
+def run(gate, up):
+    return LigerGELUMulFunction.apply(gate, up)
+'''),
+    ("liger_api/cross_entropy", "cross_entropy", '''
+from liger_kernel.ops.cross_entropy import LigerCrossEntropyFunction
+def run(x, tgt):
+    out = LigerCrossEntropyFunction.apply(x, tgt, None, -100, 0.0, 0.0, "none")
+    loss = out[0] if isinstance(out, tuple) else out
+    return loss.to(x.dtype)
+'''),
+]
+
+
+def harvest_api(verbose=True):
+    """Verify the library-API condition through the SAME harness (correctness only here; the
+    head-to-head benches the survivors). A recipe that fails import/correctness is recorded
+    as unavailable — honestly, not silently."""
+    import json
+    import sys
+    sys.path.insert(0, str(HERE))
+    from harness import evaluate
+    out_dir = HERE / "datasets" / "api_kernels"; out_dir.mkdir(parents=True, exist_ok=True)
+    manifest = []
+    for prov, op, src in API_RECIPES:
+        res = evaluate(src, op, correctness_only=True)
+        ok = res.status == "ok"
+        if verbose:
+            print(f"  {prov:28} [{op:12}] -> {res.status:12} {'' if ok else res.feedback[:60]}")
+        fname = prov.replace("/", "_") + ".py"
+        if ok:
+            (out_dir / fname).write_text(src)
+        manifest.append({"provenance": prov, "op": op, "file": fname,
+                         "verified": ok, "note": "" if ok else res.feedback[:120]})
+    (out_dir / "MANIFEST.json").write_text(json.dumps(manifest, indent=2))
+    n_ok = sum(m["verified"] for m in manifest)
+    print(f"\nlibrary-API condition: {n_ok}/{len(manifest)} verified -> {out_dir}")
+    return manifest
+
+
 def harvest(verbose=True):
     import sys
     sys.path.insert(0, str(HERE))

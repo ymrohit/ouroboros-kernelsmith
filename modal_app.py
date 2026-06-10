@@ -434,9 +434,14 @@ def verify_chains():
 
 @app.function(**COMMON)
 def bench_experts():
-    """HEAD-TO-HEAD vs human experts: our model best_kernels vs hand-written Triton from Liger-Kernel,
-    Unsloth, and the Triton tutorials — all through the SAME immutable harness (strong=True → vs
-    torch.compile max-autotune). The honest 'are we good vs humans?' test on the ops experts ship."""
+    """HEAD-TO-HEAD vs human experts, TWO conditions through the SAME immutable harness
+    (strong=True → vs torch.compile max-autotune):
+      1. fixed_schedule — raw @triton.jit kernels extracted from Liger/Unsloth/the Triton
+         tutorials with our wrappers (schedule pinned; no autotune laundering), and
+      2. library_api  — Liger called through its OWN public Function API exactly as
+         shipped (its dispatch, its settings). The condition that is FAIR to the library.
+    Failures in condition 1 on odd shapes are wrapper-fidelity findings, NOT library bugs —
+    condition 2 is the one that may make that claim. Both are reported side by side."""
     _gpu_banner(); _restore(); _prep_dirs()
     import subprocess
     ext = f"{WORK}/external"; os.makedirs(ext, exist_ok=True)
@@ -448,30 +453,38 @@ def bench_experts():
             subprocess.run(["git", "clone", "--depth", "1", url, d], check=False)
     sys.path.insert(0, WORK); os.chdir(WORK)
     import external_harvest, json
+    print("[h2h] condition 1: fixed-schedule extraction ...", flush=True)
     manifest = external_harvest.harvest()          # extract + verify expert kernels vs OUR reference
+    print("[h2h] condition 2: library public API (Liger as shipped) ...", flush=True)
+    manifest_api = external_harvest.harvest_api()
     from harness import evaluate
     experts = {}
     for m in manifest:
-        experts.setdefault(m["op"], []).append((m["provenance"], f"{WORK}/datasets/real_kernels/{m['file']}"))
+        experts.setdefault(m["op"], []).append(
+            ("fixed_schedule", m["provenance"], f"{WORK}/datasets/real_kernels/{m['file']}"))
+    for m in manifest_api:
+        if m.get("verified"):
+            experts.setdefault(m["op"], []).append(
+                ("library_api", m["provenance"], f"{WORK}/datasets/api_kernels/{m['file']}"))
     def _bench(src, op):
         v = evaluate(src, op, strong=True)
         return {"latency_ms": round(v.latency_ms, 4), "vs_maxauto": round(v.speedup_maxauto, 3),
                 "vs_compile": round(v.speedup_compile, 3), "status": v.status}
-    results = {}
-    for op in sorted(experts):
+    results = {"_api_unavailable": [m for m in manifest_api if not m.get("verified")]}
+    for op in sorted(k for k in experts):
         row = {"experts": {}}
         model_p, seed_p = f"{WORK}/outputs/best_kernels/{op}.py", f"{WORK}/seed_kernels/{op}.py"
         if os.path.exists(model_p):
             row["ours"] = {"author": "MODEL", **_bench(open(model_p).read(), op)}
         elif os.path.exists(seed_p):
             row["ours"] = {"author": "gold_seed", **_bench(open(seed_p).read(), op)}
-        for prov, path in experts[op]:
-            row["experts"][prov] = _bench(open(path).read(), op)
+        for cond, prov, path in experts[op]:
+            row["experts"][prov] = {"condition": cond, **_bench(open(path).read(), op)}
         results[op] = row
         print(f"[h2h] {op}: ours={row.get('ours')} | experts={row['experts']}", flush=True)
     json.dump(results, open(f"{WORK}/reports/headtohead_experts.json", "w"), indent=2)
     _save()
-    _push_hf(f"{WORK}/reports", MODEL_REPO, "model", "head-to-head vs Liger/Unsloth/Triton experts")
+    _push_hf(f"{WORK}/reports", MODEL_REPO, "model", "head-to-head vs Liger/Unsloth/Triton experts (2 conditions)")
     print("[h2h] done + pushed ✓", flush=True)
     return results
 
