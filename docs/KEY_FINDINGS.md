@@ -89,3 +89,35 @@ above — that's the point.
 *"Across one project we recorded eight instances where the verifier falsified a confident
 human belief — including its own builders' diagnoses, claims, and guards. The referee
 outranks intuition; the system is designed so that this is cheap to discover."*
+
+## The Falsification Slate (pre-registered 2026-06-10, late)
+
+Beliefs queued for trial, each cheap to adjudicate with existing infra:
+
+- [ ] **F1 — "The other 46 loss cells need new training ideas."** Belief: the remaining
+  short-row losses (10 worst chain ops) require something beyond what the invention run
+  learned. *Prediction (Claude): NO — resuming from `rl_adapter_invent`, the whole-row
+  style transfers immediately (lead-takes in pass 1) and ≥8/10 ops flip to >1.0 vs MA at
+  16384×2048.* Run: `rl` on 10 `_short` variants. ADJUDICATING NOW.
+- [ ] **F2 — GPU folk wisdom on trial.** Beliefs: "more warps help bandwidth-bound ops,"
+  "num_stages matters," "power-of-2 BLOCK is required," "bigger BLOCK is better on H200."
+  Method: knob-sweep the 76 winners (no LLM — pure harness), score each folk rule by how
+  often following it helps/hurts. *Prediction: num_stages ≈ no-op on these ops; the
+  warps rule is shape-dependent, wrong ≥30% of the time.*
+- [ ] **F3 — "max-autotune is near-roofline on bandwidth-bound fusions."** Method: compute
+  achieved HBM bandwidth %% of peak for ours vs MA per op. *Prediction: MA leaves 15–40%
+  of bandwidth on the table on fused chains; ours sits ≥80% of peak on the wins.*
+- [ ] **F4 — textbook scheduling folklore (one-pass online softmax beats multi-pass; 
+  masking is expensive; vectorized two-pass beats whole-row at large N).* Method: bench
+  the teacher corpus's STRUCTURE variants head-to-head across the grid — the corpus
+  already contains the competing textbook structures. *Prediction: at least one textbook
+  rule inverts across the shape grid.*
+- [ ] **F5 — "the adversarial sweep needs many random shapes."** Method: replay every
+  rejected candidate, log WHICH case (stress / bench-shape / random-k) carried each
+  rejection. *Prediction: stress + bench-shape catch >95%; random sweep is a thin tail —
+  informs harness budget.*
+- [ ] **F6 — "you need ~27B to write kernels."** MiniCPM-4B full pipeline (also the
+  hackathon Tiny-Titan/OpenBMB play). *Prediction: ≥80% of 27B's discovery count on
+  chains; clear gap on cross_entropy/qknorm-class fusions.*
+- [ ] **F7 — "the prompt exemplar is load-bearing."** Arm with signature-only prompts.
+  *Prediction: familiar ops barely affected; cold-op valid-rate halves.*

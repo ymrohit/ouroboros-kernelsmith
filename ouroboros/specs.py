@@ -972,7 +972,12 @@ def grid_inputs(name: str, M: int, N: int, dtype=torch.float16) -> tuple:
 # persistent) that wins where its entire current style loses. Adversarial correctness sweep
 # unchanged (same make_inputs/stress).
 _SHORT_M, _SHORT_N = 16384, 2048
-_SHORT_BASES = ["rmsnorm", "softmax", "layernorm_gelu", "add_layernorm_sigmoid"]
+_SHORT_BASES = ["rmsnorm", "softmax", "layernorm_gelu", "add_layernorm_sigmoid",
+                # F1 falsification slate: the 10 worst remaining loss-cell ops — does the
+                # whole-row style TRANSFER from rl_adapter_invent without new ideas?
+                "add_layernorm_tanh", "add_layernorm_silu", "add_layernorm_gelu",
+                "layernorm_sigmoid", "layernorm_tanh", "rmsnorm_silu", "add_rmsnorm_silu",
+                "add_rmsnorm_sigmoid", "add_layernorm_square", "add_rmsnorm_gelu"]
 
 
 def _register_short_variants():
