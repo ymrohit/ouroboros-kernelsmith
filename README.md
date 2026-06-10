@@ -16,7 +16,8 @@ trainer can touch how either is measured.
 |---|---|---|
 | **Shape-grid re-bench, 376 cells (V2, H200)** | **32/32 ops geomean > 1.0 vs max-autotune (overall 1.494×), cache-cold verified; the 10% loss cells reported per-cell** | `reports/rebench_shapes_qwen3.6-27b.md` |
 | 5× stability re-bench vs max-autotune (H200) | **32/32 ops beat it reproducibly** (mean−spread > 1.0); 16 orig + 16 new, 30/32 model-authored | `reports/rebench_stability_qwen3.6-27b.md` |
-| **V2 discovery run: 37 unseen ops (H200)** | **37/37 validated + beat max-autotune fresh (1.16–2.09×), 35/37 model-authored, explore arm zero** — product now 69 kernels (stability + grid gates in flight) | `reports/kernelsmith_v2.json` |
+| **V2 discovery run: 37 unseen ops (H200)** | **37/37 validated + beat max-autotune fresh (1.16–2.09×), 35/37 model-authored, explore arm zero** — product now 69 kernels | `reports/kernelsmith_v2.json` |
+| **V2 shape-grid, the 37 new kernels (440 cells)** | **37/37 geomean > 1.0 (overall 1.480×), 37/37 cache-cold; 51 loss cells, 46 in the one known regime** | `reports/rebench_shapes_v2_qwen3.6-27b.md` |
 | Head-to-head vs expert Triton (Liger/Unsloth/tutorials) | ours faster on all 5 comparable ops (fixed-schedule condition) | `reports/headtohead_experts_qwen3.6-27b.md` |
 | RL vs continue-SFT on 16 unseen ops | RL self-distill taught them (16/16); continue-SFT stalled and was stopped | `reports/discovery_newops_qwen3.6-27b.md` |
 | Harness selftest (V2, 30 cases) | 14 gold pass · 13 negative controls rejected · **3 anti-gaming cheats rejected** | `ouroboros/reports/harness_selftest.json` |

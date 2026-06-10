@@ -140,9 +140,15 @@ RL self-distill resumed from `rl_adapter_newops` over the 32 new chain ops + 5 s
   1–3/8, pass-2 was 8/8 (self-distill on pass-1's verified winners taught the idiom).
 - Attribution: 617/888 LM kernels verified (69.5%), 101 archive lead-takes, explore arm
   contributed **zero** kernels.
-- **Product: 69 model-era kernels** (32 v1 + 37 v2). Claims above are single-validation;
-  the 5× stability gate (all 69) and the shape-grid (the 37 new) are running — their
-  reports supersede this section's numbers when they land.
+- **Product: 69 model-era kernels** (32 v1 + 37 v2).
+- **Shape-grid gate (37 new): PASSED** — 37/37 geomean > 1.0 vs max-autotune (overall
+  1.480×), 37/37 cache-cold, 51/440 loss cells with 46 at the same 16384×2048 regime the
+  v1 kernels lose in (two independent runs, one identical boundary).
+  → `reports/rebench_shapes_v2_qwen3.6-27b.md`
+- 5× stability gate over all 69: first run completed all-DISCOVERY in every sampled window
+  but the script was print-only (no durable JSON — our own traceability rule); re-running
+  with the patched JSON-emitting script. Final verdict lands in
+  `reports/rebench_stability.json`.
 
 ## V2.7 Hygiene (so the integrity is inspectable)
 Git history (v1 snapshot → every V2 change), top-level README (claim→evidence→bounds→repro),

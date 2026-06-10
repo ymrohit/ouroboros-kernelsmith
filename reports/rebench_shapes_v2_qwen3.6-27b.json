@@ -1,0 +1,4726 @@
+{
+  "summary": {
+    "overall_geomean_vs_maxauto": 1.4798,
+    "ops_geomean_above_1": 37,
+    "n_ops": 37,
+    "grid": {
+      "matrix": [
+        [
+          1024,
+          4096
+        ],
+        [
+          4096,
+          4096
+        ],
+        [
+          8192,
+          4096
+        ],
+        [
+          4096,
+          8192
+        ],
+        [
+          16384,
+          2048
+        ],
+        [
+          256,
+          16384
+        ]
+      ],
+      "rope": [
+        [
+          8192,
+          128
+        ],
+        [
+          32768,
+          128
+        ],
+        [
+          65536,
+          64
+        ],
+        [
+          16384,
+          256
+        ]
+      ]
+    },
+    "dtypes": [
+      "fp16",
+      "bf16"
+    ],
+    "n_iters": 50,
+    "elapsed_min": 89.4
+  },
+  "per_op": {
+    "rmsnorm_leaky_relu": {
+      "cells": [
+        {
+          "M": 1024,
+          "N": 4096,
+          "dtype": "fp16",
+          "status": "ok",
+          "vs_maxauto": 1.9033,
+          "vs_compile": 1.9341,
+          "latency_ms": 0.02962
+        },
+        {
+          "M": 1024,
+          "N": 4096,
+          "dtype": "bf16",
+          "status": "ok",
+          "vs_maxauto": 1.9183,
+          "vs_compile": 1.8965,
+          "latency_ms": 0.02938
+        },
+        {
+          "M": 4096,
+          "N": 4096,
+          "dtype": "fp16",
+          "status": "ok",
+          "vs_maxauto": 1.5342,
+          "vs_compile": 1.5304,
+          "latency_ms": 0.03837
+        },
+        {
+          "M": 4096,
+          "N": 4096,
+          "dtype": "bf16",
+          "status": "ok",
+          "vs_maxauto": 1.4159,
+          "vs_compile": 1.4612,
+          "latency_ms": 0.03816
+        },
+        {
+          "M": 8192,
+          "N": 4096,
+          "dtype": "fp16",
+          "status": "ok",
+          "vs_maxauto": 1.301,
+          "vs_compile": 1.3886,
+          "latency_ms": 0.05294
+        },
+        {
+          "M": 8192,
+          "N": 4096,
+          "dtype": "bf16",
+          "status": "ok",
+          "vs_maxauto": 1.3541,
+          "vs_compile": 1.4356,
+          "latency_ms": 0.0544
+        },
+        {
+          "M": 4096,
+          "N": 8192,
+          "dtype": "fp16",
+          "status": "ok",
+          "vs_maxauto": 1.2272,
+          "vs_compile": 1.2381,
+          "latency_ms": 0.05739
+        },
+        {
+          "M": 4096,
+          "N": 8192,
+          "dtype": "bf16",
+          "status": "ok",
+          "vs_maxauto": 1.2269,
+          "vs_compile": 1.2255,
+          "latency_ms": 0.05691
+        },
+        {
+          "M": 16384,
+          "N": 2048,
+          "dtype": "fp16",
+          "status": "ok",
+          "vs_maxauto": 1.1698,
+          "vs_compile": 1.2508,
+          "latency_ms": 0.06258
+        },
+        {
+          "M": 16384,
+          "N": 2048,
+          "dtype": "bf16",
+          "status": "ok",
+          "vs_maxauto": 1.068,
+          "vs_compile": 1.1148,
+          "latency_ms": 0.06733
+        },
+        {
+          "M": 256,
+          "N": 16384,
+          "dtype": "fp16",
+          "status": "ok",
+          "vs_maxauto": 2.6614,
+          "vs_compile": 2.6424,
+          "latency_ms": 0.02854
+        },
+        {
+          "M": 256,
+          "N": 16384,
+          "dtype": "bf16",
+          "status": "ok",
+          "vs_maxauto": 2.6336,
+          "vs_compile": 2.6123,
+          "latency_ms": 0.02856
+        }
+      ],
+      "geomean_vs_maxauto": 1.5445,
+      "win_rate": 1.0,
+      "n_cells_ok": 12,
+      "n_cells": 12,
+      "losses": [],
+      "headline_rotated_vs_maxauto": 1.2809
+    },
+    "layernorm_leaky_relu": {
+      "cells": [
+        {
+          "M": 1024,
+          "N": 4096,
+          "dtype": "fp16",
+          "status": "ok",
+          "vs_maxauto": 1.8001,
+          "vs_compile": 1.8131,
+          "latency_ms": 0.02962
+        },
+        {
+          "M": 1024,
+          "N": 4096,
+          "dtype": "bf16",
+          "status": "ok",
+          "vs_maxauto": 1.9994,
+          "vs_compile": 2.0017,
+          "latency_ms": 0.02872
+        },
+        {
+          "M": 4096,
+          "N": 4096,
+          "dtype": "fp16",
+          "status": "ok",
+          "vs_maxauto": 1.3754,
+          "vs_compile": 1.4847,
+          "latency_ms": 0.04027
+        },
+        {
+          "M": 4096,
+          "N": 4096,
+          "dtype": "bf16",
+          "status": "ok",
+          "vs_maxauto": 1.3611,
+          "vs_compile": 1.4678,
+          "latency_ms": 0.04152
+        },
+        {
+          "M": 8192,
+          "N": 4096,
+          "dtype": "fp16",
+          "status": "ok",
+          "vs_maxauto": 1.2832,
+          "vs_compile": 1.4225,
+          "latency_ms": 0.05643
+        },
+        {
+          "M": 8192,
+          "N": 4096,
+          "dtype": "bf16",
+          "status": "ok",
+          "vs_maxauto": 1.2036,
+          "vs_compile": 1.3805,
+          "latency_ms": 0.05987
+        },
+        {
+          "M": 4096,
+          "N": 8192,
+          "dtype": "fp16",
+          "status": "ok",
+          "vs_maxauto": 1.2102,
+          "vs_compile": 1.2018,
+          "latency_ms": 0.06027
+        },
+        {
+          "M": 4096,
+          "N": 8192,
+          "dtype": "bf16",
+          "status": "ok",
+          "vs_maxauto": 1.1619,
+          "vs_compile": 1.1887,
+          "latency_ms": 0.06197
+        },
+        {
+          "M": 16384,
+          "N": 2048,
+          "dtype": "fp16",
+          "status": "ok",
+          "vs_maxauto": 0.962,
+          "vs_compile": 1.1313,
+          "latency_ms": 0.07371
+        },
+        {
+          "M": 16384,
+          "N": 2048,
+          "dtype": "bf16",
+          "status": "ok",
+          "vs_maxauto": 0.9048,
+          "vs_compile": 1.0603,
+          "latency_ms": 0.08299
+        },
+        {
+          "M": 256,
+          "N": 16384,
+          "dtype": "fp16",
+          "status": "ok",
+          "vs_maxauto": 3.2344,
+          "vs_compile": 3.2294,
+          "latency_ms": 0.02867
+        },
+        {
+          "M": 256,
+          "N": 16384,
+          "dtype": "bf16",
+          "status": "ok",
+          "vs_maxauto": 3.3386,
+          "vs_compile": 3.3009,
+          "latency_ms": 0.0301
+        }
+      ],
+      "geomean_vs_maxauto": 1.5073,
+      "win_rate": 0.833,
+      "n_cells_ok": 12,
+      "n_cells": 12,
+      "losses": [
+        {
+          "M": 16384,
+          "N": 2048,
+          "dtype": "fp16",
+          "vs_maxauto": 0.962
+        },
+        {
+          "M": 16384,
+          "N": 2048,
+          "dtype": "bf16",
+          "vs_maxauto": 0.9048
+        }
+      ],
+      "headline_rotated_vs_maxauto": 1.2304
+    },
+    "add_rmsnorm_leaky_relu": {
+      "cells": [
+        {
+          "M": 1024,
+          "N": 4096,
+          "dtype": "fp16",
+          "status": "ok",
+          "vs_maxauto": 1.8941,
+          "vs_compile": 1.8095,
+          "latency_ms": 0.02856
+        },
+        {
+          "M": 1024,
+          "N": 4096,
+          "dtype": "bf16",
+          "status": "ok",
+          "vs_maxauto": 2.0193,
+          "vs_compile": 1.9241,
+          "latency_ms": 0.02739
+        },
+        {
+          "M": 4096,
+          "N": 4096,
+          "dtype": "fp16",
+          "status": "ok",
+          "vs_maxauto": 1.2987,
+          "vs_compile": 1.2928,
+          "latency_ms": 0.0488
+        },
+        {
+          "M": 4096,
+          "N": 4096,
+          "dtype": "bf16",
+          "status": "ok",
+          "vs_maxauto": 1.3436,
+          "vs_compile": 1.3246,
+          "latency_ms": 0.04712
+        },
+        {
+          "M": 8192,
+          "N": 4096,
+          "dtype": "fp16",
+          "status": "ok",
+          "vs_maxauto": 1.2108,
+          "vs_compile": 1.1981,
+          "latency_ms": 0.07035
+        },
+        {
+          "M": 8192,
+          "N": 4096,
+          "dtype": "bf16",
+          "status": "ok",
+          "vs_maxauto": 1.216,
+          "vs_compile": 1.2045,
+          "latency_ms": 0.07082
+        },
+        {
+          "M": 4096,
+          "N": 8192,
+          "dtype": "fp16",
+          "status": "ok",
+          "vs_maxauto": 0.9318,
+          "vs_compile": 0.9216,
+          "latency_ms": 0.09266
+        },
+        {
+          "M": 4096,
+          "N": 8192,
+          "dtype": "bf16",
+          "status": "ok",
+          "vs_maxauto": 1.0126,
+          "vs_compile": 1.0098,
+          "latency_ms": 0.08496
+        },
+        {
+          "M": 16384,
+          "N": 2048,
+          "dtype": "fp16",
+          "status": "ok",
+          "vs_maxauto": 1.1639,
+          "vs_compile": 1.1804,
+          "latency_ms": 0.07291
+        },
+        {
+          "M": 16384,
+          "N": 2048,
+          "dtype": "bf16",
+          "status": "ok",
+          "vs_maxauto": 1.1474,
+          "vs_compile": 1.1608,
+          "latency_ms": 0.0775
+        },
+        {
+          "M": 256,
+          "N": 16384,
+          "dtype": "fp16",
+          "status": "ok",
+          "vs_maxauto": 2.6363,
+          "vs_compile": 2.6685,
+          "latency_ms": 0.02882
+        },
+        {
+          "M": 256,
+          "N": 16384,
+          "dtype": "bf16",
+          "status": "ok",
+          "vs_maxauto": 2.7012,
+          "vs_compile": 2.6718,
+          "latency_ms": 0.02827
+        }
+      ],
+      "geomean_vs_maxauto": 1.4525,
+      "win_rate": 0.917,
+      "n_cells_ok": 12,
+      "n_cells": 12,
+      "losses": [
+        {
+          "M": 4096,
+          "N": 8192,
+          "dtype": "fp16",
+          "vs_maxauto": 0.9318
+        }
+      ],
+      "headline_rotated_vs_maxauto": 1.2211
+    },
+    "add_layernorm_leaky_relu": {
+      "cells": [
+        {
+          "M": 1024,
+          "N": 4096,
+          "dtype": "fp16",
+          "status": "ok",
+          "vs_maxauto": 1.8565,
+          "vs_compile": 1.8428,
+          "latency_ms": 0.02922
+        },
+        {
+          "M": 1024,
+          "N": 4096,
+          "dtype": "bf16",
+          "status": "ok",
+          "vs_maxauto": 1.8943,
+          "vs_compile": 1.904,
+          "latency_ms": 0.03117
+        },
+        {
+          "M": 4096,
+          "N": 4096,
+          "dtype": "fp16",
+          "status": "ok",
+          "vs_maxauto": 1.3306,
+          "vs_compile": 1.3251,
+          "latency_ms": 0.04922
+        },
+        {
+          "M": 4096,
+          "N": 4096,
+          "dtype": "bf16",
+          "status": "ok",
+          "vs_maxauto": 1.2896,
+          "vs_compile": 1.3532,
+          "latency_ms": 0.05138
+        },
+        {
+          "M": 8192,
+          "N": 4096,
+          "dtype": "fp16",
+          "status": "ok",
+          "vs_maxauto": 1.2213,
+          "vs_compile": 1.2367,
+          "latency_ms": 0.07491
+        },
+        {
+          "M": 8192,
+          "N": 4096,
+          "dtype": "bf16",
+          "status": "ok",
+          "vs_maxauto": 1.1038,
+          "vs_compile": 1.1773,
+          "latency_ms": 0.07925
+        },
+        {
+          "M": 4096,
+          "N": 8192,
+          "dtype": "fp16",
+          "status": "ok",
+          "vs_maxauto": 1.1218,
+          "vs_compile": 1.2284,
+          "latency_ms": 0.07882
+        },
+        {
+          "M": 4096,
+          "N": 8192,
+          "dtype": "bf16",
+          "status": "ok",
+          "vs_maxauto": 1.0693,
+          "vs_compile": 1.1116,
+          "latency_ms": 0.0919
+        },
+        {
+          "M": 16384,
+          "N": 2048,
+          "dtype": "fp16",
+          "status": "ok",
+          "vs_maxauto": 0.8497,
+          "vs_compile": 0.9022,
+          "latency_ms": 0.10712
+        },
+        {
+          "M": 16384,
+          "N": 2048,
+          "dtype": "bf16",
+          "status": "ok",
+          "vs_maxauto": 0.7544,
+          "vs_compile": 0.803,
+          "latency_ms": 0.11662
+        },
+        {
+          "M": 256,
+          "N": 16384,
+          "dtype": "fp16",
+          "status": "ok",
+          "vs_maxauto": 3.07,
+          "vs_compile": 3.0157,
+          "latency_ms": 0.03155
+        },
+        {
+          "M": 256,
+          "N": 16384,
+          "dtype": "bf16",
+          "status": "ok",
+          "vs_maxauto": 3.2438,
+          "vs_compile": 3.1885,
+          "latency_ms": 0.02979
+        }
+      ],
+      "geomean_vs_maxauto": 1.411,
+      "win_rate": 0.833,
+      "n_cells_ok": 12,
+      "n_cells": 12,
+      "losses": [
+        {
+          "M": 16384,
+          "N": 2048,
+          "dtype": "fp16",
+          "vs_maxauto": 0.8497
+        },
+        {
+          "M": 16384,
+          "N": 2048,
+          "dtype": "bf16",
+          "vs_maxauto": 0.7544
+        }
+      ],
+      "headline_rotated_vs_maxauto": 1.1689
+    },
+    "rmsnorm_relu6": {
+      "cells": [
+        {
+          "M": 1024,
+          "N": 4096,
+          "dtype": "fp16",
+          "status": "ok",
+          "vs_maxauto": 1.8578,
+          "vs_compile": 1.8439,
+          "latency_ms": 0.02768
+        },
+        {
+          "M": 1024,
+          "N": 4096,
+          "dtype": "bf16",
+          "status": "ok",
+          "vs_maxauto": 1.9622,
+          "vs_compile": 1.9839,
+          "latency_ms": 0.02875
+        },
+        {
+          "M": 4096,
+          "N": 4096,
+          "dtype": "fp16",
+          "status": "ok",
+          "vs_maxauto": 1.444,
+          "vs_compile": 1.5109,
+          "latency_ms": 0.0383
+        },
+        {
+          "M": 4096,
+          "N": 4096,
+          "dtype": "bf16",
+          "status": "ok",
+          "vs_maxauto": 1.4895,
+          "vs_compile": 1.5118,
+          "latency_ms": 0.03802
+        },
+        {
+          "M": 8192,
+          "N": 4096,
+          "dtype": "fp16",
+          "status": "ok",
+          "vs_maxauto": 1.349,
+          "vs_compile": 1.4702,
+          "latency_ms": 0.05442
+        },
+        {
+          "M": 8192,
+          "N": 4096,
+          "dtype": "bf16",
+          "status": "ok",
+          "vs_maxauto": 1.304,
+          "vs_compile": 1.422,
+          "latency_ms": 0.05384
+        },
+        {
+          "M": 4096,
+          "N": 8192,
+          "dtype": "fp16",
+          "status": "ok",
+          "vs_maxauto": 1.3029,
+          "vs_compile": 1.2698,
+          "latency_ms": 0.05557
+        },
+        {
+          "M": 4096,
+          "N": 8192,
+          "dtype": "bf16",
+          "status": "ok",
+          "vs_maxauto": 1.3081,
+          "vs_compile": 1.2871,
+          "latency_ms": 0.05656
+        },
+        {
+          "M": 16384,
+          "N": 2048,
+          "dtype": "fp16",
+          "status": "ok",
+          "vs_maxauto": 1.1119,
+          "vs_compile": 1.2093,
+          "latency_ms": 0.06651
+        },
+        {
+          "M": 16384,
+          "N": 2048,
+          "dtype": "bf16",
+          "status": "ok",
+          "vs_maxauto": 1.0197,
+          "vs_compile": 1.1316,
+          "latency_ms": 0.06821
+        },
+        {
+          "M": 256,
+          "N": 16384,
+          "dtype": "fp16",
+          "status": "ok",
+          "vs_maxauto": 2.8616,
+          "vs_compile": 2.6817,
+          "latency_ms": 0.02739
+        },
+        {
+          "M": 256,
+          "N": 16384,
+          "dtype": "bf16",
+          "status": "ok",
+          "vs_maxauto": 2.5691,
+          "vs_compile": 2.5279,
+          "latency_ms": 0.0287
+        }
+      ],
+      "geomean_vs_maxauto": 1.5524,
+      "win_rate": 1.0,
+      "n_cells_ok": 12,
+      "n_cells": 12,
+      "losses": [],
+      "headline_rotated_vs_maxauto": 1.3109
+    },
+    "layernorm_relu6": {
+      "cells": [
+        {
+          "M": 1024,
+          "N": 4096,
+          "dtype": "fp16",
+          "status": "ok",
+          "vs_maxauto": 1.9437,
+          "vs_compile": 1.9533,
+          "latency_ms": 0.02982
+        },
+        {
+          "M": 1024,
+          "N": 4096,
+          "dtype": "bf16",
+          "status": "ok",
+          "vs_maxauto": 1.764,
+          "vs_compile": 1.731,
+          "latency_ms": 0.03003
+        },
+        {
+          "M": 4096,
+          "N": 4096,
+          "dtype": "fp16",
+          "status": "ok",
+          "vs_maxauto": 1.4363,
+          "vs_compile": 1.5625,
+          "latency_ms": 0.04107
+        },
+        {
+          "M": 4096,
+          "N": 4096,
+          "dtype": "bf16",
+          "status": "ok",
+          "vs_maxauto": 1.4282,
+          "vs_compile": 1.5403,
+          "latency_ms": 0.04114
+        },
+        {
+          "M": 8192,
+          "N": 4096,
+          "dtype": "fp16",
+          "status": "ok",
+          "vs_maxauto": 1.3648,
+          "vs_compile": 1.4821,
+          "latency_ms": 0.05768
+        },
+        {
+          "M": 8192,
+          "N": 4096,
+          "dtype": "bf16",
+          "status": "ok",
+          "vs_maxauto": 1.2777,
+          "vs_compile": 1.4597,
+          "latency_ms": 0.05802
+        },
+        {
+          "M": 4096,
+          "N": 8192,
+          "dtype": "fp16",
+          "status": "ok",
+          "vs_maxauto": 1.2458,
+          "vs_compile": 1.218,
+          "latency_ms": 0.06099
+        },
+        {
+          "M": 4096,
+          "N": 8192,
+          "dtype": "bf16",
+          "status": "ok",
+          "vs_maxauto": 1.2061,
+          "vs_compile": 1.2761,
+          "latency_ms": 0.06171
+        },
+        {
+          "M": 16384,
+          "N": 2048,
+          "dtype": "fp16",
+          "status": "ok",
+          "vs_maxauto": 1.0655,
+          "vs_compile": 1.2062,
+          "latency_ms": 0.07448
+        },
+        {
+          "M": 16384,
+          "N": 2048,
+          "dtype": "bf16",
+          "status": "ok",
+          "vs_maxauto": 0.9434,
+          "vs_compile": 1.0834,
+          "latency_ms": 0.08171
+        },
+        {
+          "M": 256,
+          "N": 16384,
+          "dtype": "fp16",
+          "status": "ok",
+          "vs_maxauto": 3.3161,
+          "vs_compile": 3.2775,
+          "latency_ms": 0.02854
+        },
+        {
+          "M": 256,
+          "N": 16384,
+          "dtype": "bf16",
+          "status": "ok",
+          "vs_maxauto": 3.2173,
+          "vs_compile": 3.1647,
+          "latency_ms": 0.02915
+        }
+      ],
+      "geomean_vs_maxauto": 1.5535,
+      "win_rate": 0.917,
+      "n_cells_ok": 12,
+      "n_cells": 12,
+      "losses": [
+        {
+          "M": 16384,
+          "N": 2048,
+          "dtype": "bf16",
+          "vs_maxauto": 0.9434
+        }
+      ],
+      "headline_rotated_vs_maxauto": 1.2499
+    },
+    "add_rmsnorm_relu6": {
+      "cells": [
+        {
+          "M": 1024,
+          "N": 4096,
+          "dtype": "fp16",
+          "status": "ok",
+          "vs_maxauto": 1.9749,
+          "vs_compile": 1.905,
+          "latency_ms": 0.02746
+        },
+        {
+          "M": 1024,
+          "N": 4096,
+          "dtype": "bf16",
+          "status": "ok",
+          "vs_maxauto": 1.9032,
+          "vs_compile": 1.8793,
+          "latency_ms": 0.0281
+        },
+        {
+          "M": 4096,
+          "N": 4096,
+          "dtype": "fp16",
+          "status": "ok",
+          "vs_maxauto": 1.3176,
+          "vs_compile": 1.2996,
+          "latency_ms": 0.04786
+        },
+        {
+          "M": 4096,
+          "N": 4096,
+          "dtype": "bf16",
+          "status": "ok",
+          "vs_maxauto": 1.3559,
+          "vs_compile": 1.3434,
+          "latency_ms": 0.0473
+        },
+        {
+          "M": 8192,
+          "N": 4096,
+          "dtype": "fp16",
+          "status": "ok",
+          "vs_maxauto": 1.2167,
+          "vs_compile": 1.2109,
+          "latency_ms": 0.07109
+        },
+        {
+          "M": 8192,
+          "N": 4096,
+          "dtype": "bf16",
+          "status": "ok",
+          "vs_maxauto": 1.2672,
+          "vs_compile": 1.2589,
+          "latency_ms": 0.07162
+        },
+        {
+          "M": 4096,
+          "N": 8192,
+          "dtype": "fp16",
+          "status": "ok",
+          "vs_maxauto": 0.941,
+          "vs_compile": 0.9253,
+          "latency_ms": 0.09254
+        },
+        {
+          "M": 4096,
+          "N": 8192,
+          "dtype": "bf16",
+          "status": "ok",
+          "vs_maxauto": 1.0331,
+          "vs_compile": 1.0411,
+          "latency_ms": 0.08515
+        },
+        {
+          "M": 16384,
+          "N": 2048,
+          "dtype": "fp16",
+          "status": "ok",
+          "vs_maxauto": 1.2106,
+          "vs_compile": 1.2159,
+          "latency_ms": 0.0715
+        },
+        {
+          "M": 16384,
+          "N": 2048,
+          "dtype": "bf16",
+          "status": "ok",
+          "vs_maxauto": 1.1275,
+          "vs_compile": 1.1519,
+          "latency_ms": 0.07869
+        },
+        {
+          "M": 256,
+          "N": 16384,
+          "dtype": "fp16",
+          "status": "ok",
+          "vs_maxauto": 2.6461,
+          "vs_compile": 2.6427,
+          "latency_ms": 0.0283
+        },
+        {
+          "M": 256,
+          "N": 16384,
+          "dtype": "bf16",
+          "status": "ok",
+          "vs_maxauto": 2.8484,
+          "vs_compile": 2.7128,
+          "latency_ms": 0.02797
+        }
+      ],
+      "geomean_vs_maxauto": 1.4721,
+      "win_rate": 0.917,
+      "n_cells_ok": 12,
+      "n_cells": 12,
+      "losses": [
+        {
+          "M": 4096,
+          "N": 8192,
+          "dtype": "fp16",
+          "vs_maxauto": 0.941
+        }
+      ],
+      "headline_rotated_vs_maxauto": 1.2036
+    },
+    "add_layernorm_relu6": {
+      "cells": [
+        {
+          "M": 1024,
+          "N": 4096,
+          "dtype": "fp16",
+          "status": "ok",
+          "vs_maxauto": 1.9021,
+          "vs_compile": 1.9672,
+          "latency_ms": 0.03171
+        },
+        {
+          "M": 1024,
+          "N": 4096,
+          "dtype": "bf16",
+          "status": "ok",
+          "vs_maxauto": 1.813,
+          "vs_compile": 1.7767,
+          "latency_ms": 0.03346
+        },
+        {
+          "M": 4096,
+          "N": 4096,
+          "dtype": "fp16",
+          "status": "ok",
+          "vs_maxauto": 1.3896,
+          "vs_compile": 1.3798,
+          "latency_ms": 0.05093
+        },
+        {
+          "M": 4096,
+          "N": 4096,
+          "dtype": "bf16",
+          "status": "ok",
+          "vs_maxauto": 1.2423,
+          "vs_compile": 1.3022,
+          "latency_ms": 0.05269
+        },
+        {
+          "M": 8192,
+          "N": 4096,
+          "dtype": "fp16",
+          "status": "ok",
+          "vs_maxauto": 1.1474,
+          "vs_compile": 1.1651,
+          "latency_ms": 0.07589
+        },
+        {
+          "M": 8192,
+          "N": 4096,
+          "dtype": "bf16",
+          "status": "ok",
+          "vs_maxauto": 1.161,
+          "vs_compile": 1.2154,
+          "latency_ms": 0.0811
+        },
+        {
+          "M": 4096,
+          "N": 8192,
+          "dtype": "fp16",
+          "status": "ok",
+          "vs_maxauto": 1.075,
+          "vs_compile": 1.148,
+          "latency_ms": 0.08768
+        },
+        {
+          "M": 4096,
+          "N": 8192,
+          "dtype": "bf16",
+          "status": "ok",
+          "vs_maxauto": 1.0816,
+          "vs_compile": 1.1229,
+          "latency_ms": 0.0924
+        },
+        {
+          "M": 16384,
+          "N": 2048,
+          "dtype": "fp16",
+          "status": "ok",
+          "vs_maxauto": 0.9369,
+          "vs_compile": 1.0061,
+          "latency_ms": 0.09256
+        },
+        {
+          "M": 16384,
+          "N": 2048,
+          "dtype": "bf16",
+          "status": "ok",
+          "vs_maxauto": 0.8389,
+          "vs_compile": 0.8914,
+          "latency_ms": 0.10707
+        },
+        {
+          "M": 256,
+          "N": 16384,
+          "dtype": "fp16",
+          "status": "ok",
+          "vs_maxauto": 3.0463,
+          "vs_compile": 3.0391,
+          "latency_ms": 0.0311
+        },
+        {
+          "M": 256,
+          "N": 16384,
+          "dtype": "bf16",
+          "status": "ok",
+          "vs_maxauto": 3.0877,
+          "vs_compile": 3.0995,
+          "latency_ms": 0.03118
+        }
+      ],
+      "geomean_vs_maxauto": 1.4217,
+      "win_rate": 0.833,
+      "n_cells_ok": 12,
+      "n_cells": 12,
+      "losses": [
+        {
+          "M": 16384,
+          "N": 2048,
+          "dtype": "fp16",
+          "vs_maxauto": 0.9369
+        },
+        {
+          "M": 16384,
+          "N": 2048,
+          "dtype": "bf16",
+          "vs_maxauto": 0.8389
+        }
+      ],
+      "headline_rotated_vs_maxauto": 1.1733
+    },
+    "rmsnorm_hardtanh": {
+      "cells": [
+        {
+          "M": 1024,
+          "N": 4096,
+          "dtype": "fp16",
+          "status": "ok",
+          "vs_maxauto": 1.8731,
+          "vs_compile": 1.8403,
+          "latency_ms": 0.02786
+        },
+        {
+          "M": 1024,
+          "N": 4096,
+          "dtype": "bf16",
+          "status": "ok",
+          "vs_maxauto": 1.8419,
+          "vs_compile": 1.8247,
+          "latency_ms": 0.02794
+        },
+        {
+          "M": 4096,
+          "N": 4096,
+          "dtype": "fp16",
+          "status": "ok",
+          "vs_maxauto": 1.4444,
+          "vs_compile": 1.5715,
+          "latency_ms": 0.03802
+        },
+        {
+          "M": 4096,
+          "N": 4096,
+          "dtype": "bf16",
+          "status": "ok",
+          "vs_maxauto": 1.4319,
+          "vs_compile": 1.4992,
+          "latency_ms": 0.03875
+        },
+        {
+          "M": 8192,
+          "N": 4096,
+          "dtype": "fp16",
+          "status": "ok",
+          "vs_maxauto": 1.2889,
+          "vs_compile": 1.4834,
+          "latency_ms": 0.05454
+        },
+        {
+          "M": 8192,
+          "N": 4096,
+          "dtype": "bf16",
+          "status": "ok",
+          "vs_maxauto": 1.3226,
+          "vs_compile": 1.4489,
+          "latency_ms": 0.056
+        },
+        {
+          "M": 4096,
+          "N": 8192,
+          "dtype": "fp16",
+          "status": "ok",
+          "vs_maxauto": 1.2034,
+          "vs_compile": 1.2091,
+          "latency_ms": 0.05907
+        },
+        {
+          "M": 4096,
+          "N": 8192,
+          "dtype": "bf16",
+          "status": "ok",
+          "vs_maxauto": 1.1963,
+          "vs_compile": 1.1859,
+          "latency_ms": 0.05998
+        },
+        {
+          "M": 16384,
+          "N": 2048,
+          "dtype": "fp16",
+          "status": "ok",
+          "vs_maxauto": 1.2331,
+          "vs_compile": 1.3398,
+          "latency_ms": 0.05792
+        },
+        {
+          "M": 16384,
+          "N": 2048,
+          "dtype": "bf16",
+          "status": "ok",
+          "vs_maxauto": 1.1177,
+          "vs_compile": 1.2416,
+          "latency_ms": 0.06226
+        },
+        {
+          "M": 256,
+          "N": 16384,
+          "dtype": "fp16",
+          "status": "ok",
+          "vs_maxauto": 2.5754,
+          "vs_compile": 2.5421,
+          "latency_ms": 0.02886
+        },
+        {
+          "M": 256,
+          "N": 16384,
+          "dtype": "bf16",
+          "status": "ok",
+          "vs_maxauto": 2.6369,
+          "vs_compile": 2.5746,
+          "latency_ms": 0.02851
+        }
+      ],
+      "geomean_vs_maxauto": 1.5295,
+      "win_rate": 1.0,
+      "n_cells_ok": 12,
+      "n_cells": 12,
+      "losses": [],
+      "headline_rotated_vs_maxauto": 1.2699
+    },
+    "layernorm_hardtanh": {
+      "cells": [
+        {
+          "M": 1024,
+          "N": 4096,
+          "dtype": "fp16",
+          "status": "ok",
+          "vs_maxauto": 1.9122,
+          "vs_compile": 1.9081,
+          "latency_ms": 0.02715
+        },
+        {
+          "M": 1024,
+          "N": 4096,
+          "dtype": "bf16",
+          "status": "ok",
+          "vs_maxauto": 1.9401,
+          "vs_compile": 1.9316,
+          "latency_ms": 0.03019
+        },
+        {
+          "M": 4096,
+          "N": 4096,
+          "dtype": "fp16",
+          "status": "ok",
+          "vs_maxauto": 1.481,
+          "vs_compile": 1.582,
+          "latency_ms": 0.04134
+        },
+        {
+          "M": 4096,
+          "N": 4096,
+          "dtype": "bf16",
+          "status": "ok",
+          "vs_maxauto": 1.4839,
+          "vs_compile": 1.5614,
+          "latency_ms": 0.04064
+        },
+        {
+          "M": 8192,
+          "N": 4096,
+          "dtype": "fp16",
+          "status": "ok",
+          "vs_maxauto": 1.3438,
+          "vs_compile": 1.4954,
+          "latency_ms": 0.05733
+        },
+        {
+          "M": 8192,
+          "N": 4096,
+          "dtype": "bf16",
+          "status": "ok",
+          "vs_maxauto": 1.3423,
+          "vs_compile": 1.4907,
+          "latency_ms": 0.06048
+        },
+        {
+          "M": 4096,
+          "N": 8192,
+          "dtype": "fp16",
+          "status": "ok",
+          "vs_maxauto": 1.2435,
+          "vs_compile": 1.243,
+          "latency_ms": 0.06117
+        },
+        {
+          "M": 4096,
+          "N": 8192,
+          "dtype": "bf16",
+          "status": "ok",
+          "vs_maxauto": 1.224,
+          "vs_compile": 1.298,
+          "latency_ms": 0.06186
+        },
+        {
+          "M": 16384,
+          "N": 2048,
+          "dtype": "fp16",
+          "status": "ok",
+          "vs_maxauto": 0.9722,
+          "vs_compile": 1.212,
+          "latency_ms": 0.07426
+        },
+        {
+          "M": 16384,
+          "N": 2048,
+          "dtype": "bf16",
+          "status": "ok",
+          "vs_maxauto": 0.9327,
+          "vs_compile": 1.1311,
+          "latency_ms": 0.08198
+        },
+        {
+          "M": 256,
+          "N": 16384,
+          "dtype": "fp16",
+          "status": "ok",
+          "vs_maxauto": 3.262,
+          "vs_compile": 3.2953,
+          "latency_ms": 0.02877
+        },
+        {
+          "M": 256,
+          "N": 16384,
+          "dtype": "bf16",
+          "status": "ok",
+          "vs_maxauto": 3.214,
+          "vs_compile": 3.2034,
+          "latency_ms": 0.02886
+        }
+      ],
+      "geomean_vs_maxauto": 1.5631,
+      "win_rate": 0.833,
+      "n_cells_ok": 12,
+      "n_cells": 12,
+      "losses": [
+        {
+          "M": 16384,
+          "N": 2048,
+          "dtype": "fp16",
+          "vs_maxauto": 0.9722
+        },
+        {
+          "M": 16384,
+          "N": 2048,
+          "dtype": "bf16",
+          "vs_maxauto": 0.9327
+        }
+      ],
+      "headline_rotated_vs_maxauto": 1.2743
+    },
+    "add_rmsnorm_hardtanh": {
+      "cells": [
+        {
+          "M": 1024,
+          "N": 4096,
+          "dtype": "fp16",
+          "status": "ok",
+          "vs_maxauto": 1.9802,
+          "vs_compile": 1.9703,
+          "latency_ms": 0.02909
+        },
+        {
+          "M": 1024,
+          "N": 4096,
+          "dtype": "bf16",
+          "status": "ok",
+          "vs_maxauto": 1.8974,
+          "vs_compile": 1.8902,
+          "latency_ms": 0.0287
+        },
+        {
+          "M": 4096,
+          "N": 4096,
+          "dtype": "fp16",
+          "status": "ok",
+          "vs_maxauto": 1.3598,
+          "vs_compile": 1.3585,
+          "latency_ms": 0.04918
+        },
+        {
+          "M": 4096,
+          "N": 4096,
+          "dtype": "bf16",
+          "status": "ok",
+          "vs_maxauto": 1.3389,
+          "vs_compile": 1.3056,
+          "latency_ms": 0.04749
+        },
+        {
+          "M": 8192,
+          "N": 4096,
+          "dtype": "fp16",
+          "status": "ok",
+          "vs_maxauto": 1.2116,
+          "vs_compile": 1.2091,
+          "latency_ms": 0.07069
+        },
+        {
+          "M": 8192,
+          "N": 4096,
+          "dtype": "bf16",
+          "status": "ok",
+          "vs_maxauto": 1.2318,
+          "vs_compile": 1.2266,
+          "latency_ms": 0.07019
+        },
+        {
+          "M": 4096,
+          "N": 8192,
+          "dtype": "fp16",
+          "status": "ok",
+          "vs_maxauto": 0.954,
+          "vs_compile": 0.9474,
+          "latency_ms": 0.09187
+        },
+        {
+          "M": 4096,
+          "N": 8192,
+          "dtype": "bf16",
+          "status": "ok",
+          "vs_maxauto": 1.0641,
+          "vs_compile": 1.0534,
+          "latency_ms": 0.08509
+        },
+        {
+          "M": 16384,
+          "N": 2048,
+          "dtype": "fp16",
+          "status": "ok",
+          "vs_maxauto": 1.2245,
+          "vs_compile": 1.2533,
+          "latency_ms": 0.07314
+        },
+        {
+          "M": 16384,
+          "N": 2048,
+          "dtype": "bf16",
+          "status": "ok",
+          "vs_maxauto": 1.1301,
+          "vs_compile": 1.1843,
+          "latency_ms": 0.07883
+        },
+        {
+          "M": 256,
+          "N": 16384,
+          "dtype": "fp16",
+          "status": "ok",
+          "vs_maxauto": 2.6521,
+          "vs_compile": 2.6191,
+          "latency_ms": 0.02861
+        },
+        {
+          "M": 256,
+          "N": 16384,
+          "dtype": "bf16",
+          "status": "ok",
+          "vs_maxauto": 2.6441,
+          "vs_compile": 2.6216,
+          "latency_ms": 0.02854
+        }
+      ],
+      "geomean_vs_maxauto": 1.4685,
+      "win_rate": 0.917,
+      "n_cells_ok": 12,
+      "n_cells": 12,
+      "losses": [
+        {
+          "M": 4096,
+          "N": 8192,
+          "dtype": "fp16",
+          "vs_maxauto": 0.954
+        }
+      ],
+      "headline_rotated_vs_maxauto": 1.2052
+    },
+    "add_layernorm_hardtanh": {
+      "cells": [
+        {
+          "M": 1024,
+          "N": 4096,
+          "dtype": "fp16",
+          "status": "ok",
+          "vs_maxauto": 1.9243,
+          "vs_compile": 1.8715,
+          "latency_ms": 0.03
+        },
+        {
+          "M": 1024,
+          "N": 4096,
+          "dtype": "bf16",
+          "status": "ok",
+          "vs_maxauto": 1.8393,
+          "vs_compile": 1.8132,
+          "latency_ms": 0.02938
+        },
+        {
+          "M": 4096,
+          "N": 4096,
+          "dtype": "fp16",
+          "status": "ok",
+          "vs_maxauto": 1.3266,
+          "vs_compile": 1.3398,
+          "latency_ms": 0.04978
+        },
+        {
+          "M": 4096,
+          "N": 4096,
+          "dtype": "bf16",
+          "status": "ok",
+          "vs_maxauto": 1.3213,
+          "vs_compile": 1.3613,
+          "latency_ms": 0.05368
+        },
+        {
+          "M": 8192,
+          "N": 4096,
+          "dtype": "fp16",
+          "status": "ok",
+          "vs_maxauto": 1.1795,
+          "vs_compile": 1.2068,
+          "latency_ms": 0.07382
+        },
+        {
+          "M": 8192,
+          "N": 4096,
+          "dtype": "bf16",
+          "status": "ok",
+          "vs_maxauto": 1.198,
+          "vs_compile": 1.2029,
+          "latency_ms": 0.08154
+        },
+        {
+          "M": 4096,
+          "N": 8192,
+          "dtype": "fp16",
+          "status": "ok",
+          "vs_maxauto": 1.1547,
+          "vs_compile": 1.2287,
+          "latency_ms": 0.07893
+        },
+        {
+          "M": 4096,
+          "N": 8192,
+          "dtype": "bf16",
+          "status": "ok",
+          "vs_maxauto": 1.0752,
+          "vs_compile": 1.121,
+          "latency_ms": 0.09358
+        },
+        {
+          "M": 16384,
+          "N": 2048,
+          "dtype": "fp16",
+          "status": "ok",
+          "vs_maxauto": 0.8461,
+          "vs_compile": 0.9122,
+          "latency_ms": 0.10658
+        },
+        {
+          "M": 16384,
+          "N": 2048,
+          "dtype": "bf16",
+          "status": "ok",
+          "vs_maxauto": 0.7564,
+          "vs_compile": 0.8147,
+          "latency_ms": 0.1188
+        },
+        {
+          "M": 256,
+          "N": 16384,
+          "dtype": "fp16",
+          "status": "ok",
+          "vs_maxauto": 3.2279,
+          "vs_compile": 3.0828,
+          "latency_ms": 0.03363
+        },
+        {
+          "M": 256,
+          "N": 16384,
+          "dtype": "bf16",
+          "status": "ok",
+          "vs_maxauto": 3.1879,
+          "vs_compile": 3.1964,
+          "latency_ms": 0.03194
+        }
+      ],
+      "geomean_vs_maxauto": 1.4276,
+      "win_rate": 0.833,
+      "n_cells_ok": 12,
+      "n_cells": 12,
+      "losses": [
+        {
+          "M": 16384,
+          "N": 2048,
+          "dtype": "fp16",
+          "vs_maxauto": 0.8461
+        },
+        {
+          "M": 16384,
+          "N": 2048,
+          "dtype": "bf16",
+          "vs_maxauto": 0.7564
+        }
+      ],
+      "headline_rotated_vs_maxauto": 1.1596
+    },
+    "rmsnorm_elu": {
+      "cells": [
+        {
+          "M": 1024,
+          "N": 4096,
+          "dtype": "fp16",
+          "status": "ok",
+          "vs_maxauto": 1.8603,
+          "vs_compile": 1.9494,
+          "latency_ms": 0.02782
+        },
+        {
+          "M": 1024,
+          "N": 4096,
+          "dtype": "bf16",
+          "status": "ok",
+          "vs_maxauto": 2.0834,
+          "vs_compile": 1.9724,
+          "latency_ms": 0.0284
+        },
+        {
+          "M": 4096,
+          "N": 4096,
+          "dtype": "fp16",
+          "status": "ok",
+          "vs_maxauto": 1.4549,
+          "vs_compile": 1.5022,
+          "latency_ms": 0.03918
+        },
+        {
+          "M": 4096,
+          "N": 4096,
+          "dtype": "bf16",
+          "status": "ok",
+          "vs_maxauto": 1.4403,
+          "vs_compile": 1.4926,
+          "latency_ms": 0.03979
+        },
+        {
+          "M": 8192,
+          "N": 4096,
+          "dtype": "fp16",
+          "status": "ok",
+          "vs_maxauto": 1.2931,
+          "vs_compile": 1.4185,
+          "latency_ms": 0.05437
+        },
+        {
+          "M": 8192,
+          "N": 4096,
+          "dtype": "bf16",
+          "status": "ok",
+          "vs_maxauto": 1.308,
+          "vs_compile": 1.441,
+          "latency_ms": 0.05507
+        },
+        {
+          "M": 4096,
+          "N": 8192,
+          "dtype": "fp16",
+          "status": "ok",
+          "vs_maxauto": 1.1799,
+          "vs_compile": 1.201,
+          "latency_ms": 0.06011
+        },
+        {
+          "M": 4096,
+          "N": 8192,
+          "dtype": "bf16",
+          "status": "ok",
+          "vs_maxauto": 1.2369,
+          "vs_compile": 1.2911,
+          "latency_ms": 0.06173
+        },
+        {
+          "M": 16384,
+          "N": 2048,
+          "dtype": "fp16",
+          "status": "ok",
+          "vs_maxauto": 1.1181,
+          "vs_compile": 1.2418,
+          "latency_ms": 0.06597
+        },
+        {
+          "M": 16384,
+          "N": 2048,
+          "dtype": "bf16",
+          "status": "ok",
+          "vs_maxauto": 1.0029,
+          "vs_compile": 1.1293,
+          "latency_ms": 0.07078
+        },
+        {
+          "M": 256,
+          "N": 16384,
+          "dtype": "fp16",
+          "status": "ok",
+          "vs_maxauto": 2.7181,
+          "vs_compile": 2.7079,
+          "latency_ms": 0.02986
+        },
+        {
+          "M": 256,
+          "N": 16384,
+          "dtype": "bf16",
+          "status": "ok",
+          "vs_maxauto": 2.8252,
+          "vs_compile": 2.8203,
+          "latency_ms": 0.02902
+        }
+      ],
+      "geomean_vs_maxauto": 1.5361,
+      "win_rate": 1.0,
+      "n_cells_ok": 12,
+      "n_cells": 12,
+      "losses": [],
+      "headline_rotated_vs_maxauto": 1.2949
+    },
+    "layernorm_elu": {
+      "cells": [
+        {
+          "M": 1024,
+          "N": 4096,
+          "dtype": "fp16",
+          "status": "ok",
+          "vs_maxauto": 2.0519,
+          "vs_compile": 2.0338,
+          "latency_ms": 0.02837
+        },
+        {
+          "M": 1024,
+          "N": 4096,
+          "dtype": "bf16",
+          "status": "ok",
+          "vs_maxauto": 1.965,
+          "vs_compile": 1.8424,
+          "latency_ms": 0.02832
+        },
+        {
+          "M": 4096,
+          "N": 4096,
+          "dtype": "fp16",
+          "status": "ok",
+          "vs_maxauto": 1.3884,
+          "vs_compile": 1.4939,
+          "latency_ms": 0.04214
+        },
+        {
+          "M": 4096,
+          "N": 4096,
+          "dtype": "bf16",
+          "status": "ok",
+          "vs_maxauto": 1.3665,
+          "vs_compile": 1.4737,
+          "latency_ms": 0.04445
+        },
+        {
+          "M": 8192,
+          "N": 4096,
+          "dtype": "fp16",
+          "status": "ok",
+          "vs_maxauto": 1.2818,
+          "vs_compile": 1.4335,
+          "latency_ms": 0.05928
+        },
+        {
+          "M": 8192,
+          "N": 4096,
+          "dtype": "bf16",
+          "status": "ok",
+          "vs_maxauto": 1.2945,
+          "vs_compile": 1.4626,
+          "latency_ms": 0.06318
+        },
+        {
+          "M": 4096,
+          "N": 8192,
+          "dtype": "fp16",
+          "status": "ok",
+          "vs_maxauto": 1.1742,
+          "vs_compile": 1.2349,
+          "latency_ms": 0.06403
+        },
+        {
+          "M": 4096,
+          "N": 8192,
+          "dtype": "bf16",
+          "status": "ok",
+          "vs_maxauto": 1.2112,
+          "vs_compile": 1.262,
+          "latency_ms": 0.06552
+        },
+        {
+          "M": 16384,
+          "N": 2048,
+          "dtype": "fp16",
+          "status": "ok",
+          "vs_maxauto": 0.9859,
+          "vs_compile": 1.1439,
+          "latency_ms": 0.08392
+        },
+        {
+          "M": 16384,
+          "N": 2048,
+          "dtype": "bf16",
+          "status": "ok",
+          "vs_maxauto": 0.8997,
+          "vs_compile": 1.0344,
+          "latency_ms": 0.09478
+        },
+        {
+          "M": 256,
+          "N": 16384,
+          "dtype": "fp16",
+          "status": "ok",
+          "vs_maxauto": 3.1314,
+          "vs_compile": 3.1353,
+          "latency_ms": 0.02922
+        },
+        {
+          "M": 256,
+          "N": 16384,
+          "dtype": "bf16",
+          "status": "ok",
+          "vs_maxauto": 3.1147,
+          "vs_compile": 3.1236,
+          "latency_ms": 0.03069
+        }
+      ],
+      "geomean_vs_maxauto": 1.5234,
+      "win_rate": 0.833,
+      "n_cells_ok": 12,
+      "n_cells": 12,
+      "losses": [
+        {
+          "M": 16384,
+          "N": 2048,
+          "dtype": "fp16",
+          "vs_maxauto": 0.9859
+        },
+        {
+          "M": 16384,
+          "N": 2048,
+          "dtype": "bf16",
+          "vs_maxauto": 0.8997
+        }
+      ],
+      "headline_rotated_vs_maxauto": 1.2864
+    },
+    "add_rmsnorm_elu": {
+      "cells": [
+        {
+          "M": 1024,
+          "N": 4096,
+          "dtype": "fp16",
+          "status": "ok",
+          "vs_maxauto": 1.9673,
+          "vs_compile": 1.9447,
+          "latency_ms": 0.02981
+        },
+        {
+          "M": 1024,
+          "N": 4096,
+          "dtype": "bf16",
+          "status": "ok",
+          "vs_maxauto": 1.8836,
+          "vs_compile": 1.8824,
+          "latency_ms": 0.02803
+        },
+        {
+          "M": 4096,
+          "N": 4096,
+          "dtype": "fp16",
+          "status": "ok",
+          "vs_maxauto": 1.3962,
+          "vs_compile": 1.3706,
+          "latency_ms": 0.04685
+        },
+        {
+          "M": 4096,
+          "N": 4096,
+          "dtype": "bf16",
+          "status": "ok",
+          "vs_maxauto": 1.3692,
+          "vs_compile": 1.3462,
+          "latency_ms": 0.04858
+        },
+        {
+          "M": 8192,
+          "N": 4096,
+          "dtype": "fp16",
+          "status": "ok",
+          "vs_maxauto": 1.2523,
+          "vs_compile": 1.2415,
+          "latency_ms": 0.06938
+        },
+        {
+          "M": 8192,
+          "N": 4096,
+          "dtype": "bf16",
+          "status": "ok",
+          "vs_maxauto": 1.2806,
+          "vs_compile": 1.2442,
+          "latency_ms": 0.0747
+        },
+        {
+          "M": 4096,
+          "N": 8192,
+          "dtype": "fp16",
+          "status": "ok",
+          "vs_maxauto": 1.0616,
+          "vs_compile": 1.0639,
+          "latency_ms": 0.08133
+        },
+        {
+          "M": 4096,
+          "N": 8192,
+          "dtype": "bf16",
+          "status": "ok",
+          "vs_maxauto": 1.0846,
+          "vs_compile": 1.0818,
+          "latency_ms": 0.08117
+        },
+        {
+          "M": 16384,
+          "N": 2048,
+          "dtype": "fp16",
+          "status": "ok",
+          "vs_maxauto": 1.0276,
+          "vs_compile": 1.0754,
+          "latency_ms": 0.08653
+        },
+        {
+          "M": 16384,
+          "N": 2048,
+          "dtype": "bf16",
+          "status": "ok",
+          "vs_maxauto": 0.9354,
+          "vs_compile": 0.9835,
+          "latency_ms": 0.09416
+        },
+        {
+          "M": 256,
+          "N": 16384,
+          "dtype": "fp16",
+          "status": "ok",
+          "vs_maxauto": 2.5793,
+          "vs_compile": 2.6098,
+          "latency_ms": 0.02886
+        },
+        {
+          "M": 256,
+          "N": 16384,
+          "dtype": "bf16",
+          "status": "ok",
+          "vs_maxauto": 2.6044,
+          "vs_compile": 2.6106,
+          "latency_ms": 0.02843
+        }
+      ],
+      "geomean_vs_maxauto": 1.4473,
+      "win_rate": 0.917,
+      "n_cells_ok": 12,
+      "n_cells": 12,
+      "losses": [
+        {
+          "M": 16384,
+          "N": 2048,
+          "dtype": "bf16",
+          "vs_maxauto": 0.9354
+        }
+      ],
+      "headline_rotated_vs_maxauto": 1.2884
+    },
+    "add_layernorm_elu": {
+      "cells": [
+        {
+          "M": 1024,
+          "N": 4096,
+          "dtype": "fp16",
+          "status": "ok",
+          "vs_maxauto": 1.8636,
+          "vs_compile": 1.8977,
+          "latency_ms": 0.02862
+        },
+        {
+          "M": 1024,
+          "N": 4096,
+          "dtype": "bf16",
+          "status": "ok",
+          "vs_maxauto": 1.8262,
+          "vs_compile": 1.7991,
+          "latency_ms": 0.03011
+        },
+        {
+          "M": 4096,
+          "N": 4096,
+          "dtype": "fp16",
+          "status": "ok",
+          "vs_maxauto": 1.3792,
+          "vs_compile": 1.3725,
+          "latency_ms": 0.05227
+        },
+        {
+          "M": 4096,
+          "N": 4096,
+          "dtype": "bf16",
+          "status": "ok",
+          "vs_maxauto": 1.3142,
+          "vs_compile": 1.3704,
+          "latency_ms": 0.05525
+        },
+        {
+          "M": 8192,
+          "N": 4096,
+          "dtype": "fp16",
+          "status": "ok",
+          "vs_maxauto": 1.2188,
+          "vs_compile": 1.2158,
+          "latency_ms": 0.07592
+        },
+        {
+          "M": 8192,
+          "N": 4096,
+          "dtype": "bf16",
+          "status": "ok",
+          "vs_maxauto": 1.1037,
+          "vs_compile": 1.1999,
+          "latency_ms": 0.08299
+        },
+        {
+          "M": 4096,
+          "N": 8192,
+          "dtype": "fp16",
+          "status": "ok",
+          "vs_maxauto": 1.1489,
+          "vs_compile": 1.2599,
+          "latency_ms": 0.08157
+        },
+        {
+          "M": 4096,
+          "N": 8192,
+          "dtype": "bf16",
+          "status": "ok",
+          "vs_maxauto": 1.0999,
+          "vs_compile": 1.1869,
+          "latency_ms": 0.09544
+        },
+        {
+          "M": 16384,
+          "N": 2048,
+          "dtype": "fp16",
+          "status": "ok",
+          "vs_maxauto": 0.7735,
+          "vs_compile": 0.8392,
+          "latency_ms": 0.11552
+        },
+        {
+          "M": 16384,
+          "N": 2048,
+          "dtype": "bf16",
+          "status": "ok",
+          "vs_maxauto": 0.7454,
+          "vs_compile": 0.8213,
+          "latency_ms": 0.12819
+        },
+        {
+          "M": 256,
+          "N": 16384,
+          "dtype": "fp16",
+          "status": "ok",
+          "vs_maxauto": 3.2222,
+          "vs_compile": 3.2785,
+          "latency_ms": 0.03125
+        },
+        {
+          "M": 256,
+          "N": 16384,
+          "dtype": "bf16",
+          "status": "ok",
+          "vs_maxauto": 3.0111,
+          "vs_compile": 3.0418,
+          "latency_ms": 0.03176
+        }
+      ],
+      "geomean_vs_maxauto": 1.404,
+      "win_rate": 0.833,
+      "n_cells_ok": 12,
+      "n_cells": 12,
+      "losses": [
+        {
+          "M": 16384,
+          "N": 2048,
+          "dtype": "fp16",
+          "vs_maxauto": 0.7735
+        },
+        {
+          "M": 16384,
+          "N": 2048,
+          "dtype": "bf16",
+          "vs_maxauto": 0.7454
+        }
+      ],
+      "headline_rotated_vs_maxauto": 1.1949
+    },
+    "rmsnorm_selu": {
+      "cells": [
+        {
+          "M": 1024,
+          "N": 4096,
+          "dtype": "fp16",
+          "status": "ok",
+          "vs_maxauto": 1.8346,
+          "vs_compile": 1.8105,
+          "latency_ms": 0.02854
+        },
+        {
+          "M": 1024,
+          "N": 4096,
+          "dtype": "bf16",
+          "status": "ok",
+          "vs_maxauto": 2.0011,
+          "vs_compile": 1.9989,
+          "latency_ms": 0.02829
+        },
+        {
+          "M": 4096,
+          "N": 4096,
+          "dtype": "fp16",
+          "status": "ok",
+          "vs_maxauto": 1.4503,
+          "vs_compile": 1.4901,
+          "latency_ms": 0.03898
+        },
+        {
+          "M": 4096,
+          "N": 4096,
+          "dtype": "bf16",
+          "status": "ok",
+          "vs_maxauto": 1.4668,
+          "vs_compile": 1.493,
+          "latency_ms": 0.03973
+        },
+        {
+          "M": 8192,
+          "N": 4096,
+          "dtype": "fp16",
+          "status": "ok",
+          "vs_maxauto": 1.3576,
+          "vs_compile": 1.4501,
+          "latency_ms": 0.05584
+        },
+        {
+          "M": 8192,
+          "N": 4096,
+          "dtype": "bf16",
+          "status": "ok",
+          "vs_maxauto": 1.3187,
+          "vs_compile": 1.4221,
+          "latency_ms": 0.05568
+        },
+        {
+          "M": 4096,
+          "N": 8192,
+          "dtype": "fp16",
+          "status": "ok",
+          "vs_maxauto": 1.2013,
+          "vs_compile": 1.2136,
+          "latency_ms": 0.06098
+        },
+        {
+          "M": 4096,
+          "N": 8192,
+          "dtype": "bf16",
+          "status": "ok",
+          "vs_maxauto": 1.2147,
+          "vs_compile": 1.2155,
+          "latency_ms": 0.06208
+        },
+        {
+          "M": 16384,
+          "N": 2048,
+          "dtype": "fp16",
+          "status": "ok",
+          "vs_maxauto": 1.0602,
+          "vs_compile": 1.1855,
+          "latency_ms": 0.06781
+        },
+        {
+          "M": 16384,
+          "N": 2048,
+          "dtype": "bf16",
+          "status": "ok",
+          "vs_maxauto": 0.9804,
+          "vs_compile": 1.112,
+          "latency_ms": 0.07269
+        },
+        {
+          "M": 256,
+          "N": 16384,
+          "dtype": "fp16",
+          "status": "ok",
+          "vs_maxauto": 2.5481,
+          "vs_compile": 2.5442,
+          "latency_ms": 0.02843
+        },
+        {
+          "M": 256,
+          "N": 16384,
+          "dtype": "bf16",
+          "status": "ok",
+          "vs_maxauto": 2.6506,
+          "vs_compile": 2.6528,
+          "latency_ms": 0.02848
+        }
+      ],
+      "geomean_vs_maxauto": 1.5124,
+      "win_rate": 0.917,
+      "n_cells_ok": 12,
+      "n_cells": 12,
+      "losses": [
+        {
+          "M": 16384,
+          "N": 2048,
+          "dtype": "bf16",
+          "vs_maxauto": 0.9804
+        }
+      ],
+      "headline_rotated_vs_maxauto": 1.2929
+    },
+    "layernorm_selu": {
+      "cells": [
+        {
+          "M": 1024,
+          "N": 4096,
+          "dtype": "fp16",
+          "status": "ok",
+          "vs_maxauto": 1.9116,
+          "vs_compile": 1.922,
+          "latency_ms": 0.03058
+        },
+        {
+          "M": 1024,
+          "N": 4096,
+          "dtype": "bf16",
+          "status": "ok",
+          "vs_maxauto": 1.8438,
+          "vs_compile": 1.8124,
+          "latency_ms": 0.02899
+        },
+        {
+          "M": 4096,
+          "N": 4096,
+          "dtype": "fp16",
+          "status": "ok",
+          "vs_maxauto": 1.413,
+          "vs_compile": 1.5126,
+          "latency_ms": 0.04258
+        },
+        {
+          "M": 4096,
+          "N": 4096,
+          "dtype": "bf16",
+          "status": "ok",
+          "vs_maxauto": 1.3895,
+          "vs_compile": 1.4885,
+          "latency_ms": 0.04461
+        },
+        {
+          "M": 8192,
+          "N": 4096,
+          "dtype": "fp16",
+          "status": "ok",
+          "vs_maxauto": 1.297,
+          "vs_compile": 1.4833,
+          "latency_ms": 0.05995
+        },
+        {
+          "M": 8192,
+          "N": 4096,
+          "dtype": "bf16",
+          "status": "ok",
+          "vs_maxauto": 1.2516,
+          "vs_compile": 1.4325,
+          "latency_ms": 0.06378
+        },
+        {
+          "M": 4096,
+          "N": 8192,
+          "dtype": "fp16",
+          "status": "ok",
+          "vs_maxauto": 1.1942,
+          "vs_compile": 1.267,
+          "latency_ms": 0.06485
+        },
+        {
+          "M": 4096,
+          "N": 8192,
+          "dtype": "bf16",
+          "status": "ok",
+          "vs_maxauto": 1.2324,
+          "vs_compile": 1.309,
+          "latency_ms": 0.06602
+        },
+        {
+          "M": 16384,
+          "N": 2048,
+          "dtype": "fp16",
+          "status": "ok",
+          "vs_maxauto": 0.8973,
+          "vs_compile": 1.1074,
+          "latency_ms": 0.08523
+        },
+        {
+          "M": 16384,
+          "N": 2048,
+          "dtype": "bf16",
+          "status": "ok",
+          "vs_maxauto": 0.8613,
+          "vs_compile": 1.012,
+          "latency_ms": 0.0947
+        },
+        {
+          "M": 256,
+          "N": 16384,
+          "dtype": "fp16",
+          "status": "ok",
+          "vs_maxauto": 3.2577,
+          "vs_compile": 3.2426,
+          "latency_ms": 0.0308
+        },
+        {
+          "M": 256,
+          "N": 16384,
+          "dtype": "bf16",
+          "status": "ok",
+          "vs_maxauto": 3.1759,
+          "vs_compile": 3.1322,
+          "latency_ms": 0.02965
+        }
+      ],
+      "geomean_vs_maxauto": 1.5023,
+      "win_rate": 0.833,
+      "n_cells_ok": 12,
+      "n_cells": 12,
+      "losses": [
+        {
+          "M": 16384,
+          "N": 2048,
+          "dtype": "fp16",
+          "vs_maxauto": 0.8973
+        },
+        {
+          "M": 16384,
+          "N": 2048,
+          "dtype": "bf16",
+          "vs_maxauto": 0.8613
+        }
+      ],
+      "headline_rotated_vs_maxauto": 1.2562
+    },
+    "add_rmsnorm_selu": {
+      "cells": [
+        {
+          "M": 1024,
+          "N": 4096,
+          "dtype": "fp16",
+          "status": "ok",
+          "vs_maxauto": 1.9882,
+          "vs_compile": 1.9378,
+          "latency_ms": 0.02982
+        },
+        {
+          "M": 1024,
+          "N": 4096,
+          "dtype": "bf16",
+          "status": "ok",
+          "vs_maxauto": 1.9044,
+          "vs_compile": 1.8446,
+          "latency_ms": 0.0313
+        },
+        {
+          "M": 4096,
+          "N": 4096,
+          "dtype": "fp16",
+          "status": "ok",
+          "vs_maxauto": 1.416,
+          "vs_compile": 1.3587,
+          "latency_ms": 0.04746
+        },
+        {
+          "M": 4096,
+          "N": 4096,
+          "dtype": "bf16",
+          "status": "ok",
+          "vs_maxauto": 1.3505,
+          "vs_compile": 1.3405,
+          "latency_ms": 0.04981
+        },
+        {
+          "M": 8192,
+          "N": 4096,
+          "dtype": "fp16",
+          "status": "ok",
+          "vs_maxauto": 1.2588,
+          "vs_compile": 1.2694,
+          "latency_ms": 0.06973
+        },
+        {
+          "M": 8192,
+          "N": 4096,
+          "dtype": "bf16",
+          "status": "ok",
+          "vs_maxauto": 1.2623,
+          "vs_compile": 1.2514,
+          "latency_ms": 0.07472
+        },
+        {
+          "M": 4096,
+          "N": 8192,
+          "dtype": "fp16",
+          "status": "ok",
+          "vs_maxauto": 1.0953,
+          "vs_compile": 1.0804,
+          "latency_ms": 0.08197
+        },
+        {
+          "M": 4096,
+          "N": 8192,
+          "dtype": "bf16",
+          "status": "ok",
+          "vs_maxauto": 1.0926,
+          "vs_compile": 1.0692,
+          "latency_ms": 0.08157
+        },
+        {
+          "M": 16384,
+          "N": 2048,
+          "dtype": "fp16",
+          "status": "ok",
+          "vs_maxauto": 1.0207,
+          "vs_compile": 1.0531,
+          "latency_ms": 0.08797
+        },
+        {
+          "M": 16384,
+          "N": 2048,
+          "dtype": "bf16",
+          "status": "ok",
+          "vs_maxauto": 0.9259,
+          "vs_compile": 0.9935,
+          "latency_ms": 0.09822
+        },
+        {
+          "M": 256,
+          "N": 16384,
+          "dtype": "fp16",
+          "status": "ok",
+          "vs_maxauto": 2.6148,
+          "vs_compile": 2.5885,
+          "latency_ms": 0.02858
+        },
+        {
+          "M": 256,
+          "N": 16384,
+          "dtype": "bf16",
+          "status": "ok",
+          "vs_maxauto": 2.6086,
+          "vs_compile": 2.6394,
+          "latency_ms": 0.02955
+        }
+      ],
+      "geomean_vs_maxauto": 1.4533,
+      "win_rate": 0.917,
+      "n_cells_ok": 12,
+      "n_cells": 12,
+      "losses": [
+        {
+          "M": 16384,
+          "N": 2048,
+          "dtype": "bf16",
+          "vs_maxauto": 0.9259
+        }
+      ],
+      "headline_rotated_vs_maxauto": 1.2609
+    },
+    "add_layernorm_selu": {
+      "cells": [
+        {
+          "M": 1024,
+          "N": 4096,
+          "dtype": "fp16",
+          "status": "ok",
+          "vs_maxauto": 1.7778,
+          "vs_compile": 1.765,
+          "latency_ms": 0.02989
+        },
+        {
+          "M": 1024,
+          "N": 4096,
+          "dtype": "bf16",
+          "status": "ok",
+          "vs_maxauto": 1.7758,
+          "vs_compile": 1.7451,
+          "latency_ms": 0.03026
+        },
+        {
+          "M": 4096,
+          "N": 4096,
+          "dtype": "fp16",
+          "status": "ok",
+          "vs_maxauto": 1.3276,
+          "vs_compile": 1.3331,
+          "latency_ms": 0.05168
+        },
+        {
+          "M": 4096,
+          "N": 4096,
+          "dtype": "bf16",
+          "status": "ok",
+          "vs_maxauto": 1.29,
+          "vs_compile": 1.3647,
+          "latency_ms": 0.05445
+        },
+        {
+          "M": 8192,
+          "N": 4096,
+          "dtype": "fp16",
+          "status": "ok",
+          "vs_maxauto": 1.2053,
+          "vs_compile": 1.2119,
+          "latency_ms": 0.07776
+        },
+        {
+          "M": 8192,
+          "N": 4096,
+          "dtype": "bf16",
+          "status": "ok",
+          "vs_maxauto": 1.1337,
+          "vs_compile": 1.2227,
+          "latency_ms": 0.08355
+        },
+        {
+          "M": 4096,
+          "N": 8192,
+          "dtype": "fp16",
+          "status": "ok",
+          "vs_maxauto": 1.1448,
+          "vs_compile": 1.2324,
+          "latency_ms": 0.08366
+        },
+        {
+          "M": 4096,
+          "N": 8192,
+          "dtype": "bf16",
+          "status": "ok",
+          "vs_maxauto": 1.1764,
+          "vs_compile": 1.2688,
+          "latency_ms": 0.09077
+        },
+        {
+          "M": 16384,
+          "N": 2048,
+          "dtype": "fp16",
+          "status": "ok",
+          "vs_maxauto": 0.7678,
+          "vs_compile": 0.8449,
+          "latency_ms": 0.12162
+        },
+        {
+          "M": 16384,
+          "N": 2048,
+          "dtype": "bf16",
+          "status": "ok",
+          "vs_maxauto": 0.7004,
+          "vs_compile": 0.7883,
+          "latency_ms": 0.13693
+        },
+        {
+          "M": 256,
+          "N": 16384,
+          "dtype": "fp16",
+          "status": "ok",
+          "vs_maxauto": 3.2032,
+          "vs_compile": 3.1936,
+          "latency_ms": 0.02992
+        },
+        {
+          "M": 256,
+          "N": 16384,
+          "dtype": "bf16",
+          "status": "ok",
+          "vs_maxauto": 3.1445,
+          "vs_compile": 3.1405,
+          "latency_ms": 0.03234
+        }
+      ],
+      "geomean_vs_maxauto": 1.3941,
+      "win_rate": 0.833,
+      "n_cells_ok": 12,
+      "n_cells": 12,
+      "losses": [
+        {
+          "M": 16384,
+          "N": 2048,
+          "dtype": "fp16",
+          "vs_maxauto": 0.7678
+        },
+        {
+          "M": 16384,
+          "N": 2048,
+          "dtype": "bf16",
+          "vs_maxauto": 0.7004
+        }
+      ],
+      "headline_rotated_vs_maxauto": 1.1875
+    },
+    "rmsnorm_softplus": {
+      "cells": [
+        {
+          "M": 1024,
+          "N": 4096,
+          "dtype": "fp16",
+          "status": "ok",
+          "vs_maxauto": 1.8415,
+          "vs_compile": 1.8313,
+          "latency_ms": 0.02816
+        },
+        {
+          "M": 1024,
+          "N": 4096,
+          "dtype": "bf16",
+          "status": "ok",
+          "vs_maxauto": 1.8724,
+          "vs_compile": 1.8589,
+          "latency_ms": 0.03085
+        },
+        {
+          "M": 4096,
+          "N": 4096,
+          "dtype": "fp16",
+          "status": "ok",
+          "vs_maxauto": 1.5077,
+          "vs_compile": 1.5373,
+          "latency_ms": 0.0481
+        },
+        {
+          "M": 4096,
+          "N": 4096,
+          "dtype": "bf16",
+          "status": "ok",
+          "vs_maxauto": 1.4294,
+          "vs_compile": 1.4717,
+          "latency_ms": 0.04803
+        },
+        {
+          "M": 8192,
+          "N": 4096,
+          "dtype": "fp16",
+          "status": "ok",
+          "vs_maxauto": 1.4118,
+          "vs_compile": 1.4866,
+          "latency_ms": 0.06754
+        },
+        {
+          "M": 8192,
+          "N": 4096,
+          "dtype": "bf16",
+          "status": "ok",
+          "vs_maxauto": 1.3872,
+          "vs_compile": 1.4724,
+          "latency_ms": 0.07045
+        },
+        {
+          "M": 4096,
+          "N": 8192,
+          "dtype": "fp16",
+          "status": "ok",
+          "vs_maxauto": 1.3339,
+          "vs_compile": 1.3493,
+          "latency_ms": 0.07187
+        },
+        {
+          "M": 4096,
+          "N": 8192,
+          "dtype": "bf16",
+          "status": "ok",
+          "vs_maxauto": 1.3265,
+          "vs_compile": 1.3649,
+          "latency_ms": 0.0744
+        },
+        {
+          "M": 16384,
+          "N": 2048,
+          "dtype": "fp16",
+          "status": "ok",
+          "vs_maxauto": 0.9156,
+          "vs_compile": 0.9826,
+          "latency_ms": 0.10573
+        },
+        {
+          "M": 16384,
+          "N": 2048,
+          "dtype": "bf16",
+          "status": "ok",
+          "vs_maxauto": 0.9204,
+          "vs_compile": 0.993,
+          "latency_ms": 0.11411
+        },
+        {
+          "M": 256,
+          "N": 16384,
+          "dtype": "fp16",
+          "status": "ok",
+          "vs_maxauto": 2.4145,
+          "vs_compile": 2.4389,
+          "latency_ms": 0.03274
+        },
+        {
+          "M": 256,
+          "N": 16384,
+          "dtype": "bf16",
+          "status": "ok",
+          "vs_maxauto": 2.3621,
+          "vs_compile": 2.3673,
+          "latency_ms": 0.03389
+        }
+      ],
+      "geomean_vs_maxauto": 1.4941,
+      "win_rate": 0.833,
+      "n_cells_ok": 12,
+      "n_cells": 12,
+      "losses": [
+        {
+          "M": 16384,
+          "N": 2048,
+          "dtype": "fp16",
+          "vs_maxauto": 0.9156
+        },
+        {
+          "M": 16384,
+          "N": 2048,
+          "dtype": "bf16",
+          "vs_maxauto": 0.9204
+        }
+      ],
+      "headline_rotated_vs_maxauto": 1.3918
+    },
+    "layernorm_softplus": {
+      "cells": [
+        {
+          "M": 1024,
+          "N": 4096,
+          "dtype": "fp16",
+          "status": "ok",
+          "vs_maxauto": 1.8607,
+          "vs_compile": 1.8405,
+          "latency_ms": 0.02859
+        },
+        {
+          "M": 1024,
+          "N": 4096,
+          "dtype": "bf16",
+          "status": "ok",
+          "vs_maxauto": 1.8943,
+          "vs_compile": 1.889,
+          "latency_ms": 0.03042
+        },
+        {
+          "M": 4096,
+          "N": 4096,
+          "dtype": "fp16",
+          "status": "ok",
+          "vs_maxauto": 1.4564,
+          "vs_compile": 1.5278,
+          "latency_ms": 0.05066
+        },
+        {
+          "M": 4096,
+          "N": 4096,
+          "dtype": "bf16",
+          "status": "ok",
+          "vs_maxauto": 1.4675,
+          "vs_compile": 1.5954,
+          "latency_ms": 0.05366
+        },
+        {
+          "M": 8192,
+          "N": 4096,
+          "dtype": "fp16",
+          "status": "ok",
+          "vs_maxauto": 1.3593,
+          "vs_compile": 1.486,
+          "latency_ms": 0.0753
+        },
+        {
+          "M": 8192,
+          "N": 4096,
+          "dtype": "bf16",
+          "status": "ok",
+          "vs_maxauto": 1.3309,
+          "vs_compile": 1.5284,
+          "latency_ms": 0.08054
+        },
+        {
+          "M": 4096,
+          "N": 8192,
+          "dtype": "fp16",
+          "status": "ok",
+          "vs_maxauto": 1.3116,
+          "vs_compile": 1.3749,
+          "latency_ms": 0.07835
+        },
+        {
+          "M": 4096,
+          "N": 8192,
+          "dtype": "bf16",
+          "status": "ok",
+          "vs_maxauto": 1.3079,
+          "vs_compile": 1.3822,
+          "latency_ms": 0.0823
+        },
+        {
+          "M": 16384,
+          "N": 2048,
+          "dtype": "fp16",
+          "status": "ok",
+          "vs_maxauto": 0.8728,
+          "vs_compile": 0.9587,
+          "latency_ms": 0.12448
+        },
+        {
+          "M": 16384,
+          "N": 2048,
+          "dtype": "bf16",
+          "status": "ok",
+          "vs_maxauto": 0.8531,
+          "vs_compile": 0.9139,
+          "latency_ms": 0.13658
+        },
+        {
+          "M": 256,
+          "N": 16384,
+          "dtype": "fp16",
+          "status": "ok",
+          "vs_maxauto": 2.9888,
+          "vs_compile": 2.9229,
+          "latency_ms": 0.03133
+        },
+        {
+          "M": 256,
+          "N": 16384,
+          "dtype": "bf16",
+          "status": "ok",
+          "vs_maxauto": 3.038,
+          "vs_compile": 3.2038,
+          "latency_ms": 0.03328
+        }
+      ],
+      "geomean_vs_maxauto": 1.5249,
+      "win_rate": 0.833,
+      "n_cells_ok": 12,
+      "n_cells": 12,
+      "losses": [
+        {
+          "M": 16384,
+          "N": 2048,
+          "dtype": "fp16",
+          "vs_maxauto": 0.8728
+        },
+        {
+          "M": 16384,
+          "N": 2048,
+          "dtype": "bf16",
+          "vs_maxauto": 0.8531
+        }
+      ],
+      "headline_rotated_vs_maxauto": 1.3423
+    },
+    "add_rmsnorm_softplus": {
+      "cells": [
+        {
+          "M": 1024,
+          "N": 4096,
+          "dtype": "fp16",
+          "status": "ok",
+          "vs_maxauto": 1.7688,
+          "vs_compile": 1.7612,
+          "latency_ms": 0.02934
+        },
+        {
+          "M": 1024,
+          "N": 4096,
+          "dtype": "bf16",
+          "status": "ok",
+          "vs_maxauto": 1.7463,
+          "vs_compile": 1.7793,
+          "latency_ms": 0.03002
+        },
+        {
+          "M": 4096,
+          "N": 4096,
+          "dtype": "fp16",
+          "status": "ok",
+          "vs_maxauto": 1.2938,
+          "vs_compile": 1.2735,
+          "latency_ms": 0.05762
+        },
+        {
+          "M": 4096,
+          "N": 4096,
+          "dtype": "bf16",
+          "status": "ok",
+          "vs_maxauto": 1.3021,
+          "vs_compile": 1.3031,
+          "latency_ms": 0.05917
+        },
+        {
+          "M": 8192,
+          "N": 4096,
+          "dtype": "fp16",
+          "status": "ok",
+          "vs_maxauto": 1.2054,
+          "vs_compile": 1.2298,
+          "latency_ms": 0.09003
+        },
+        {
+          "M": 8192,
+          "N": 4096,
+          "dtype": "bf16",
+          "status": "ok",
+          "vs_maxauto": 1.1691,
+          "vs_compile": 1.2112,
+          "latency_ms": 0.09312
+        },
+        {
+          "M": 4096,
+          "N": 8192,
+          "dtype": "fp16",
+          "status": "ok",
+          "vs_maxauto": 1.1547,
+          "vs_compile": 1.1432,
+          "latency_ms": 0.09341
+        },
+        {
+          "M": 4096,
+          "N": 8192,
+          "dtype": "bf16",
+          "status": "ok",
+          "vs_maxauto": 1.157,
+          "vs_compile": 1.1444,
+          "latency_ms": 0.09782
+        },
+        {
+          "M": 16384,
+          "N": 2048,
+          "dtype": "fp16",
+          "status": "ok",
+          "vs_maxauto": 0.8095,
+          "vs_compile": 0.8786,
+          "latency_ms": 0.12701
+        },
+        {
+          "M": 16384,
+          "N": 2048,
+          "dtype": "bf16",
+          "status": "ok",
+          "vs_maxauto": 0.7744,
+          "vs_compile": 0.8469,
+          "latency_ms": 0.13882
+        },
+        {
+          "M": 256,
+          "N": 16384,
+          "dtype": "fp16",
+          "status": "ok",
+          "vs_maxauto": 2.5523,
+          "vs_compile": 2.5271,
+          "latency_ms": 0.02984
+        },
+        {
+          "M": 256,
+          "N": 16384,
+          "dtype": "bf16",
+          "status": "ok",
+          "vs_maxauto": 2.6056,
+          "vs_compile": 2.6213,
+          "latency_ms": 0.03173
+        }
+      ],
+      "geomean_vs_maxauto": 1.3623,
+      "win_rate": 0.833,
+      "n_cells_ok": 12,
+      "n_cells": 12,
+      "losses": [
+        {
+          "M": 16384,
+          "N": 2048,
+          "dtype": "fp16",
+          "vs_maxauto": 0.8095
+        },
+        {
+          "M": 16384,
+          "N": 2048,
+          "dtype": "bf16",
+          "vs_maxauto": 0.7744
+        }
+      ],
+      "headline_rotated_vs_maxauto": 1.1858
+    },
+    "add_layernorm_softplus": {
+      "cells": [
+        {
+          "M": 1024,
+          "N": 4096,
+          "dtype": "fp16",
+          "status": "ok",
+          "vs_maxauto": 1.7456,
+          "vs_compile": 1.7907,
+          "latency_ms": 0.03019
+        },
+        {
+          "M": 1024,
+          "N": 4096,
+          "dtype": "bf16",
+          "status": "ok",
+          "vs_maxauto": 1.8275,
+          "vs_compile": 1.8383,
+          "latency_ms": 0.03256
+        },
+        {
+          "M": 4096,
+          "N": 4096,
+          "dtype": "fp16",
+          "status": "ok",
+          "vs_maxauto": 1.3626,
+          "vs_compile": 1.4381,
+          "latency_ms": 0.05803
+        },
+        {
+          "M": 4096,
+          "N": 4096,
+          "dtype": "bf16",
+          "status": "ok",
+          "vs_maxauto": 1.2995,
+          "vs_compile": 1.4238,
+          "latency_ms": 0.06282
+        },
+        {
+          "M": 8192,
+          "N": 4096,
+          "dtype": "fp16",
+          "status": "ok",
+          "vs_maxauto": 1.2279,
+          "vs_compile": 1.3714,
+          "latency_ms": 0.08952
+        },
+        {
+          "M": 8192,
+          "N": 4096,
+          "dtype": "bf16",
+          "status": "ok",
+          "vs_maxauto": 1.1933,
+          "vs_compile": 1.3416,
+          "latency_ms": 0.09982
+        },
+        {
+          "M": 4096,
+          "N": 8192,
+          "dtype": "fp16",
+          "status": "ok",
+          "vs_maxauto": 1.1873,
+          "vs_compile": 1.2691,
+          "latency_ms": 0.10138
+        },
+        {
+          "M": 4096,
+          "N": 8192,
+          "dtype": "bf16",
+          "status": "ok",
+          "vs_maxauto": 1.2217,
+          "vs_compile": 1.295,
+          "latency_ms": 0.10798
+        },
+        {
+          "M": 16384,
+          "N": 2048,
+          "dtype": "fp16",
+          "status": "ok",
+          "vs_maxauto": 0.7721,
+          "vs_compile": 0.8759,
+          "latency_ms": 0.14579
+        },
+        {
+          "M": 16384,
+          "N": 2048,
+          "dtype": "bf16",
+          "status": "ok",
+          "vs_maxauto": 0.6884,
+          "vs_compile": 0.7895,
+          "latency_ms": 0.16685
+        },
+        {
+          "M": 256,
+          "N": 16384,
+          "dtype": "fp16",
+          "status": "ok",
+          "vs_maxauto": 2.931,
+          "vs_compile": 2.9347,
+          "latency_ms": 0.03478
+        },
+        {
+          "M": 256,
+          "N": 16384,
+          "dtype": "bf16",
+          "status": "ok",
+          "vs_maxauto": 2.9375,
+          "vs_compile": 2.956,
+          "latency_ms": 0.03454
+        }
+      ],
+      "geomean_vs_maxauto": 1.3963,
+      "win_rate": 0.833,
+      "n_cells_ok": 12,
+      "n_cells": 12,
+      "losses": [
+        {
+          "M": 16384,
+          "N": 2048,
+          "dtype": "fp16",
+          "vs_maxauto": 0.7721
+        },
+        {
+          "M": 16384,
+          "N": 2048,
+          "dtype": "bf16",
+          "vs_maxauto": 0.6884
+        }
+      ],
+      "headline_rotated_vs_maxauto": 1.2451
+    },
+    "rmsnorm_mish": {
+      "cells": [
+        {
+          "M": 1024,
+          "N": 4096,
+          "dtype": "fp16",
+          "status": "ok",
+          "vs_maxauto": 1.7814,
+          "vs_compile": 1.7628,
+          "latency_ms": 0.02928
+        },
+        {
+          "M": 1024,
+          "N": 4096,
+          "dtype": "bf16",
+          "status": "ok",
+          "vs_maxauto": 1.8237,
+          "vs_compile": 1.7666,
+          "latency_ms": 0.02886
+        },
+        {
+          "M": 4096,
+          "N": 4096,
+          "dtype": "fp16",
+          "status": "ok",
+          "vs_maxauto": 1.5536,
+          "vs_compile": 1.5545,
+          "latency_ms": 0.05341
+        },
+        {
+          "M": 4096,
+          "N": 4096,
+          "dtype": "bf16",
+          "status": "ok",
+          "vs_maxauto": 1.5802,
+          "vs_compile": 1.5843,
+          "latency_ms": 0.05416
+        },
+        {
+          "M": 8192,
+          "N": 4096,
+          "dtype": "fp16",
+          "status": "ok",
+          "vs_maxauto": 1.5624,
+          "vs_compile": 1.5638,
+          "latency_ms": 0.08066
+        },
+        {
+          "M": 8192,
+          "N": 4096,
+          "dtype": "bf16",
+          "status": "ok",
+          "vs_maxauto": 1.5306,
+          "vs_compile": 1.5779,
+          "latency_ms": 0.08328
+        },
+        {
+          "M": 4096,
+          "N": 8192,
+          "dtype": "fp16",
+          "status": "ok",
+          "vs_maxauto": 1.5035,
+          "vs_compile": 1.495,
+          "latency_ms": 0.08405
+        },
+        {
+          "M": 4096,
+          "N": 8192,
+          "dtype": "bf16",
+          "status": "ok",
+          "vs_maxauto": 1.4846,
+          "vs_compile": 1.5165,
+          "latency_ms": 0.08686
+        },
+        {
+          "M": 16384,
+          "N": 2048,
+          "dtype": "fp16",
+          "status": "ok",
+          "vs_maxauto": 0.9424,
+          "vs_compile": 0.9793,
+          "latency_ms": 0.13672
+        },
+        {
+          "M": 16384,
+          "N": 2048,
+          "dtype": "bf16",
+          "status": "ok",
+          "vs_maxauto": 0.8985,
+          "vs_compile": 0.9366,
+          "latency_ms": 0.14136
+        },
+        {
+          "M": 256,
+          "N": 16384,
+          "dtype": "fp16",
+          "status": "ok",
+          "vs_maxauto": 2.1792,
+          "vs_compile": 2.2303,
+          "latency_ms": 0.03384
+        },
+        {
+          "M": 256,
+          "N": 16384,
+          "dtype": "bf16",
+          "status": "ok",
+          "vs_maxauto": 2.2737,
+          "vs_compile": 2.4114,
+          "latency_ms": 0.03531
+        }
+      ],
+      "geomean_vs_maxauto": 1.5405,
+      "win_rate": 0.833,
+      "n_cells_ok": 12,
+      "n_cells": 12,
+      "losses": [
+        {
+          "M": 16384,
+          "N": 2048,
+          "dtype": "fp16",
+          "vs_maxauto": 0.9424
+        },
+        {
+          "M": 16384,
+          "N": 2048,
+          "dtype": "bf16",
+          "vs_maxauto": 0.8985
+        }
+      ],
+      "headline_rotated_vs_maxauto": 1.547
+    },
+    "layernorm_mish": {
+      "cells": [
+        {
+          "M": 1024,
+          "N": 4096,
+          "dtype": "fp16",
+          "status": "ok",
+          "vs_maxauto": 1.7507,
+          "vs_compile": 1.7059,
+          "latency_ms": 0.03042
+        },
+        {
+          "M": 1024,
+          "N": 4096,
+          "dtype": "bf16",
+          "status": "ok",
+          "vs_maxauto": 1.6898,
+          "vs_compile": 1.7092,
+          "latency_ms": 0.03131
+        },
+        {
+          "M": 4096,
+          "N": 4096,
+          "dtype": "fp16",
+          "status": "ok",
+          "vs_maxauto": 1.535,
+          "vs_compile": 1.5384,
+          "latency_ms": 0.05736
+        },
+        {
+          "M": 4096,
+          "N": 4096,
+          "dtype": "bf16",
+          "status": "ok",
+          "vs_maxauto": 1.5395,
+          "vs_compile": 1.5434,
+          "latency_ms": 0.06213
+        },
+        {
+          "M": 8192,
+          "N": 4096,
+          "dtype": "fp16",
+          "status": "ok",
+          "vs_maxauto": 1.4816,
+          "vs_compile": 1.5068,
+          "latency_ms": 0.09093
+        },
+        {
+          "M": 8192,
+          "N": 4096,
+          "dtype": "bf16",
+          "status": "ok",
+          "vs_maxauto": 1.4812,
+          "vs_compile": 1.4823,
+          "latency_ms": 0.09554
+        },
+        {
+          "M": 4096,
+          "N": 8192,
+          "dtype": "fp16",
+          "status": "ok",
+          "vs_maxauto": 1.4504,
+          "vs_compile": 1.4721,
+          "latency_ms": 0.09299
+        },
+        {
+          "M": 4096,
+          "N": 8192,
+          "dtype": "bf16",
+          "status": "ok",
+          "vs_maxauto": 1.4263,
+          "vs_compile": 1.4552,
+          "latency_ms": 0.09811
+        },
+        {
+          "M": 16384,
+          "N": 2048,
+          "dtype": "fp16",
+          "status": "ok",
+          "vs_maxauto": 0.8764,
+          "vs_compile": 0.9244,
+          "latency_ms": 0.15686
+        },
+        {
+          "M": 16384,
+          "N": 2048,
+          "dtype": "bf16",
+          "status": "ok",
+          "vs_maxauto": 0.8498,
+          "vs_compile": 0.8896,
+          "latency_ms": 0.16768
+        },
+        {
+          "M": 256,
+          "N": 16384,
+          "dtype": "fp16",
+          "status": "ok",
+          "vs_maxauto": 2.5637,
+          "vs_compile": 2.5748,
+          "latency_ms": 0.03594
+        },
+        {
+          "M": 256,
+          "N": 16384,
+          "dtype": "bf16",
+          "status": "ok",
+          "vs_maxauto": 2.5286,
+          "vs_compile": 2.5448,
+          "latency_ms": 0.03662
+        }
+      ],
+      "geomean_vs_maxauto": 1.5209,
+      "win_rate": 0.833,
+      "n_cells_ok": 12,
+      "n_cells": 12,
+      "losses": [
+        {
+          "M": 16384,
+          "N": 2048,
+          "dtype": "fp16",
+          "vs_maxauto": 0.8764
+        },
+        {
+          "M": 16384,
+          "N": 2048,
+          "dtype": "bf16",
+          "vs_maxauto": 0.8498
+        }
+      ],
+      "headline_rotated_vs_maxauto": 1.4644
+    },
+    "add_rmsnorm_mish": {
+      "cells": [
+        {
+          "M": 1024,
+          "N": 4096,
+          "dtype": "fp16",
+          "status": "ok",
+          "vs_maxauto": 1.7982,
+          "vs_compile": 1.7807,
+          "latency_ms": 0.03275
+        },
+        {
+          "M": 1024,
+          "N": 4096,
+          "dtype": "bf16",
+          "status": "ok",
+          "vs_maxauto": 1.8114,
+          "vs_compile": 1.8239,
+          "latency_ms": 0.03198
+        },
+        {
+          "M": 4096,
+          "N": 4096,
+          "dtype": "fp16",
+          "status": "ok",
+          "vs_maxauto": 1.4783,
+          "vs_compile": 1.4732,
+          "latency_ms": 0.05974
+        },
+        {
+          "M": 4096,
+          "N": 4096,
+          "dtype": "bf16",
+          "status": "ok",
+          "vs_maxauto": 1.531,
+          "vs_compile": 1.5152,
+          "latency_ms": 0.0596
+        },
+        {
+          "M": 8192,
+          "N": 4096,
+          "dtype": "fp16",
+          "status": "ok",
+          "vs_maxauto": 1.4538,
+          "vs_compile": 1.471,
+          "latency_ms": 0.09083
+        },
+        {
+          "M": 8192,
+          "N": 4096,
+          "dtype": "bf16",
+          "status": "ok",
+          "vs_maxauto": 1.4577,
+          "vs_compile": 1.4696,
+          "latency_ms": 0.09424
+        },
+        {
+          "M": 4096,
+          "N": 8192,
+          "dtype": "fp16",
+          "status": "ok",
+          "vs_maxauto": 1.3007,
+          "vs_compile": 1.2904,
+          "latency_ms": 0.10302
+        },
+        {
+          "M": 4096,
+          "N": 8192,
+          "dtype": "bf16",
+          "status": "ok",
+          "vs_maxauto": 1.4109,
+          "vs_compile": 1.4022,
+          "latency_ms": 0.0996
+        },
+        {
+          "M": 16384,
+          "N": 2048,
+          "dtype": "fp16",
+          "status": "ok",
+          "vs_maxauto": 0.9103,
+          "vs_compile": 0.9494,
+          "latency_ms": 0.14947
+        },
+        {
+          "M": 16384,
+          "N": 2048,
+          "dtype": "bf16",
+          "status": "ok",
+          "vs_maxauto": 0.8659,
+          "vs_compile": 0.8922,
+          "latency_ms": 0.15819
+        },
+        {
+          "M": 256,
+          "N": 16384,
+          "dtype": "fp16",
+          "status": "ok",
+          "vs_maxauto": 2.2033,
+          "vs_compile": 2.194,
+          "latency_ms": 0.0381
+        },
+        {
+          "M": 256,
+          "N": 16384,
+          "dtype": "bf16",
+          "status": "ok",
+          "vs_maxauto": 2.1855,
+          "vs_compile": 2.1689,
+          "latency_ms": 0.03467
+        }
+      ],
+      "geomean_vs_maxauto": 1.4782,
+      "win_rate": 0.833,
+      "n_cells_ok": 12,
+      "n_cells": 12,
+      "losses": [
+        {
+          "M": 16384,
+          "N": 2048,
+          "dtype": "fp16",
+          "vs_maxauto": 0.9103
+        },
+        {
+          "M": 16384,
+          "N": 2048,
+          "dtype": "bf16",
+          "vs_maxauto": 0.8659
+        }
+      ],
+      "headline_rotated_vs_maxauto": 1.4451
+    },
+    "add_layernorm_mish": {
+      "cells": [
+        {
+          "M": 1024,
+          "N": 4096,
+          "dtype": "fp16",
+          "status": "ok",
+          "vs_maxauto": 1.6801,
+          "vs_compile": 1.7156,
+          "latency_ms": 0.03336
+        },
+        {
+          "M": 1024,
+          "N": 4096,
+          "dtype": "bf16",
+          "status": "ok",
+          "vs_maxauto": 1.6139,
+          "vs_compile": 1.6448,
+          "latency_ms": 0.03518
+        },
+        {
+          "M": 4096,
+          "N": 4096,
+          "dtype": "fp16",
+          "status": "ok",
+          "vs_maxauto": 1.4232,
+          "vs_compile": 1.5166,
+          "latency_ms": 0.06454
+        },
+        {
+          "M": 4096,
+          "N": 4096,
+          "dtype": "bf16",
+          "status": "ok",
+          "vs_maxauto": 1.4335,
+          "vs_compile": 1.5271,
+          "latency_ms": 0.07024
+        },
+        {
+          "M": 8192,
+          "N": 4096,
+          "dtype": "fp16",
+          "status": "ok",
+          "vs_maxauto": 1.3703,
+          "vs_compile": 1.4915,
+          "latency_ms": 0.10301
+        },
+        {
+          "M": 8192,
+          "N": 4096,
+          "dtype": "bf16",
+          "status": "ok",
+          "vs_maxauto": 1.3845,
+          "vs_compile": 1.4675,
+          "latency_ms": 0.11397
+        },
+        {
+          "M": 4096,
+          "N": 8192,
+          "dtype": "fp16",
+          "status": "ok",
+          "vs_maxauto": 1.3557,
+          "vs_compile": 1.4274,
+          "latency_ms": 0.10837
+        },
+        {
+          "M": 4096,
+          "N": 8192,
+          "dtype": "bf16",
+          "status": "ok",
+          "vs_maxauto": 1.3483,
+          "vs_compile": 1.4105,
+          "latency_ms": 0.11942
+        },
+        {
+          "M": 16384,
+          "N": 2048,
+          "dtype": "fp16",
+          "status": "ok",
+          "vs_maxauto": 0.7995,
+          "vs_compile": 0.8475,
+          "latency_ms": 0.17504
+        },
+        {
+          "M": 16384,
+          "N": 2048,
+          "dtype": "bf16",
+          "status": "ok",
+          "vs_maxauto": 0.7823,
+          "vs_compile": 0.8121,
+          "latency_ms": 0.19702
+        },
+        {
+          "M": 256,
+          "N": 16384,
+          "dtype": "fp16",
+          "status": "ok",
+          "vs_maxauto": 2.5987,
+          "vs_compile": 2.5966,
+          "latency_ms": 0.03752
+        },
+        {
+          "M": 256,
+          "N": 16384,
+          "dtype": "bf16",
+          "status": "ok",
+          "vs_maxauto": 2.5632,
+          "vs_compile": 2.5859,
+          "latency_ms": 0.03798
+        }
+      ],
+      "geomean_vs_maxauto": 1.4406,
+      "win_rate": 0.833,
+      "n_cells_ok": 12,
+      "n_cells": 12,
+      "losses": [
+        {
+          "M": 16384,
+          "N": 2048,
+          "dtype": "fp16",
+          "vs_maxauto": 0.7995
+        },
+        {
+          "M": 16384,
+          "N": 2048,
+          "dtype": "bf16",
+          "vs_maxauto": 0.7823
+        }
+      ],
+      "headline_rotated_vs_maxauto": 1.3569
+    },
+    "rmsnorm_gelu_erf": {
+      "cells": [
+        {
+          "M": 1024,
+          "N": 4096,
+          "dtype": "fp16",
+          "status": "ok",
+          "vs_maxauto": 1.7938,
+          "vs_compile": 1.7576,
+          "latency_ms": 0.02832
+        },
+        {
+          "M": 1024,
+          "N": 4096,
+          "dtype": "bf16",
+          "status": "ok",
+          "vs_maxauto": 1.8446,
+          "vs_compile": 1.8306,
+          "latency_ms": 0.03069
+        },
+        {
+          "M": 4096,
+          "N": 4096,
+          "dtype": "fp16",
+          "status": "ok",
+          "vs_maxauto": 1.2884,
+          "vs_compile": 1.4073,
+          "latency_ms": 0.05048
+        },
+        {
+          "M": 4096,
+          "N": 4096,
+          "dtype": "bf16",
+          "status": "ok",
+          "vs_maxauto": 1.3205,
+          "vs_compile": 1.3508,
+          "latency_ms": 0.05072
+        },
+        {
+          "M": 8192,
+          "N": 4096,
+          "dtype": "fp16",
+          "status": "ok",
+          "vs_maxauto": 1.1615,
+          "vs_compile": 1.3288,
+          "latency_ms": 0.07709
+        },
+        {
+          "M": 8192,
+          "N": 4096,
+          "dtype": "bf16",
+          "status": "ok",
+          "vs_maxauto": 1.2085,
+          "vs_compile": 1.2552,
+          "latency_ms": 0.07712
+        },
+        {
+          "M": 4096,
+          "N": 8192,
+          "dtype": "fp16",
+          "status": "ok",
+          "vs_maxauto": 1.194,
+          "vs_compile": 1.2018,
+          "latency_ms": 0.07803
+        },
+        {
+          "M": 4096,
+          "N": 8192,
+          "dtype": "bf16",
+          "status": "ok",
+          "vs_maxauto": 1.2183,
+          "vs_compile": 1.253,
+          "latency_ms": 0.07843
+        },
+        {
+          "M": 16384,
+          "N": 2048,
+          "dtype": "fp16",
+          "status": "ok",
+          "vs_maxauto": 0.7603,
+          "vs_compile": 0.7931,
+          "latency_ms": 0.12461
+        },
+        {
+          "M": 16384,
+          "N": 2048,
+          "dtype": "bf16",
+          "status": "ok",
+          "vs_maxauto": 0.7612,
+          "vs_compile": 0.7761,
+          "latency_ms": 0.12725
+        },
+        {
+          "M": 256,
+          "N": 16384,
+          "dtype": "fp16",
+          "status": "ok",
+          "vs_maxauto": 2.4748,
+          "vs_compile": 2.5025,
+          "latency_ms": 0.02894
+        },
+        {
+          "M": 256,
+          "N": 16384,
+          "dtype": "bf16",
+          "status": "ok",
+          "vs_maxauto": 2.5852,
+          "vs_compile": 2.6208,
+          "latency_ms": 0.02827
+        }
+      ],
+      "geomean_vs_maxauto": 1.3669,
+      "win_rate": 0.833,
+      "n_cells_ok": 12,
+      "n_cells": 12,
+      "losses": [
+        {
+          "M": 16384,
+          "N": 2048,
+          "dtype": "fp16",
+          "vs_maxauto": 0.7603
+        },
+        {
+          "M": 16384,
+          "N": 2048,
+          "dtype": "bf16",
+          "vs_maxauto": 0.7612
+        }
+      ],
+      "headline_rotated_vs_maxauto": 1.1306
+    },
+    "layernorm_gelu_erf": {
+      "cells": [
+        {
+          "M": 1024,
+          "N": 4096,
+          "dtype": "fp16",
+          "status": "ok",
+          "vs_maxauto": 1.7595,
+          "vs_compile": 1.6961,
+          "latency_ms": 0.03027
+        },
+        {
+          "M": 1024,
+          "N": 4096,
+          "dtype": "bf16",
+          "status": "ok",
+          "vs_maxauto": 1.8897,
+          "vs_compile": 1.8643,
+          "latency_ms": 0.0309
+        },
+        {
+          "M": 4096,
+          "N": 4096,
+          "dtype": "fp16",
+          "status": "ok",
+          "vs_maxauto": 1.3254,
+          "vs_compile": 1.4158,
+          "latency_ms": 0.05434
+        },
+        {
+          "M": 4096,
+          "N": 4096,
+          "dtype": "bf16",
+          "status": "ok",
+          "vs_maxauto": 1.317,
+          "vs_compile": 1.4173,
+          "latency_ms": 0.05763
+        },
+        {
+          "M": 8192,
+          "N": 4096,
+          "dtype": "fp16",
+          "status": "ok",
+          "vs_maxauto": 1.2519,
+          "vs_compile": 1.2632,
+          "latency_ms": 0.08486
+        },
+        {
+          "M": 8192,
+          "N": 4096,
+          "dtype": "bf16",
+          "status": "ok",
+          "vs_maxauto": 1.1362,
+          "vs_compile": 1.3044,
+          "latency_ms": 0.088
+        },
+        {
+          "M": 4096,
+          "N": 8192,
+          "dtype": "fp16",
+          "status": "ok",
+          "vs_maxauto": 1.21,
+          "vs_compile": 1.2679,
+          "latency_ms": 0.08541
+        },
+        {
+          "M": 4096,
+          "N": 8192,
+          "dtype": "bf16",
+          "status": "ok",
+          "vs_maxauto": 1.1495,
+          "vs_compile": 1.2248,
+          "latency_ms": 0.08946
+        },
+        {
+          "M": 16384,
+          "N": 2048,
+          "dtype": "fp16",
+          "status": "ok",
+          "vs_maxauto": 0.6845,
+          "vs_compile": 0.8007,
+          "latency_ms": 0.14275
+        },
+        {
+          "M": 16384,
+          "N": 2048,
+          "dtype": "bf16",
+          "status": "ok",
+          "vs_maxauto": 0.687,
+          "vs_compile": 0.77,
+          "latency_ms": 0.15072
+        },
+        {
+          "M": 256,
+          "N": 16384,
+          "dtype": "fp16",
+          "status": "ok",
+          "vs_maxauto": 2.9113,
+          "vs_compile": 2.8441,
+          "latency_ms": 0.03192
+        },
+        {
+          "M": 256,
+          "N": 16384,
+          "dtype": "bf16",
+          "status": "ok",
+          "vs_maxauto": 2.9413,
+          "vs_compile": 3.1329,
+          "latency_ms": 0.0319
+        }
+      ],
+      "geomean_vs_maxauto": 1.3764,
+      "win_rate": 0.833,
+      "n_cells_ok": 12,
+      "n_cells": 12,
+      "losses": [
+        {
+          "M": 16384,
+          "N": 2048,
+          "dtype": "fp16",
+          "vs_maxauto": 0.6845
+        },
+        {
+          "M": 16384,
+          "N": 2048,
+          "dtype": "bf16",
+          "vs_maxauto": 0.687
+        }
+      ],
+      "headline_rotated_vs_maxauto": 1.2483
+    },
+    "add_rmsnorm_gelu_erf": {
+      "cells": [
+        {
+          "M": 1024,
+          "N": 4096,
+          "dtype": "fp16",
+          "status": "ok",
+          "vs_maxauto": 1.811,
+          "vs_compile": 1.754,
+          "latency_ms": 0.02979
+        },
+        {
+          "M": 1024,
+          "N": 4096,
+          "dtype": "bf16",
+          "status": "ok",
+          "vs_maxauto": 1.7778,
+          "vs_compile": 1.7533,
+          "latency_ms": 0.02938
+        },
+        {
+          "M": 4096,
+          "N": 4096,
+          "dtype": "fp16",
+          "status": "ok",
+          "vs_maxauto": 1.2808,
+          "vs_compile": 1.2678,
+          "latency_ms": 0.05682
+        },
+        {
+          "M": 4096,
+          "N": 4096,
+          "dtype": "bf16",
+          "status": "ok",
+          "vs_maxauto": 1.3353,
+          "vs_compile": 1.3453,
+          "latency_ms": 0.05746
+        },
+        {
+          "M": 8192,
+          "N": 4096,
+          "dtype": "fp16",
+          "status": "ok",
+          "vs_maxauto": 1.1627,
+          "vs_compile": 1.1641,
+          "latency_ms": 0.08882
+        },
+        {
+          "M": 8192,
+          "N": 4096,
+          "dtype": "bf16",
+          "status": "ok",
+          "vs_maxauto": 1.1405,
+          "vs_compile": 1.1877,
+          "latency_ms": 0.08883
+        },
+        {
+          "M": 4096,
+          "N": 8192,
+          "dtype": "fp16",
+          "status": "ok",
+          "vs_maxauto": 1.1152,
+          "vs_compile": 1.1204,
+          "latency_ms": 0.09293
+        },
+        {
+          "M": 4096,
+          "N": 8192,
+          "dtype": "bf16",
+          "status": "ok",
+          "vs_maxauto": 1.1462,
+          "vs_compile": 1.1414,
+          "latency_ms": 0.09259
+        },
+        {
+          "M": 16384,
+          "N": 2048,
+          "dtype": "fp16",
+          "status": "ok",
+          "vs_maxauto": 0.7607,
+          "vs_compile": 0.7908,
+          "latency_ms": 0.13813
+        },
+        {
+          "M": 16384,
+          "N": 2048,
+          "dtype": "bf16",
+          "status": "ok",
+          "vs_maxauto": 0.719,
+          "vs_compile": 0.7629,
+          "latency_ms": 0.14368
+        },
+        {
+          "M": 256,
+          "N": 16384,
+          "dtype": "fp16",
+          "status": "ok",
+          "vs_maxauto": 2.4659,
+          "vs_compile": 2.4552,
+          "latency_ms": 0.03142
+        },
+        {
+          "M": 256,
+          "N": 16384,
+          "dtype": "bf16",
+          "status": "ok",
+          "vs_maxauto": 2.3278,
+          "vs_compile": 2.3429,
+          "latency_ms": 0.03192
+        }
+      ],
+      "geomean_vs_maxauto": 1.3251,
+      "win_rate": 0.833,
+      "n_cells_ok": 12,
+      "n_cells": 12,
+      "losses": [
+        {
+          "M": 16384,
+          "N": 2048,
+          "dtype": "fp16",
+          "vs_maxauto": 0.7607
+        },
+        {
+          "M": 16384,
+          "N": 2048,
+          "dtype": "bf16",
+          "vs_maxauto": 0.719
+        }
+      ],
+      "headline_rotated_vs_maxauto": 1.1892
+    },
+    "add_layernorm_gelu_erf": {
+      "cells": [
+        {
+          "M": 1024,
+          "N": 4096,
+          "dtype": "fp16",
+          "status": "ok",
+          "vs_maxauto": 1.7158,
+          "vs_compile": 1.729,
+          "latency_ms": 0.03147
+        },
+        {
+          "M": 1024,
+          "N": 4096,
+          "dtype": "bf16",
+          "status": "ok",
+          "vs_maxauto": 1.7092,
+          "vs_compile": 1.7032,
+          "latency_ms": 0.0317
+        },
+        {
+          "M": 4096,
+          "N": 4096,
+          "dtype": "fp16",
+          "status": "ok",
+          "vs_maxauto": 1.3101,
+          "vs_compile": 1.4003,
+          "latency_ms": 0.06155
+        },
+        {
+          "M": 4096,
+          "N": 4096,
+          "dtype": "bf16",
+          "status": "ok",
+          "vs_maxauto": 1.3333,
+          "vs_compile": 1.332,
+          "latency_ms": 0.0651
+        },
+        {
+          "M": 8192,
+          "N": 4096,
+          "dtype": "fp16",
+          "status": "ok",
+          "vs_maxauto": 1.1208,
+          "vs_compile": 1.2455,
+          "latency_ms": 0.09731
+        },
+        {
+          "M": 8192,
+          "N": 4096,
+          "dtype": "bf16",
+          "status": "ok",
+          "vs_maxauto": 1.1003,
+          "vs_compile": 1.2131,
+          "latency_ms": 0.10514
+        },
+        {
+          "M": 4096,
+          "N": 8192,
+          "dtype": "fp16",
+          "status": "ok",
+          "vs_maxauto": 1.1076,
+          "vs_compile": 1.2228,
+          "latency_ms": 0.10069
+        },
+        {
+          "M": 4096,
+          "N": 8192,
+          "dtype": "bf16",
+          "status": "ok",
+          "vs_maxauto": 1.1517,
+          "vs_compile": 1.2096,
+          "latency_ms": 0.1085
+        },
+        {
+          "M": 16384,
+          "N": 2048,
+          "dtype": "fp16",
+          "status": "ok",
+          "vs_maxauto": 0.6423,
+          "vs_compile": 0.7125,
+          "latency_ms": 0.16288
+        },
+        {
+          "M": 16384,
+          "N": 2048,
+          "dtype": "bf16",
+          "status": "ok",
+          "vs_maxauto": 0.6552,
+          "vs_compile": 0.7063,
+          "latency_ms": 0.17605
+        },
+        {
+          "M": 256,
+          "N": 16384,
+          "dtype": "fp16",
+          "status": "ok",
+          "vs_maxauto": 3.0739,
+          "vs_compile": 2.9463,
+          "latency_ms": 0.03485
+        },
+        {
+          "M": 256,
+          "N": 16384,
+          "dtype": "bf16",
+          "status": "ok",
+          "vs_maxauto": 2.9523,
+          "vs_compile": 2.9243,
+          "latency_ms": 0.03486
+        }
+      ],
+      "geomean_vs_maxauto": 1.3305,
+      "win_rate": 0.833,
+      "n_cells_ok": 12,
+      "n_cells": 12,
+      "losses": [
+        {
+          "M": 16384,
+          "N": 2048,
+          "dtype": "fp16",
+          "vs_maxauto": 0.6423
+        },
+        {
+          "M": 16384,
+          "N": 2048,
+          "dtype": "bf16",
+          "vs_maxauto": 0.6552
+        }
+      ],
+      "headline_rotated_vs_maxauto": 1.1139
+    },
+    "softcap_softmax": {
+      "cells": [
+        {
+          "M": 1024,
+          "N": 4096,
+          "dtype": "fp16",
+          "status": "ok",
+          "vs_maxauto": 1.6804,
+          "vs_compile": 1.6974,
+          "latency_ms": 0.03194
+        },
+        {
+          "M": 1024,
+          "N": 4096,
+          "dtype": "bf16",
+          "status": "ok",
+          "vs_maxauto": 1.7361,
+          "vs_compile": 1.7309,
+          "latency_ms": 0.03098
+        },
+        {
+          "M": 4096,
+          "N": 4096,
+          "dtype": "fp16",
+          "status": "ok",
+          "vs_maxauto": 1.8018,
+          "vs_compile": 1.8323,
+          "latency_ms": 0.04189
+        },
+        {
+          "M": 4096,
+          "N": 4096,
+          "dtype": "bf16",
+          "status": "ok",
+          "vs_maxauto": 1.7602,
+          "vs_compile": 1.7964,
+          "latency_ms": 0.04283
+        },
+        {
+          "M": 8192,
+          "N": 4096,
+          "dtype": "fp16",
+          "status": "ok",
+          "vs_maxauto": 1.8633,
+          "vs_compile": 1.9183,
+          "latency_ms": 0.05957
+        },
+        {
+          "M": 8192,
+          "N": 4096,
+          "dtype": "bf16",
+          "status": "ok",
+          "vs_maxauto": 1.8036,
+          "vs_compile": 1.937,
+          "latency_ms": 0.06198
+        },
+        {
+          "M": 4096,
+          "N": 8192,
+          "dtype": "fp16",
+          "status": "ok",
+          "vs_maxauto": 1.3361,
+          "vs_compile": 1.3412,
+          "latency_ms": 0.08442
+        },
+        {
+          "M": 4096,
+          "N": 8192,
+          "dtype": "bf16",
+          "status": "ok",
+          "vs_maxauto": 1.3394,
+          "vs_compile": 1.3406,
+          "latency_ms": 0.0847
+        },
+        {
+          "M": 16384,
+          "N": 2048,
+          "dtype": "fp16",
+          "status": "ok",
+          "vs_maxauto": 1.8256,
+          "vs_compile": 1.8882,
+          "latency_ms": 0.06099
+        },
+        {
+          "M": 16384,
+          "N": 2048,
+          "dtype": "bf16",
+          "status": "ok",
+          "vs_maxauto": 1.8148,
+          "vs_compile": 1.8702,
+          "latency_ms": 0.06237
+        },
+        {
+          "M": 256,
+          "N": 16384,
+          "dtype": "fp16",
+          "status": "ok",
+          "vs_maxauto": 2.8869,
+          "vs_compile": 2.8331,
+          "latency_ms": 0.03182
+        },
+        {
+          "M": 256,
+          "N": 16384,
+          "dtype": "bf16",
+          "status": "ok",
+          "vs_maxauto": 2.8212,
+          "vs_compile": 2.802,
+          "latency_ms": 0.03176
+        }
+      ],
+      "geomean_vs_maxauto": 1.8395,
+      "win_rate": 1.0,
+      "n_cells_ok": 12,
+      "n_cells": 12,
+      "losses": [],
+      "headline_rotated_vs_maxauto": 1.8539
+    },
+    "rmsnorm_gemma": {
+      "cells": [
+        {
+          "M": 1024,
+          "N": 4096,
+          "dtype": "fp16",
+          "status": "ok",
+          "vs_maxauto": 1.9977,
+          "vs_compile": 1.9684,
+          "latency_ms": 0.02838
+        },
+        {
+          "M": 1024,
+          "N": 4096,
+          "dtype": "bf16",
+          "status": "ok",
+          "vs_maxauto": 1.9608,
+          "vs_compile": 1.9117,
+          "latency_ms": 0.02936
+        },
+        {
+          "M": 4096,
+          "N": 4096,
+          "dtype": "fp16",
+          "status": "ok",
+          "vs_maxauto": 1.4228,
+          "vs_compile": 1.4887,
+          "latency_ms": 0.03742
+        },
+        {
+          "M": 4096,
+          "N": 4096,
+          "dtype": "bf16",
+          "status": "ok",
+          "vs_maxauto": 1.5164,
+          "vs_compile": 1.5321,
+          "latency_ms": 0.03864
+        },
+        {
+          "M": 8192,
+          "N": 4096,
+          "dtype": "fp16",
+          "status": "ok",
+          "vs_maxauto": 1.2918,
+          "vs_compile": 1.3583,
+          "latency_ms": 0.05291
+        },
+        {
+          "M": 8192,
+          "N": 4096,
+          "dtype": "bf16",
+          "status": "ok",
+          "vs_maxauto": 1.2699,
+          "vs_compile": 1.3427,
+          "latency_ms": 0.05448
+        },
+        {
+          "M": 4096,
+          "N": 8192,
+          "dtype": "fp16",
+          "status": "ok",
+          "vs_maxauto": 1.1861,
+          "vs_compile": 1.1831,
+          "latency_ms": 0.05821
+        },
+        {
+          "M": 4096,
+          "N": 8192,
+          "dtype": "bf16",
+          "status": "ok",
+          "vs_maxauto": 1.2201,
+          "vs_compile": 1.2119,
+          "latency_ms": 0.06048
+        },
+        {
+          "M": 16384,
+          "N": 2048,
+          "dtype": "fp16",
+          "status": "ok",
+          "vs_maxauto": 1.255,
+          "vs_compile": 1.3669,
+          "latency_ms": 0.05403
+        },
+        {
+          "M": 16384,
+          "N": 2048,
+          "dtype": "bf16",
+          "status": "ok",
+          "vs_maxauto": 1.1669,
+          "vs_compile": 1.2509,
+          "latency_ms": 0.05923
+        },
+        {
+          "M": 256,
+          "N": 16384,
+          "dtype": "fp16",
+          "status": "ok",
+          "vs_maxauto": 2.62,
+          "vs_compile": 2.5926,
+          "latency_ms": 0.028
+        },
+        {
+          "M": 256,
+          "N": 16384,
+          "dtype": "bf16",
+          "status": "ok",
+          "vs_maxauto": 2.6265,
+          "vs_compile": 2.6375,
+          "latency_ms": 0.02746
+        }
+      ],
+      "geomean_vs_maxauto": 1.5565,
+      "win_rate": 1.0,
+      "n_cells_ok": 12,
+      "n_cells": 12,
+      "losses": [],
+      "headline_rotated_vs_maxauto": 1.263
+    },
+    "glu": {
+      "cells": [
+        {
+          "M": 1024,
+          "N": 4096,
+          "dtype": "fp16",
+          "status": "ok",
+          "vs_maxauto": 1.8436,
+          "vs_compile": 1.8714,
+          "latency_ms": 0.02701
+        },
+        {
+          "M": 1024,
+          "N": 4096,
+          "dtype": "bf16",
+          "status": "ok",
+          "vs_maxauto": 1.857,
+          "vs_compile": 1.8541,
+          "latency_ms": 0.02741
+        },
+        {
+          "M": 4096,
+          "N": 4096,
+          "dtype": "fp16",
+          "status": "ok",
+          "vs_maxauto": 1.3882,
+          "vs_compile": 1.3831,
+          "latency_ms": 0.04443
+        },
+        {
+          "M": 4096,
+          "N": 4096,
+          "dtype": "bf16",
+          "status": "ok",
+          "vs_maxauto": 1.3784,
+          "vs_compile": 1.3758,
+          "latency_ms": 0.0433
+        },
+        {
+          "M": 8192,
+          "N": 4096,
+          "dtype": "fp16",
+          "status": "ok",
+          "vs_maxauto": 1.2517,
+          "vs_compile": 1.2544,
+          "latency_ms": 0.06566
+        },
+        {
+          "M": 8192,
+          "N": 4096,
+          "dtype": "bf16",
+          "status": "ok",
+          "vs_maxauto": 1.2777,
+          "vs_compile": 1.262,
+          "latency_ms": 0.06534
+        },
+        {
+          "M": 4096,
+          "N": 8192,
+          "dtype": "fp16",
+          "status": "ok",
+          "vs_maxauto": 1.2345,
+          "vs_compile": 1.2436,
+          "latency_ms": 0.06666
+        },
+        {
+          "M": 4096,
+          "N": 8192,
+          "dtype": "bf16",
+          "status": "ok",
+          "vs_maxauto": 1.2597,
+          "vs_compile": 1.2623,
+          "latency_ms": 0.06802
+        },
+        {
+          "M": 16384,
+          "N": 2048,
+          "dtype": "fp16",
+          "status": "ok",
+          "vs_maxauto": 1.2555,
+          "vs_compile": 1.2633,
+          "latency_ms": 0.06563
+        },
+        {
+          "M": 16384,
+          "N": 2048,
+          "dtype": "bf16",
+          "status": "ok",
+          "vs_maxauto": 1.2407,
+          "vs_compile": 1.246,
+          "latency_ms": 0.06661
+        },
+        {
+          "M": 256,
+          "N": 16384,
+          "dtype": "fp16",
+          "status": "ok",
+          "vs_maxauto": 1.8967,
+          "vs_compile": 1.9064,
+          "latency_ms": 0.0265
+        },
+        {
+          "M": 256,
+          "N": 16384,
+          "dtype": "bf16",
+          "status": "ok",
+          "vs_maxauto": 1.9563,
+          "vs_compile": 1.9643,
+          "latency_ms": 0.02821
+        }
+      ],
+      "geomean_vs_maxauto": 1.4605,
+      "win_rate": 1.0,
+      "n_cells_ok": 12,
+      "n_cells": 12,
+      "losses": [],
+      "headline_rotated_vs_maxauto": 1.2575
+    },
+    "rope_interleaved": {
+      "cells": [
+        {
+          "M": 8192,
+          "N": 128,
+          "dtype": "fp16",
+          "status": "ok",
+          "vs_maxauto": 1.6519,
+          "vs_compile": 1.6334,
+          "latency_ms": 0.03208
+        },
+        {
+          "M": 8192,
+          "N": 128,
+          "dtype": "bf16",
+          "status": "ok",
+          "vs_maxauto": 1.6366,
+          "vs_compile": 1.6165,
+          "latency_ms": 0.03179
+        },
+        {
+          "M": 32768,
+          "N": 128,
+          "dtype": "fp16",
+          "status": "ok",
+          "vs_maxauto": 1.1854,
+          "vs_compile": 1.1824,
+          "latency_ms": 0.04264
+        },
+        {
+          "M": 32768,
+          "N": 128,
+          "dtype": "bf16",
+          "status": "ok",
+          "vs_maxauto": 1.1811,
+          "vs_compile": 1.1792,
+          "latency_ms": 0.04259
+        },
+        {
+          "M": 65536,
+          "N": 64,
+          "dtype": "fp16",
+          "status": "ok",
+          "vs_maxauto": 0.8806,
+          "vs_compile": 0.8758,
+          "latency_ms": 0.0643
+        },
+        {
+          "M": 65536,
+          "N": 64,
+          "dtype": "bf16",
+          "status": "ok",
+          "vs_maxauto": 0.805,
+          "vs_compile": 0.8155,
+          "latency_ms": 0.06237
+        },
+        {
+          "M": 16384,
+          "N": 256,
+          "dtype": "fp16",
+          "status": "ok",
+          "vs_maxauto": 1.5451,
+          "vs_compile": 1.5791,
+          "latency_ms": 0.03296
+        },
+        {
+          "M": 16384,
+          "N": 256,
+          "dtype": "bf16",
+          "status": "ok",
+          "vs_maxauto": 1.6248,
+          "vs_compile": 1.6427,
+          "latency_ms": 0.03488
+        }
+      ],
+      "geomean_vs_maxauto": 1.2693,
+      "win_rate": 0.75,
+      "n_cells_ok": 8,
+      "n_cells": 8,
+      "losses": [
+        {
+          "M": 65536,
+          "N": 64,
+          "dtype": "fp16",
+          "vs_maxauto": 0.8806
+        },
+        {
+          "M": 65536,
+          "N": 64,
+          "dtype": "bf16",
+          "vs_maxauto": 0.805
+        }
+      ],
+      "headline_rotated_vs_maxauto": 1.1865
+    },
+    "cross_entropy": {
+      "cells": [
+        {
+          "M": 1024,
+          "N": 4096,
+          "dtype": "fp16",
+          "status": "ok",
+          "vs_maxauto": 1.8172,
+          "vs_compile": 1.8046,
+          "latency_ms": 0.02784
+        },
+        {
+          "M": 1024,
+          "N": 4096,
+          "dtype": "bf16",
+          "status": "ok",
+          "vs_maxauto": 1.8209,
+          "vs_compile": 1.8187,
+          "latency_ms": 0.02842
+        },
+        {
+          "M": 4096,
+          "N": 4096,
+          "dtype": "fp16",
+          "status": "ok",
+          "vs_maxauto": 2.0544,
+          "vs_compile": 2.4386,
+          "latency_ms": 0.02973
+        },
+        {
+          "M": 4096,
+          "N": 4096,
+          "dtype": "bf16",
+          "status": "ok",
+          "vs_maxauto": 2.0504,
+          "vs_compile": 2.456,
+          "latency_ms": 0.03109
+        },
+        {
+          "M": 8192,
+          "N": 4096,
+          "dtype": "fp16",
+          "status": "ok",
+          "vs_maxauto": 2.0212,
+          "vs_compile": 2.6345,
+          "latency_ms": 0.0408
+        },
+        {
+          "M": 8192,
+          "N": 4096,
+          "dtype": "bf16",
+          "status": "ok",
+          "vs_maxauto": 1.968,
+          "vs_compile": 2.5929,
+          "latency_ms": 0.04355
+        },
+        {
+          "M": 4096,
+          "N": 8192,
+          "dtype": "fp16",
+          "status": "ok",
+          "vs_maxauto": 1.8083,
+          "vs_compile": 2.0629,
+          "latency_ms": 0.04557
+        },
+        {
+          "M": 4096,
+          "N": 8192,
+          "dtype": "bf16",
+          "status": "ok",
+          "vs_maxauto": 1.745,
+          "vs_compile": 2.0956,
+          "latency_ms": 0.04587
+        },
+        {
+          "M": 16384,
+          "N": 2048,
+          "dtype": "fp16",
+          "status": "ok",
+          "vs_maxauto": 1.4886,
+          "vs_compile": 2.052,
+          "latency_ms": 0.05566
+        },
+        {
+          "M": 16384,
+          "N": 2048,
+          "dtype": "bf16",
+          "status": "ok",
+          "vs_maxauto": 1.4832,
+          "vs_compile": 2.0514,
+          "latency_ms": 0.05854
+        },
+        {
+          "M": 256,
+          "N": 16384,
+          "dtype": "fp16",
+          "status": "ok",
+          "vs_maxauto": 3.0079,
+          "vs_compile": 2.9356,
+          "latency_ms": 0.03032
+        },
+        {
+          "M": 256,
+          "N": 16384,
+          "dtype": "bf16",
+          "status": "ok",
+          "vs_maxauto": 2.9763,
+          "vs_compile": 2.9746,
+          "latency_ms": 0.02898
+        }
+      ],
+      "geomean_vs_maxauto": 1.972,
+      "win_rate": 1.0,
+      "n_cells_ok": 12,
+      "n_cells": 12,
+      "losses": [],
+      "headline_rotated_vs_maxauto": 2.0944
+    }
+  }
+}
