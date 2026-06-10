@@ -151,8 +151,27 @@ def _prep_dirs():
 
 
 def _run(cmd: list[str]):
+    """Run a phase, TEEING full stdout+stderr to reports/logs/<stamp>_<script>.log so the
+    complete run log persists to the volume + HF (Modal's CLI windows old logs — the full
+    transcript is evidence and must outlive the container)."""
     print(">>>", " ".join(cmd), flush=True)
-    subprocess.run(cmd, cwd=WORK, env=_env(), check=True)
+    import datetime
+    logdir = f"{WORK}/reports/logs"
+    os.makedirs(logdir, exist_ok=True)
+    script = next((c for c in cmd if c.endswith(".py")), "cmd").rsplit("/", 1)[-1][:-3]
+    logpath = f"{logdir}/{datetime.datetime.now().strftime('%Y%m%d_%H%M%S')}_{script}.log"
+    with open(logpath, "ab") as lf:
+        p = subprocess.Popen(cmd, cwd=WORK, env=_env(),
+                             stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+        for line in p.stdout:
+            sys.stdout.buffer.write(line)
+            sys.stdout.flush()
+            lf.write(line)
+            lf.flush()
+        rc = p.wait()
+    print(f"[log] full transcript archived -> {logpath}", flush=True)
+    if rc != 0:
+        raise subprocess.CalledProcessError(rc, cmd)
 
 
 def _save():
