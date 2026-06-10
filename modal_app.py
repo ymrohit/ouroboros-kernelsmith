@@ -414,11 +414,16 @@ def rl(
 
 
 @app.function(**COMMON)
-def rebench():
-    """5× stability re-bench vs torch.compile max-autotune (the honest 'beats the incumbent' bar)."""
+def rebench(ops: str = ""):
+    """5× stability re-bench vs torch.compile max-autotune (the honest 'beats the incumbent' bar).
+    ops: optional comma subset (default: every kernel in outputs/best_kernels)."""
     _gpu_banner(); _restore(); _prep_dirs()
-    _run([sys.executable, "-u", "rebench_stability.py"])
+    cmd = [sys.executable, "-u", "rebench_stability.py"]
+    if ops:
+        cmd += ["--ops", ops]
+    _run(cmd)
     _save()
+    _push_hf(f"{WORK}/reports", MODEL_REPO, "model", "stability rebench")
 
 
 @app.function(**COMMON)
