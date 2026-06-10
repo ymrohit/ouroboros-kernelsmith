@@ -211,7 +211,8 @@ class Proposer:
 
     def learn(self, pids, comps, rewards, distill_src, kl=0.02):
         """GRPO over the group + self-distill the fastest verified kernel. Per-sample backward.
-        KL-to-frozen-reference guards against policy collapse (same guard as rl_specialist)."""
+        Drift penalty to the frozen reference guards against policy collapse. (Honest label:
+        this is |Δ sequence-logprob|, a crude one-sample KL proxy — not a true KL.)"""
         import torch
         rt = torch.tensor(rewards, dtype=torch.float32)
         did = False
@@ -268,7 +269,8 @@ def main():
     ap.add_argument("--no-llm", action="store_true", dest="no_llm",
                     help="templated search only (no GPU LM): proves search/dedup/archive cheaply")
     ap.add_argument("--no-kl", action="store_true", dest="no_kl",
-                    help="skip the frozen reference model (halves proposer VRAM; drops the KL guard)")
+                    help="skip the frozen reference model (halves proposer VRAM; drops the drift "
+                         "penalty — honestly a |Δ seq-logprob| to the frozen ref, a crude KL proxy)")
     ap.add_argument("--max-new", type=int, default=1024, dest="max_new",
                     help="max new tokens per generated kernel (caps generation VRAM/time)")
     ap.add_argument("--load-adapter", default=None, dest="load_adapter",

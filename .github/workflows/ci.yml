@@ -1,0 +1,18 @@
+name: ci
+on:
+  push: {branches: [main]}
+  pull_request:
+
+jobs:
+  cpu-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: "3.11"}
+      - run: pip install pytest torch --index-url https://download.pytorch.org/whl/cpu
+      - run: pip install ruff
+      - run: ruff check ouroboros/*.py modal_app.py --select E9,F63,F7,F82   # real errors only
+      - run: pytest tests/ -q
+      # The GPU truth (harness selftest: gold pass / wrong + cheats rejected) cannot run
+      # here — it is the Modal/4090 gate: `modal run modal_app.py::selftest` must be ALL GREEN.

@@ -1,4 +1,8 @@
-# OUROBOROS on Modal — cloud training
+# OUROBOROS on Modal — cloud training (HISTORICAL: the original 2B setup)
+
+> ⚠️ **This documents the ORIGINAL Qwen3.5-2B / A100 / torch-2.12 run.** The current config
+> (Qwen3.6-27B, H200, torch 2.10 + tilelang) is baked into `modal_app.py`; start from the
+> top-level `README.md` and `RESULTS.md`. The Modal workflow below is still accurate.
 
 Train the kernel-smith (Qwen3.5-2B writes Triton kernels, an immutable harness verifies them)
 on Modal GPUs. This folder is **self-contained**: the training stack under `ouroboros/` was
@@ -27,9 +31,9 @@ ouroboros-modal/
 export HF_TOKEN=hf_xxxxxxxx                            # only needed for gated model downloads
 ```
 
-The HF token is forwarded to the container as an inline secret from your local `HF_TOKEN`
-(no named Modal secret required). Probes (`gpuinfo`, `selftest`) run with no token at all.
-For public models you can skip it entirely.
+The app uses a **named Modal secret** called `huggingface`
+(`modal secret create huggingface HF_TOKEN=hf_xxx`) — needed for gated model downloads and
+the private-HF pushes. Probes (`gpuinfo`, `selftest`) work without a usable token.
 
 ## 2. Validate the GPU + the referee (cheap, ~2–3 min)
 
