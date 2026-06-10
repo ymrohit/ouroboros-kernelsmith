@@ -1,0 +1,93 @@
+{
+  "layernorm": {
+    "experts": {
+      "tutorial/layernorm": {
+        "latency_ms": 0.0667,
+        "vs_maxauto": 1.063,
+        "vs_compile": 1.18,
+        "status": "ok"
+      },
+      "unsloth/layernorm": {
+        "latency_ms": 0.0618,
+        "vs_maxauto": 1.109,
+        "vs_compile": 1.228,
+        "status": "ok"
+      }
+    },
+    "ours": {
+      "author": "gold_seed",
+      "latency_ms": 0.0614,
+      "vs_maxauto": 1.164,
+      "vs_compile": 1.287,
+      "status": "ok"
+    }
+  },
+  "relu2": {
+    "experts": {
+      "liger/relu_squared": {
+        "latency_ms": 0.0547,
+        "vs_maxauto": 1.186,
+        "vs_compile": 1.193,
+        "status": "ok"
+      }
+    },
+    "ours": {
+      "author": "gold_seed",
+      "latency_ms": 0.0515,
+      "vs_maxauto": 1.259,
+      "vs_compile": 1.26,
+      "status": "ok"
+    }
+  },
+  "rmsnorm": {
+    "experts": {
+      "unsloth/rms_layernorm": {
+        "latency_ms": 0.0598,
+        "vs_maxauto": 1.166,
+        "vs_compile": 1.228,
+        "status": "ok"
+      }
+    },
+    "ours": {
+      "author": "gold_seed",
+      "latency_ms": 0.053,
+      "vs_maxauto": 1.256,
+      "vs_compile": 1.325,
+      "status": "ok"
+    }
+  },
+  "softmax": {
+    "experts": {
+      "tutorial/softmax": {
+        "latency_ms": 0.0544,
+        "vs_maxauto": 1.779,
+        "vs_compile": 2.013,
+        "status": "ok"
+      }
+    },
+    "ours": {
+      "author": "MODEL",
+      "latency_ms": 0.0535,
+      "vs_maxauto": 1.846,
+      "vs_compile": 2.068,
+      "status": "ok"
+    }
+  },
+  "swiglu": {
+    "experts": {
+      "liger/swiglu": {
+        "latency_ms": 0.0697,
+        "vs_maxauto": 1.142,
+        "vs_compile": 1.159,
+        "status": "ok"
+      }
+    },
+    "ours": {
+      "author": "MODEL",
+      "latency_ms": 0.066,
+      "vs_maxauto": 1.235,
+      "vs_compile": 1.224,
+      "status": "ok"
+    }
+  }
+}

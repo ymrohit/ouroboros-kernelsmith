@@ -83,6 +83,62 @@ Op sets: `ALL_OPS` (31 SFT), `RL_OPS` (16), `DISCOVERY_OPS` (16 new), `FULL_SFT_
 > 27B config baked into `modal_app.py` (H200, torch 2.10 + tilelang). Read it for the Modal workflow,
 > but the pinned versions/model there are the old run's.
 
+---
+
+# V2 (2026-06-10) — hardening, scale-out, and the claim upgrade
+
+## V2.1 Harness anti-gaming (the moat, proven harder)
+Three exploits the v1 harness would have ACCEPTED are now impossible by construction AND
+shipped as rejected negative controls: bench-shape special-casing (bench inputs joined the
+correctness sweep), pointer-keyed output memoization (large-value poke each timed iteration
++ verify-after-bench), input mutation (contract check). Selftest is now **30 cases — ALL
+GREEN on RTX 4090 and H200** (14 gold / 13 negative / 3 anti-gaming). New `rotate` mode
+re-benches cache-cold (4 rotating clone-sets).
+
+## V2.2 Op suite: 60 → 101 verified specs
++8 chain epilogues (leaky_relu, relu6, hardtanh, elu, selu, softplus, mish, gelu_erf) ×
+{rms,layer}norm × ±residual = 32 new chain ops — **64/64 gold variants pass + 5
+cross-epilogue rejections on the production stack (Modal L4)**. +5 standalone real-LLM ops
+with gold+wrong seeds (softcap_softmax, rmsnorm_gemma, glu, rope_interleaved,
+cross_entropy). `l1norm` evaluated and EXCLUDED — outputs below fp16 atol make allclose
+vacuous there (an all-zeros kernel would pass).
+
+## V2.3 Shape-grid re-bench: the headline claim, upgraded ✅
+All 32 trained kernels × (M,N)×{fp16,bf16} grid (376 cells) vs max-autotune recompiled per
+cell, H200: **32/32 geomean > 1.0, overall geomean 1.494×, 32/32 survive the cache-cold
+rotated check (1.10–1.83×).** 38/376 cells (10%) are LOSSES, reported per-cell — 34 of 38
+concentrate at 16384×2048 (short-row regime; tells the next round which bench shape to
+add). → `reports/rebench_shapes_qwen3.6-27b.md`. The v1 single-shape headline is retired in
+favor of this.
+
+## V2.4 Expert head-to-head, now TWO conditions ✅
+Condition 2 (NEW): Liger via its OWN public API, as shipped. **All 5 Liger API recipes pass
+our adversarial sweep — the v1 "5/11 experts non-robust" claim is RETIRED as a
+wrapper-fidelity artifact** (and stated so). H200 results: ours faster on swiglu / rmsnorm /
+relu2 / geglu in both conditions; softmax and layernorm are ties-within-noise vs the best
+fixed-schedule expert; cross_entropy "win" (0.048ms vs 0.226ms) is FLAGGED — Liger's CE
+computes grads in the forward, so forward-only comparison is unfair to them.
+→ `reports/headtohead_experts.json`.
+
+## V2.5 End-to-end composed block ✅
+Qwen-style MLP sub-block (add_rmsnorm → gate/up GEMMs → swiglu → down GEMM), correctness-
+gated, three ways. H200 + trained kernels: **1.148× vs eager, 1.004× vs compile-MA (a tie,
+reported as a tie)**; 4090 + seeds: 1.085× / 1.301×. Non-GEMM sub-path 8.5–10.1× faster;
+Amdahl ceiling (GEMMs ≈ 83–88% of block) printed in the output. → `reports/e2e_block.json`.
+
+## V2.6 Discovery run on the 37 new ops — IN FLIGHT
+RL self-distill resumed from `rl_adapter_newops` over the 32 new chain ops + 5 standalone
+(111 rounds, H200, `outputs/rl_adapter_v2`). Early rounds: LM valid-rate 12%→71% within 3
+rounds; model already took the archive lead from its own gold seeds on the first 3 ops
+attempted (1.42×/1.48×/1.28× vs compile, all `[LM]`-authored). Verdict lands in
+`reports/kernelsmith_v2.json` + a stability re-bench before anything is claimed.
+
+## V2.7 Hygiene (so the integrity is inspectable)
+Git history (v1 snapshot → every V2 change), top-level README (claim→evidence→bounds→repro),
+MIT LICENSE, CI + 11 CPU tests, `_2068` dataset naming fixed to actual counts, pseudo-KL
+relabeled as the |Δ seq-logprob| drift penalty it is, README_MODAL marked historical,
+docs/FRAMEWORK_VISION.md + docs/PAPER_PLAN.md.
+
 ## Integrity notes (what we refused)
 - Stopped the full continue-SFT when it interfered with proven ops (didn't burn epochs chasing it).
 - Skipped/declined the KernelBench prompt-prefill shortcut (would inflate a non-comparable number).
