@@ -319,6 +319,10 @@ def _selftest():
         ("glu", "glu.py", "GOLD (original GLU)", "ok"),
         ("rope_interleaved", "rope_interleaved.py", "GOLD (GPT-J RoPE)", "ok"),
         ("cross_entropy", "cross_entropy.py", "GOLD (fused CE)", "ok"),
+        # V2.7 invention suite
+        ("cumsum", "cumsum.py", "GOLD (prefix scan)", "ok"),
+        ("entropy", "entropy.py", "GOLD (entropy-from-logits)", "ok"),
+        ("kl_div", "kl_div.py", "GOLD (logit-pair KL)", "ok"),
         ("rmsnorm", "rmsnorm_wrong.py", "NEGATIVE-CONTROL (no rsqrt)", "incorrect"),
         ("softmax", "softmax_wrong.py", "NEGATIVE-CONTROL (no max-subtract)", "incorrect"),
         ("add_rmsnorm", "add_rmsnorm_wrong.py", "NEGATIVE-CONTROL (drops residual in stat)", "incorrect"),
@@ -332,6 +336,9 @@ def _selftest():
         ("glu", "glu_wrong.py", "NEGATIVE-CONTROL (silu not sigmoid)", "incorrect"),
         ("rope_interleaved", "rope_interleaved_wrong.py", "NEGATIVE-CONTROL (drops negation)", "incorrect"),
         ("cross_entropy", "cross_entropy_wrong.py", "NEGATIVE-CONTROL (no max-subtract)", "incorrect"),
+        ("cumsum", "cumsum_wrong.py", "NEGATIVE-CONTROL (no carry across blocks)", "incorrect"),
+        ("entropy", "entropy_wrong.py", "NEGATIVE-CONTROL (no max-subtract)", "incorrect"),
+        ("kl_div", "kl_div_wrong.py", "NEGATIVE-CONTROL (2nd lse not max-subtracted)", "incorrect"),
         # V2 ANTI-GAMING controls — exploits the v1 harness would have ACCEPTED:
         ("softmax", "softmax_cheat_shape.py", "ANTI-GAMING (special-cases bench shape)", "incorrect"),
         ("softmax", "softmax_cheat_memo.py", "ANTI-GAMING (memoizes by input pointer)", "incorrect"),

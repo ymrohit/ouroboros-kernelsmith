@@ -281,6 +281,15 @@ def main():
     ap.add_argument("--out", default=str(HERE / "reports" / "kernelsmith.json"))
     ap.add_argument("--save-adapter", default=None, dest="save_adapter",
                     help="save the RL-trained LoRA adapter here when done (else the RL weights are LOST)")
+    # --- ABLATION ARMS (paper section 4; each isolates one ingredient of the loop) ---------
+    ap.add_argument("--no-feedback", action="store_true", dest="no_feedback",
+                    help="ABLATION: never feed harness feedback into the prompt (no fix->retry signal)")
+    ap.add_argument("--distill-only", action="store_true", dest="distill_only",
+                    help="ABLATION: drop the GRPO advantage term; learn ONLY by self-distilling the "
+                         "round's fastest verified kernel (rejection-sampling distillation)")
+    ap.add_argument("--no-learn", action="store_true", dest="no_learn",
+                    help="ABLATION: no weight updates at all — pure best-of-N sampling from the "
+                         "starting adapter (the search-without-learning baseline)")
     args = ap.parse_args()
     ops = [o.strip() for o in args.ops.split(",") if o.strip()]
     rng = random.Random(0)
@@ -366,8 +375,8 @@ def main():
         else:
             # LM ARM: proposals are 1:1 with comps -> their rewards drive GRPO (correct credit
             # assignment: the model is scored ONLY on kernels it actually wrote). Prompt carries
-            # last round's feedback (the fix→retry reflex).
-            prompt = prop.prompt(op, last_fb[op])
+            # last round's feedback (the fix→retry reflex) — unless the ablation disables it.
+            prompt = prop.prompt(op, "" if args.no_feedback else last_fb[op])
             comps, pids = prop.sample(prompt, args.group)
             lm_srcs = [extract_kernel(prop.tok.decode(c, skip_special_tokens=True)) for c in comps]
             rewards = [grade(src, "LM") for src in lm_srcs]
@@ -376,7 +385,11 @@ def main():
             n_explore = round(args.group * args.explore_frac)
             for src in [mutate_src(base_src, rng) for _ in range(n_explore)]:
                 grade(src, "explore")
-            prop.learn(pids, comps, rewards, fastest)  # GRPO on LM proposals + distill fastest
+            if not args.no_learn:
+                # --distill-only zeroes the rewards => GRPO's std-gate skips the advantage term
+                # and ONLY the self-distill half runs (rejection-sampling distillation).
+                prop.learn(pids, comps,
+                           [0.0] * len(rewards) if args.distill_only else rewards, fastest)
 
         last_fb[op] = fb_first[0]                       # feed this round's signal into the next
         b = best.get(op, (0.0, None))[0]

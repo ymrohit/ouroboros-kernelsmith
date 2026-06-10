@@ -241,6 +241,30 @@ def _cross_entropy_ref(x, tgt):
     return torch.nn.functional.cross_entropy(x.float(), tgt, reduction="none").to(x.dtype)
 
 
+# ---- INVENTION suite (V2.7): problem classes the model was never trained on --------------
+def _cumsum_ref(x):
+    # row-wise inclusive prefix sum — a SCAN, not a reduction: a different parallel
+    # algorithm class (carry propagation across blocks) from everything in the suite.
+    return torch.cumsum(x.float(), dim=-1).to(x.dtype)
+
+
+def _entropy_ref(x):
+    # per-row Shannon entropy of softmax(x), fused from logits: H = lse(x) - sum(x*p).
+    xf = x.float()
+    lse = torch.logsumexp(xf, dim=-1, keepdim=True)
+    p = torch.exp(xf - lse)
+    return (lse.squeeze(-1) - (xf * p).sum(-1)).to(x.dtype)
+
+
+def _kl_div_ref(x, y):
+    # per-row KL(softmax(x) || softmax(y)) from raw logits — the distillation op.
+    # DOUBLE logsumexp fusion; both must be max-subtracted.
+    xf, yf = x.float(), y.float()
+    lx = xf - torch.logsumexp(xf, dim=-1, keepdim=True)
+    ly = yf - torch.logsumexp(yf, dim=-1, keepdim=True)
+    return (torch.exp(lx) * (lx - ly)).sum(-1).to(x.dtype)
+
+
 # ----------------------------------------------------------------------------------------
 @dataclass
 class OpSpec:
@@ -254,9 +278,14 @@ class OpSpec:
     signature_hint: str
     notes: str = ""
     extra: dict = field(default_factory=dict)
+    # Per-op tolerance override — DERIVED from the op's numerics (documented at the spec),
+    # never tuned to make a kernel pass. Needed where the global elementwise envelope is
+    # the wrong yardstick (e.g. scans: error tracks the running-path magnitude; entropy:
+    # the REFERENCE itself carries catastrophic cancellation).
+    tol_override: dict = field(default_factory=dict)
 
     def tol(self, dtype: torch.dtype) -> tuple[float, float]:
-        return tol_for(dtype)
+        return self.tol_override.get(dtype, tol_for(dtype))
 
 
 # Guaranteed-hard cases: large magnitude (overflow trap), low precision, NON-power-of-2 row
@@ -617,6 +646,23 @@ def _bench_softcap_softmax(): return _bench_x(162)
 def _bench_rmsnorm_gemma(): return (_fixed((_BENCH_M, _BENCH_N), seed=163), _fixed((_BENCH_N,), seed=164))
 
 
+# ---- invention suite: generators / bench / stress ----------------------------------------
+def _mk_xy(rng):
+    M, N, dt, sc = _pick(rng, _NROWS), _pick(rng, _ROWLEN), _pick(rng, _DTYPES), _pick(rng, _SCALES)
+    return (_randn(rng, (M, N), dt, sc), _randn(rng, (M, N), dt, sc))
+
+
+def _stress_xy():
+    return [(_fixed((37, 4097), torch.float16, 64.0, 171), _fixed((37, 4097), torch.float16, 64.0, 172)),
+            (_fixed((37, 4097), torch.bfloat16, 64.0, 173), _fixed((37, 4097), torch.bfloat16, 64.0, 174)),
+            (_fixed((3, 8192), torch.float16, 32.0, 175), _fixed((3, 8192), torch.float16, 32.0, 176))]
+
+
+def _bench_cumsum(): return _bench_x(170)
+def _bench_entropy(): return _bench_x(177)
+def _bench_kl_div(): return (_fixed((_BENCH_M, _BENCH_N), seed=178), _fixed((_BENCH_M, _BENCH_N), seed=179))
+
+
 SPECS: dict[str, OpSpec] = {
     "rmsnorm": OpSpec(
         name="rmsnorm",
@@ -790,6 +836,32 @@ SPECS: dict[str, OpSpec] = {
         "    # per-row cross-entropy: logsumexp(x) - x[tgt]. MUST subtract row-max inside\n"
         "    # the logsumexp (stability). Accumulate in fp32; output dtype = x.dtype.",
         notes="fused cross-entropy (the Liger flagship): softmax+log+gather in one pass."),
+    # ---- INVENTION suite: never-trained problem classes ----------------------------------
+    "cumsum": OpSpec("cumsum", _cumsum_ref, _mk_x, _bench_cumsum, _stress_x,
+        "def run(x):  # (M,N)->(M,N)  row-wise INCLUSIVE prefix sum (cumsum along the last dim).\n"
+        "    # This is a SCAN: each output depends on ALL previous elements in the row —\n"
+        "    # a carry must propagate across blocks. Accumulate in fp32.",
+        notes="prefix-scan algorithm class (carry across blocks) — unlike every reduction op.",
+        # SCAN tolerance: rounding error tracks the RUNNING-SUM magnitude (scale*sqrt(j)),
+        # not the output element — fp32 envelope: eps*scale_max*sqrt(N_max) ≈ 1.2e-7*64*90
+        # ≈ 7e-4, ×~constants → 5e-3 atol. Wrong-kernel errors here are 1e3+, so the
+        # verification stays sharp. fp16/bf16 global atol already dominates this term.
+        tol_override={torch.float32: (2e-4, 5e-3)}),
+    "entropy": OpSpec("entropy", _entropy_ref, _mk_x, _bench_entropy, _stress_x,
+        "def run(x):  # x:(M,N) -> (M,)  Shannon entropy of softmax(x) per row:\n"
+        "    # H = logsumexp(x) - sum(x * softmax(x)). MUST subtract the row max inside\n"
+        "    # both the logsumexp and the softmax (stability). fp32 accumulation.",
+        notes="fused entropy-from-logits (sampling diagnostics): two coupled reductions.",
+        # H = lse - Σx·p subtracts two O(scale·|x|) quantities — the REFERENCE itself
+        # carries this cancellation, so elementwise agreement beyond eps*|x|_max*sqrt(N)
+        # ≈ 1.2e-7*300*64 ≈ 2e-3 is unattainable for ANY correct kernel. fp32 atol 2e-2
+        # against H ∈ [0, log N≈9]; the no-max-sub control still fails with nan/inf.
+        tol_override={torch.float32: (2e-4, 2e-2)}),
+    "kl_div": OpSpec("kl_div", _kl_div_ref, _mk_xy, _bench_kl_div, _stress_xy,
+        "def run(x, y):  # both (M,N) logits -> (M,)  KL(softmax(x) || softmax(y)) per row:\n"
+        "    # lx = x - lse(x); ly = y - lse(y); out = sum(exp(lx) * (lx - ly)).\n"
+        "    # BOTH logsumexps must be max-subtracted. fp32 accumulation.",
+        notes="fused distillation KL from raw logit pairs: double logsumexp + weighted sum."),
     # ---- algorithm-discovery experiment: rmsnorm at a TALL-SKINNY shape where split-K wins ---
     "rmsnorm_wide": OpSpec("rmsnorm_wide", _rmsnorm_ref, _mk_rmsnorm_wide, _bench_rmsnorm_wide,
         _stress_rmsnorm_wide,
@@ -827,9 +899,12 @@ def _grid_kind(name: str) -> str:
         "bias_gelu": "x_bias", "softmax_scale": "x_scale", "dequant_int8": "int8",
         "cross_entropy": "ce", "rope": "rope", "rope_interleaved": "rope_inter",
         "qknorm_rope": "qkr", "add_rmsnorm_rope": "arr",
+        "cumsum": "x", "entropy": "x", "kl_div": "gate_up",
     }
     if name in explicit:
         return explicit[name]
+    if name.endswith("_short"):
+        return _grid_kind(name[: -len("_short")])
     try:
         import chains
         for cname, kind, _ref, _s in chains.all_chains():
@@ -889,6 +964,34 @@ def grid_inputs(name: str, M: int, N: int, dtype=torch.float16) -> tuple:
     raise KeyError(kind)
 
 
+# ---- SHORT-ROW regime variants (V2.7 invention targets) -----------------------------------
+# The shape-grid characterized ONE loss region for the whole product: 16384x2048 (many short
+# rows), where row-per-program schedules underuse the GPU and inductor wins. These variants
+# are the SAME ops with the bench (and its correctness case) pinned INSIDE that region —
+# the invention question is whether RL finds a schedule family (split-row / multi-row /
+# persistent) that wins where its entire current style loses. Adversarial correctness sweep
+# unchanged (same make_inputs/stress).
+_SHORT_M, _SHORT_N = 16384, 2048
+_SHORT_BASES = ["rmsnorm", "softmax", "layernorm_gelu", "add_layernorm_sigmoid"]
+
+
+def _register_short_variants():
+    for base in _SHORT_BASES:
+        b = SPECS[base]
+        name = base + "_short"
+        if name in SPECS:
+            continue
+        SPECS[name] = OpSpec(
+            name, b.reference, b.make_inputs,
+            (lambda base=base: grid_inputs(base, _SHORT_M, _SHORT_N)),
+            b.stress_inputs,
+            b.signature_hint + "\n    # REGIME: M=16384 rows of only N=2048. One-program-per-row "
+            "underuses the GPU here;\n    # consider processing MULTIPLE rows per program or "
+            "splitting work differently.",
+            notes=f"{base} pinned to the characterized loss regime (16384x2048) — schedule invention target.",
+            extra=dict(b.extra))
+
+
 # ---- register the generative fusion-chain grammar (chains.py) ----------------------------
 def _register_chains():
     import chains
@@ -908,3 +1011,4 @@ def _register_chains():
             f"then {act} epilogue; accumulate the reduction in fp32",
             notes=f"generative fusion chain (reduction->epilogue): {name}.")
 _register_chains()
+_register_short_variants()

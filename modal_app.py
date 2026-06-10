@@ -363,9 +363,11 @@ def rl(
     model: str = DEFAULT_MODEL,
     save_adapter: str = "outputs/rl_adapter",
     out: str = "reports/kernelsmith_rl.json",
+    extra_args: str = "",
 ):
     """PHASE 2 — RL/self-distill on the SFT'd model. explore_frac=0.0 → the model writes every kernel.
-    SAVES the RL adapter to `save_adapter`, hard-verifies it wrote, then pushes everything."""
+    SAVES the RL adapter to `save_adapter`, hard-verifies it wrote, then pushes everything.
+    extra_args: space-separated passthrough flags (e.g. ablations: '--no-feedback')."""
     _gpu_banner(); _restore(); _prep_dirs()
     if not os.path.isdir(f"{WORK}/{adapter}"):
         raise RuntimeError(f"adapter '{adapter}' not found in the volume — run `sft` first.")
@@ -374,7 +376,8 @@ def rl(
         _run([sys.executable, "-u", "rl_kernelsmith.py",
               "--model", model, "--ops", ops, "--rounds", str(rounds), "--group", str(group),
               "--no-kl", "--explore-frac", str(explore_frac), "--max-new", str(max_new),
-              "--load-adapter", adapter, "--save-adapter", save_adapter, "--out", out])
+              "--load-adapter", adapter, "--save-adapter", save_adapter, "--out", out]
+             + [a for a in extra_args.split() if a])
     finally:
         stop_saver()
     _save()
