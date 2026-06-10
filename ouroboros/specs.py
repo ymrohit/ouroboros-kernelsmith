@@ -203,6 +203,44 @@ def _dequant_int8_ref(q, scale):
     return (q.float() * scale.float()).to(torch.float16)
 
 
+# ---- V2 standalone additions: real LLM ops beyond the chain grammar ----------------------
+_SOFTCAP = 30.0
+
+
+def _softcap_softmax_ref(x):
+    # Gemma2-style logit softcapping then softmax: softmax(cap * tanh(x / cap)).
+    t = _SOFTCAP * torch.tanh(x.float() / _SOFTCAP)
+    return torch.softmax(t, dim=-1).to(x.dtype)
+
+
+def _rmsnorm_gemma_ref(x, w, eps: float = 1e-6):
+    # Gemma-style RMSNorm: scale by (1 + w), not w. The +1 is the classic silent-wrongness trap.
+    xf = x.float()
+    rms = torch.rsqrt(xf.pow(2).mean(-1, keepdim=True) + eps)
+    return (xf * rms * (1.0 + w.float())).to(x.dtype)
+
+
+def _glu_ref(gate, up):
+    # the ORIGINAL gated linear unit: sigmoid(gate) * up
+    return (torch.sigmoid(gate.float()) * up.float()).to(gate.dtype)
+
+
+def _rope_interleaved_ref(x, cos, sin):
+    # GPT-J / interleaved RoPE: pairs (x[2i], x[2i+1]) rotated by (cos[i], sin[i]).
+    xf = x.float()
+    x1, x2 = xf[..., 0::2], xf[..., 1::2]
+    c, s = cos.float(), sin.float()
+    out = torch.empty_like(xf)
+    out[..., 0::2] = x1 * c - x2 * s
+    out[..., 1::2] = x2 * c + x1 * s
+    return out.to(x.dtype)
+
+
+def _cross_entropy_ref(x, tgt):
+    # fused per-row cross-entropy (the Liger flagship fusion): -log_softmax(x)[tgt], no reduction.
+    return torch.nn.functional.cross_entropy(x.float(), tgt, reduction="none").to(x.dtype)
+
+
 # ----------------------------------------------------------------------------------------
 @dataclass
 class OpSpec:
@@ -530,6 +568,55 @@ def _stress_dequant_int8():
     return out
 
 
+# ---- V2 standalone ops: generators / bench / stress --------------------------------------
+def _mk_rope_inter(rng):
+    M, D, dt, sc = _pick(rng, _NROWS), _pick(rng, _HEADDIM), _pick(rng, _DTYPES), _pick(rng, _SCALES)
+    g = torch.Generator(device="cuda").manual_seed(rng.randrange(2**31))
+    ang = torch.randn((M, D // 2), generator=g, device="cuda", dtype=torch.float32)
+    return (_randn(rng, (M, D), dt, sc), torch.cos(ang).to(dt), torch.sin(ang).to(dt))
+
+
+def _bench_rope_inter():
+    M, D = 32768, 128
+    g = torch.Generator(device="cuda").manual_seed(140)
+    ang = torch.randn((M, D // 2), generator=g, device="cuda", dtype=torch.float32)
+    return (_fixed((M, D), seed=141), torch.cos(ang).to(torch.float16), torch.sin(ang).to(torch.float16))
+
+
+def _stress_rope_inter():
+    out = []
+    for D, dt in [(128, torch.float16), (256, torch.bfloat16), (64, torch.float16)]:
+        g = torch.Generator(device="cuda").manual_seed(850 + D)
+        ang = torch.randn((37, D // 2), generator=g, device="cuda", dtype=torch.float32)
+        out.append((_fixed((37, D), dt, 64.0, 850 + D), torch.cos(ang).to(dt), torch.sin(ang).to(dt)))
+    return out
+
+
+def _tgt(M, N, seed):
+    g = torch.Generator(device="cuda").manual_seed(seed)
+    return torch.randint(0, N, (M,), generator=g, device="cuda", dtype=torch.int64)
+
+
+def _mk_cross_entropy(rng):
+    M, N, dt, sc = _pick(rng, _NROWS), _pick(rng, _ROWLEN), _pick(rng, _DTYPES), _pick(rng, _SCALES)
+    return (_randn(rng, (M, N), dt, sc), _tgt(M, N, rng.randrange(2**31)))
+
+
+def _bench_cross_entropy():
+    return (_fixed((_BENCH_M, _BENCH_N), seed=150), _tgt(_BENCH_M, _BENCH_N, 151))
+
+
+def _stress_cross_entropy():
+    return [(_fixed((37, 4097), torch.float16, 64.0, 152), _tgt(37, 4097, 153)),
+            (_fixed((37, 4097), torch.bfloat16, 64.0, 154), _tgt(37, 4097, 155)),
+            (_fixed((3, 8192), torch.float16, 32.0, 156), _tgt(3, 8192, 157))]
+
+
+def _bench_glu(): return (_fixed((_BENCH_M, _BENCH_N), seed=160), _fixed((_BENCH_M, _BENCH_N), seed=161))
+def _bench_softcap_softmax(): return _bench_x(162)
+def _bench_rmsnorm_gemma(): return (_fixed((_BENCH_M, _BENCH_N), seed=163), _fixed((_BENCH_N,), seed=164))
+
+
 SPECS: dict[str, OpSpec] = {
     "rmsnorm": OpSpec(
         name="rmsnorm",
@@ -676,6 +763,33 @@ SPECS: dict[str, OpSpec] = {
         _stress_dequant_int8,
         "def run(q, scale):  # q:(M,N) int8, scale:(M,1) fp16 -> (M,N) fp16  out = q*scale  (per-row dequant)",
         notes="NON-GEMM int8 weight dequantization (memory-bound)."),
+    # ---- V2 standalone ops --------------------------------------------------------------
+    "softcap_softmax": OpSpec("softcap_softmax", _softcap_softmax_ref, _mk_softmax,
+        _bench_softcap_softmax, _stress_1tensor,
+        "def run(x):  # (M,N)->(M,N)  softmax(30*tanh(x/30)) row-wise (Gemma2 logit softcap).\n"
+        "    # MUST apply the softcap BEFORE softmax and subtract the row-max before exp.",
+        notes="Gemma2-style softcapped softmax; the cap is what large-scale inputs expose."),
+    "rmsnorm_gemma": OpSpec("rmsnorm_gemma", _rmsnorm_gemma_ref, _mk_rmsnorm,
+        _bench_rmsnorm_gemma, _stress_rmsnorm,
+        "def run(x, w):  # x:(M,N) w:(N,) -> (M,N)\n"
+        "    # Gemma RMSNorm: y = x * rsqrt(mean(x^2)+1e-6) * (1 + w)  — note the (1 + w)!",
+        notes="Gemma-style RMSNorm: scale by (1+w); dropping the +1 is the classic silent bug.",
+        extra={"eps": 1e-6}),
+    "glu": OpSpec("glu", _glu_ref, _mk_gate_up, _bench_glu, _stress_gate_up,
+        "def run(gate, up):  # both (M,N) -> (M,N)  sigmoid(gate) * up  (the original GLU)",
+        notes="the original gated linear unit; eager launches sigmoid then mul separately."),
+    "rope_interleaved": OpSpec("rope_interleaved", _rope_interleaved_ref, _mk_rope_inter,
+        _bench_rope_inter, _stress_rope_inter,
+        "def run(x, cos, sin):  # x:(M,D), cos,sin:(M,D/2), D even -> (M,D)\n"
+        "    # GPT-J INTERLEAVED RoPE: out[2i]=x[2i]*cos[i]-x[2i+1]*sin[i];\n"
+        "    #                         out[2i+1]=x[2i+1]*cos[i]+x[2i]*sin[i]. fp32 math.",
+        notes="interleaved-pair rotary (GPT-J/NeoX-style); strided pair access is the fusion win."),
+    "cross_entropy": OpSpec("cross_entropy", _cross_entropy_ref, _mk_cross_entropy,
+        _bench_cross_entropy, _stress_cross_entropy,
+        "def run(x, tgt):  # x:(M,N) fp, tgt:(M,) int64 -> (M,)\n"
+        "    # per-row cross-entropy: logsumexp(x) - x[tgt]. MUST subtract row-max inside\n"
+        "    # the logsumexp (stability). Accumulate in fp32; output dtype = x.dtype.",
+        notes="fused cross-entropy (the Liger flagship): softmax+log+gather in one pass."),
     # ---- algorithm-discovery experiment: rmsnorm at a TALL-SKINNY shape where split-K wins ---
     "rmsnorm_wide": OpSpec("rmsnorm_wide", _rmsnorm_ref, _mk_rmsnorm_wide, _bench_rmsnorm_wide,
         _stress_rmsnorm_wide,
@@ -690,6 +804,89 @@ def get_spec(name: str) -> OpSpec:
     if name not in SPECS:
         raise KeyError(f"unknown op {name!r}; have {sorted(SPECS)}")
     return SPECS[name]
+
+
+# ----------------------------------------------------------------------------------------
+# SHAPE-GRID inputs (V2, purely ADDITIVE — references/tolerances/bench_inputs untouched).
+# Builds inputs for any op at an arbitrary (M, N[, dtype]) so the harness can re-bench the
+# same kernel across a grid of shapes. For rope-family ops N is the head dim D (must be
+# even). Deterministic seeds derived from the shape so every grid cell is reproducible.
+# ----------------------------------------------------------------------------------------
+_ROPE_FAMILY = {"rope", "rope_interleaved", "qknorm_rope", "add_rmsnorm_rope"}
+
+
+def _grid_kind(name: str) -> str:
+    """Input-signature kind for an op (mirrors _register_chains's _IN map + explicit ops)."""
+    explicit = {
+        "softmax": "x", "log_softmax": "x", "gelu": "x", "silu": "x", "relu2": "x",
+        "l2norm": "x", "softcap_softmax": "x",
+        "rmsnorm": "rms", "rmsnorm_wide": "rms", "rmsnorm_gemma": "rms",
+        "layernorm": "ln", "layernorm_gelu": "ln",
+        "add_rmsnorm": "add_rms", "add_layernorm": "add_ln",
+        "swiglu": "gate_up", "geglu": "gate_up", "reglu": "gate_up", "glu": "gate_up",
+        "bias_gelu": "x_bias", "softmax_scale": "x_scale", "dequant_int8": "int8",
+        "cross_entropy": "ce", "rope": "rope", "rope_interleaved": "rope_inter",
+        "qknorm_rope": "qkr", "add_rmsnorm_rope": "arr",
+    }
+    if name in explicit:
+        return explicit[name]
+    try:
+        import chains
+        for cname, kind, _ref, _s in chains.all_chains():
+            if cname == name:
+                return {"rms": "rms", "add_rms": "add_rms", "ln": "ln", "add_ln": "add_ln"}[kind]
+    except Exception:
+        pass
+    raise KeyError(f"no grid input builder for op {name!r}")
+
+
+def grid_inputs(name: str, M: int, N: int, dtype=torch.float16) -> tuple:
+    kind = _grid_kind(name)
+    sd = (hash((name, M, N, str(dtype))) & 0x7FFFFFF) + 7
+    x = _fixed((M, N), dtype, 1.0, seed=sd)
+    if kind == "x":
+        return (x,)
+    if kind == "rms":
+        return (x, _fixed((N,), dtype, 1.0, seed=sd + 1))
+    if kind == "ln":
+        return (x, _fixed((N,), dtype, 1.0, seed=sd + 1), _fixed((N,), dtype, 1.0, seed=sd + 2))
+    if kind == "add_rms":
+        return (x, _fixed((M, N), dtype, 1.0, seed=sd + 3), _fixed((N,), dtype, 1.0, seed=sd + 1))
+    if kind == "add_ln":
+        return (x, _fixed((M, N), dtype, 1.0, seed=sd + 3),
+                _fixed((N,), dtype, 1.0, seed=sd + 1), _fixed((N,), dtype, 1.0, seed=sd + 2))
+    if kind == "gate_up":
+        return (x, _fixed((M, N), dtype, 1.0, seed=sd + 3))
+    if kind == "x_bias":
+        return (x, _fixed((N,), dtype, 1.0, seed=sd + 1))
+    if kind == "x_scale":
+        return (x, torch.tensor([0.125], device="cuda", dtype=dtype))
+    if kind == "ce":
+        g = torch.Generator(device="cuda").manual_seed(sd + 4)
+        return (x, torch.randint(0, N, (M,), generator=g, device="cuda", dtype=torch.int64))
+    if kind == "int8":
+        g = torch.Generator(device="cuda").manual_seed(sd)
+        q = torch.randint(-127, 127, (M, N), generator=g, device="cuda", dtype=torch.int8)
+        g2 = torch.Generator(device="cuda").manual_seed(sd + 1)
+        return (q, (torch.rand((M, 1), generator=g2, device="cuda") * 0.05 + 0.005).to(torch.float16))
+    # rope family: N is the head dim D (even)
+    D = N
+    if D % 2:
+        raise ValueError(f"{name}: head dim must be even, got {D}")
+    g = torch.Generator(device="cuda").manual_seed(sd + 5)
+    ang = torch.randn((M, D // 2), generator=g, device="cuda", dtype=torch.float32)
+    c, s = torch.cos(ang), torch.sin(ang)
+    if kind == "rope_inter":
+        return (x, c.to(dtype), s.to(dtype))
+    cos = torch.cat([c, c], -1).to(dtype)
+    sin = torch.cat([s, s], -1).to(dtype)
+    if kind == "rope":
+        return (x, cos, sin)
+    if kind == "qkr":
+        return (x, _fixed((D,), dtype, 1.0, seed=sd + 1), cos, sin)
+    if kind == "arr":
+        return (x, _fixed((M, D), dtype, 1.0, seed=sd + 3), _fixed((D,), dtype, 1.0, seed=sd + 1), cos, sin)
+    raise KeyError(kind)
 
 
 # ---- register the generative fusion-chain grammar (chains.py) ----------------------------

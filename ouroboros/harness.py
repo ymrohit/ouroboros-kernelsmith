@@ -73,7 +73,8 @@ class Result:
 # ============================ PARENT: subprocess driver =================================
 def evaluate(kernel_src: str, spec_name: str, n_shapes: int = 8, n_iters: int = 100,
              seed: int = 0, strong: bool = False, correctness_only: bool = False,
-             rotate: bool = False, timeout: float | None = None) -> Result:
+             rotate: bool = False, bench_override: tuple | None = None,
+             timeout: float | None = None) -> Result:
     """Run a candidate kernel through the full referee in an ISOLATED child process.
 
     The child can segfault or hang freely; we reap it. Only a clean JSON verdict on stdout
@@ -85,12 +86,16 @@ def evaluate(kernel_src: str, spec_name: str, n_shapes: int = 8, n_iters: int = 
     much cheaper, for building/filtering the SFT corpus where the boolean is all that matters.
     rotate=True cycles among 4 distinct input clones inside the timed loop (kernel AND
     baselines alike) so nothing stays L2-resident across iterations — the cache-cold
-    cross-check for headline numbers."""
+    cross-check for headline numbers.
+    bench_override=(M, N, "fp16"|"bf16"|"fp32") re-benches at an arbitrary shape via
+    specs.grid_inputs (the SHAPE-GRID rebench); the override shape also joins the
+    correctness sweep, so the anti-special-casing guarantee holds at every grid cell."""
     if timeout is None:
         timeout = 300.0 if strong else (20.0 if correctness_only else 40.0)
     req = json.dumps({"kernel_src": kernel_src, "spec_name": spec_name,
                       "n_shapes": n_shapes, "n_iters": n_iters, "seed": seed, "strong": strong,
-                      "correctness_only": correctness_only, "rotate": rotate})
+                      "correctness_only": correctness_only, "rotate": rotate,
+                      "bench_override": list(bench_override) if bench_override else None})
     try:
         proc = subprocess.run([sys.executable, str(HERE / "harness.py"), "--worker"],
                               input=req, capture_output=True, text=True, timeout=timeout)
@@ -147,8 +152,19 @@ def _worker(req: dict) -> Result:
     #         the negative controls fail DETERMINISTICALLY — never by seed luck. The bench
     #         inputs are included so a kernel cannot special-case the (public, fixed) timing
     #         shape: anything it returns at the bench shape is allclose-checked here first. --
+    # the BENCH inputs (fixed spec shape, or the shape-grid override) — built up front so the
+    # correctness sweep ALWAYS covers exactly what gets timed.
+    if req.get("bench_override"):
+        from specs import grid_inputs
+        _M, _N, _dt = req["bench_override"]
+        bench = grid_inputs(req["spec_name"], int(_M), int(_N),
+                            {"fp16": torch.float16, "bf16": torch.bfloat16,
+                             "fp32": torch.float32}[_dt])
+    else:
+        bench = spec.bench_inputs()
+
     rng = random.Random(req["seed"])
-    cases = (list(spec.stress_inputs()) + [spec.bench_inputs()]
+    cases = (list(spec.stress_inputs()) + [bench]
              + [spec.make_inputs(rng) for _ in range(req["n_shapes"])])
     passed = 0
     worst = 0.0
@@ -192,7 +208,6 @@ def _worker(req: dict) -> Result:
                       feedback=f"PASS {passed} cases (correctness-only)")
 
     # ---- 3. BENCHMARK (correct kernels only) — CUDA events, warmup both, median ----------
-    bench = spec.bench_inputs()
     eager = spec.reference
     try:
         compiled = torch.compile(spec.reference)
@@ -298,6 +313,12 @@ def _selftest():
         ("add_layernorm", "add_layernorm.py", "GOLD", "ok"),
         ("geglu", "geglu.py", "GOLD", "ok"),
         ("qknorm_rope", "qknorm_rope.py", "GOLD (fusion chain)", "ok"),
+        # V2 standalone ops
+        ("softcap_softmax", "softcap_softmax.py", "GOLD (Gemma2 softcap)", "ok"),
+        ("rmsnorm_gemma", "rmsnorm_gemma.py", "GOLD (Gemma 1+w)", "ok"),
+        ("glu", "glu.py", "GOLD (original GLU)", "ok"),
+        ("rope_interleaved", "rope_interleaved.py", "GOLD (GPT-J RoPE)", "ok"),
+        ("cross_entropy", "cross_entropy.py", "GOLD (fused CE)", "ok"),
         ("rmsnorm", "rmsnorm_wrong.py", "NEGATIVE-CONTROL (no rsqrt)", "incorrect"),
         ("softmax", "softmax_wrong.py", "NEGATIVE-CONTROL (no max-subtract)", "incorrect"),
         ("add_rmsnorm", "add_rmsnorm_wrong.py", "NEGATIVE-CONTROL (drops residual in stat)", "incorrect"),
@@ -306,6 +327,11 @@ def _selftest():
         ("add_layernorm", "add_layernorm_wrong.py", "NEGATIVE-CONTROL (drops residual in stat)", "incorrect"),
         ("geglu", "geglu_wrong.py", "NEGATIVE-CONTROL (SiLU instead of GELU)", "incorrect"),
         ("qknorm_rope", "qknorm_rope_wrong.py", "NEGATIVE-CONTROL (rms scale dropped on rotated half)", "incorrect"),
+        ("softcap_softmax", "softcap_softmax_wrong.py", "NEGATIVE-CONTROL (no softcap)", "incorrect"),
+        ("rmsnorm_gemma", "rmsnorm_gemma_wrong.py", "NEGATIVE-CONTROL (drops the +1)", "incorrect"),
+        ("glu", "glu_wrong.py", "NEGATIVE-CONTROL (silu not sigmoid)", "incorrect"),
+        ("rope_interleaved", "rope_interleaved_wrong.py", "NEGATIVE-CONTROL (drops negation)", "incorrect"),
+        ("cross_entropy", "cross_entropy_wrong.py", "NEGATIVE-CONTROL (no max-subtract)", "incorrect"),
         # V2 ANTI-GAMING controls — exploits the v1 harness would have ACCEPTED:
         ("softmax", "softmax_cheat_shape.py", "ANTI-GAMING (special-cases bench shape)", "incorrect"),
         ("softmax", "softmax_cheat_memo.py", "ANTI-GAMING (memoizes by input pointer)", "incorrect"),

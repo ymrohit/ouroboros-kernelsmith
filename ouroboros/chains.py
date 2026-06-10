@@ -27,11 +27,35 @@ ACTS = {
                     "(tl.minimum(tl.maximum(n + 3.0, 0.0), 6.0) / 6.0)"),          # F.hardsigmoid
     "hardswish":   (lambda t: t * torch.clamp(t + 3.0, 0.0, 6.0) / 6.0,
                     "(n * tl.minimum(tl.maximum(n + 3.0, 0.0), 6.0) / 6.0)"),      # F.hardswish
+    # --- V2 round 3: 8 more real, numerically-safe activations. Same exactness rule: the
+    #     torch lambda IS the triton expression (tanh via the 2*sigmoid(2x)-1 identity;
+    #     softplus uses F.softplus's threshold=20 guard so exp never overflows). -----------
+    "leaky_relu": (lambda t: torch.where(t > 0, t, 0.01 * t),
+                   "tl.where(n > 0.0, n, 0.01 * n)"),
+    "relu6":      (lambda t: torch.clamp(t, 0.0, 6.0),
+                   "tl.minimum(tl.maximum(n, 0.0), 6.0)"),
+    "hardtanh":   (lambda t: torch.clamp(t, -1.0, 1.0),
+                   "tl.minimum(tl.maximum(n, -1.0), 1.0)"),
+    "elu":        (lambda t: torch.where(t > 0, t, torch.exp(torch.clamp(t, max=0.0)) - 1.0),
+                   "tl.where(n > 0.0, n, tl.exp(tl.minimum(n, 0.0)) - 1.0)"),
+    "selu":       (lambda t: 1.0507009873554805 * torch.where(
+                       t > 0, t, 1.6732632423543772 * (torch.exp(torch.clamp(t, max=0.0)) - 1.0)),
+                   "(1.0507009873554805 * tl.where(n > 0.0, n, "
+                   "1.6732632423543772 * (tl.exp(tl.minimum(n, 0.0)) - 1.0)))"),
+    "softplus":   (lambda t: torch.where(t > 20.0, t, torch.log(1.0 + torch.exp(torch.clamp(t, max=20.0)))),
+                   "tl.where(n > 20.0, n, tl.log(1.0 + tl.exp(tl.minimum(n, 20.0))))"),
+    "mish":       (lambda t: t * torch.tanh(torch.where(
+                       t > 20.0, t, torch.log(1.0 + torch.exp(torch.clamp(t, max=20.0))))),
+                   "(n * (2.0 * tl.sigmoid(2.0 * tl.where(n > 20.0, n, "
+                   "tl.log(1.0 + tl.exp(tl.minimum(n, 20.0))))) - 1.0))"),
+    "gelu_erf":   (lambda t: 0.5 * t * (1.0 + torch.erf(t * 0.7071067811865476)),
+                   "(0.5 * n * (1.0 + tl.erf(n * 0.7071067811865476)))"),          # EXACT gelu
 }
 NORMS = ["rms", "layer"]
 RESID = [False, True]
 ACTNAMES = ["gelu", "silu", "relu2", "tanh", "sigmoid", "relu", "square",
-            "abs", "softsign", "hardsigmoid", "hardswish"]
+            "abs", "softsign", "hardsigmoid", "hardswish",
+            "leaky_relu", "relu6", "hardtanh", "elu", "selu", "softplus", "mish", "gelu_erf"]
 
 
 def chain_name(norm, residual, act):

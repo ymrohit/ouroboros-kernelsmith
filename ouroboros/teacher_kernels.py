@@ -844,7 +844,201 @@ def run(q, scale):
     return y
 '''
 
+# ---- V2 standalone ops: teacher structures ------------------------------------------------
+_SOFTCAP_WHOLEROW = '''
+@triton.jit
+def _k(x_ptr, y_ptr, stride, N, BLOCK: tl.constexpr):
+    row = tl.program_id(0); x_ptr += row * stride; y_ptr += row * stride
+    cols = tl.arange(0, BLOCK); m = cols < N
+    x = tl.load(x_ptr + cols, mask=m, other=0.0).to(tl.float32)
+    c = 30.0 * (2.0 * tl.sigmoid(2.0 * (x / 30.0)) - 1.0)
+    c = tl.where(m, c, -float("inf"))
+    e = tl.exp(c - tl.max(c, 0))
+    e = tl.where(m, e, 0.0)
+    tl.store(y_ptr + cols, e / tl.sum(e, 0), mask=m)
+def run(x):
+    M, N = x.shape; y = torch.empty_like(x)
+    _k[(M,)](x, y, x.stride(0), N, BLOCK=triton.next_power_of_2(N))
+    return y
+'''
+_SOFTCAP_TWOPASS = '''
+@triton.jit
+def _k(x_ptr, y_ptr, stride, N, BLOCK: tl.constexpr):
+    row = tl.program_id(0); x_ptr += row * stride; y_ptr += row * stride
+    mx = tl.full([BLOCK], -float("inf"), dtype=tl.float32)
+    for off in range(0, N, BLOCK):
+        cols = off + tl.arange(0, BLOCK); m = cols < N
+        x = tl.load(x_ptr + cols, mask=m, other=0.0).to(tl.float32)
+        c = 30.0 * (2.0 * tl.sigmoid(2.0 * (x / 30.0)) - 1.0)
+        mx = tl.maximum(mx, tl.where(m, c, -float("inf")))
+    rmax = tl.max(mx)
+    d = tl.zeros([BLOCK], dtype=tl.float32)
+    for off in range(0, N, BLOCK):
+        cols = off + tl.arange(0, BLOCK); m = cols < N
+        x = tl.load(x_ptr + cols, mask=m, other=0.0).to(tl.float32)
+        c = 30.0 * (2.0 * tl.sigmoid(2.0 * (x / 30.0)) - 1.0)
+        d += tl.where(m, tl.exp(c - rmax), 0.0)
+    denom = tl.sum(d)
+    for off in range(0, N, BLOCK):
+        cols = off + tl.arange(0, BLOCK); m = cols < N
+        x = tl.load(x_ptr + cols, mask=m, other=0.0).to(tl.float32)
+        c = 30.0 * (2.0 * tl.sigmoid(2.0 * (x / 30.0)) - 1.0)
+        tl.store(y_ptr + cols, tl.exp(c - rmax) / denom, mask=m)
+def run(x):
+    M, N = x.shape; y = torch.empty_like(x)
+    _k[(M,)](x, y, x.stride(0), N, BLOCK=1024)
+    return y
+'''
+_RG_SCALAR = '''
+@triton.jit
+def _k(x_ptr, w_ptr, y_ptr, stride, N, eps, BLOCK: tl.constexpr):
+    row = tl.program_id(0); x_ptr += row * stride; y_ptr += row * stride
+    s = 0.0
+    for off in range(0, N, BLOCK):
+        cols = off + tl.arange(0, BLOCK)
+        x = tl.load(x_ptr + cols, mask=cols < N, other=0.0).to(tl.float32)
+        s += tl.sum(x * x)
+    rr = tl.rsqrt(s / N + eps)
+    for off in range(0, N, BLOCK):
+        cols = off + tl.arange(0, BLOCK); m = cols < N
+        x = tl.load(x_ptr + cols, mask=m, other=0.0).to(tl.float32)
+        w = tl.load(w_ptr + cols, mask=m, other=0.0).to(tl.float32)
+        tl.store(y_ptr + cols, x * rr * (1.0 + w), mask=m)
+def run(x, w):
+    M, N = x.shape; y = torch.empty_like(x)
+    _k[(M,)](x, w, y, x.stride(0), N, 1e-6, BLOCK=1024)
+    return y
+'''
+_RG_WHOLEROW = '''
+@triton.jit
+def _k(x_ptr, w_ptr, y_ptr, stride, N, eps, BLOCK: tl.constexpr):
+    row = tl.program_id(0); x_ptr += row * stride; y_ptr += row * stride
+    cols = tl.arange(0, BLOCK); m = cols < N
+    x = tl.load(x_ptr + cols, mask=m, other=0.0).to(tl.float32)
+    rr = tl.rsqrt(tl.sum(x * x) / N + eps)
+    w = tl.load(w_ptr + cols, mask=m, other=0.0).to(tl.float32)
+    tl.store(y_ptr + cols, x * rr * (1.0 + w), mask=m)
+def run(x, w):
+    M, N = x.shape; y = torch.empty_like(x)
+    _k[(M,)](x, w, y, x.stride(0), N, 1e-6, BLOCK=triton.next_power_of_2(N))
+    return y
+'''
+_GLU_FLAT = '''
+@triton.jit
+def _k(g_ptr, u_ptr, y_ptr, n_elem, BLOCK: tl.constexpr):
+    pid = tl.program_id(0)
+    cols = pid * BLOCK + tl.arange(0, BLOCK); m = cols < n_elem
+    g = tl.load(g_ptr + cols, mask=m, other=0.0).to(tl.float32)
+    u = tl.load(u_ptr + cols, mask=m, other=0.0).to(tl.float32)
+    tl.store(y_ptr + cols, tl.sigmoid(g) * u, mask=m)
+def run(gate, up):
+    y = torch.empty_like(gate); n = gate.numel()
+    _k[(triton.cdiv(n, 1024),)](gate, up, y, n, BLOCK=1024)
+    return y
+'''
+_GLU_ROW = '''
+@triton.jit
+def _k(g_ptr, u_ptr, y_ptr, stride, N, BLOCK: tl.constexpr):
+    row = tl.program_id(0); g_ptr += row * stride; u_ptr += row * stride; y_ptr += row * stride
+    for off in range(0, N, BLOCK):
+        cols = off + tl.arange(0, BLOCK); m = cols < N
+        g = tl.load(g_ptr + cols, mask=m, other=0.0).to(tl.float32)
+        u = tl.load(u_ptr + cols, mask=m, other=0.0).to(tl.float32)
+        tl.store(y_ptr + cols, tl.sigmoid(g) * u, mask=m)
+def run(gate, up):
+    M, N = gate.shape; y = torch.empty_like(gate)
+    _k[(M,)](gate, up, y, gate.stride(0), N, BLOCK=1024)
+    return y
+'''
+_RI_STRIDED = '''
+@triton.jit
+def _k(x_ptr, cos_ptr, sin_ptr, y_ptr, xs, cs, H, BLOCK: tl.constexpr):
+    row = tl.program_id(0)
+    x_ptr += row * xs; y_ptr += row * xs; cos_ptr += row * cs; sin_ptr += row * cs
+    i = tl.arange(0, BLOCK); m = i < H
+    x1 = tl.load(x_ptr + 2 * i, mask=m, other=0.0).to(tl.float32)
+    x2 = tl.load(x_ptr + 2 * i + 1, mask=m, other=0.0).to(tl.float32)
+    c = tl.load(cos_ptr + i, mask=m, other=0.0).to(tl.float32)
+    s = tl.load(sin_ptr + i, mask=m, other=0.0).to(tl.float32)
+    tl.store(y_ptr + 2 * i, x1 * c - x2 * s, mask=m)
+    tl.store(y_ptr + 2 * i + 1, x2 * c + x1 * s, mask=m)
+def run(x, cos, sin):
+    M, D = x.shape; y = torch.empty_like(x)
+    _k[(M,)](x, cos, sin, y, x.stride(0), cos.stride(0), D // 2, BLOCK=triton.next_power_of_2(D // 2))
+    return y
+'''
+_RI_TILED = '''
+@triton.jit
+def _k(x_ptr, cos_ptr, sin_ptr, y_ptr, xs, cs, H, BLOCK: tl.constexpr):
+    row = tl.program_id(0)
+    x_ptr += row * xs; y_ptr += row * xs; cos_ptr += row * cs; sin_ptr += row * cs
+    for off in range(0, H, BLOCK):
+        i = off + tl.arange(0, BLOCK); m = i < H
+        x1 = tl.load(x_ptr + 2 * i, mask=m, other=0.0).to(tl.float32)
+        x2 = tl.load(x_ptr + 2 * i + 1, mask=m, other=0.0).to(tl.float32)
+        c = tl.load(cos_ptr + i, mask=m, other=0.0).to(tl.float32)
+        s = tl.load(sin_ptr + i, mask=m, other=0.0).to(tl.float32)
+        tl.store(y_ptr + 2 * i, x1 * c - x2 * s, mask=m)
+        tl.store(y_ptr + 2 * i + 1, x2 * c + x1 * s, mask=m)
+def run(x, cos, sin):
+    M, D = x.shape; y = torch.empty_like(x)
+    _k[(M,)](x, cos, sin, y, x.stride(0), cos.stride(0), D // 2, BLOCK=1024)
+    return y
+'''
+_CE_TWOPASS = '''
+@triton.jit
+def _k(x_ptr, t_ptr, y_ptr, stride, N, BLOCK: tl.constexpr):
+    row = tl.program_id(0); x_ptr += row * stride
+    mx = tl.full([BLOCK], -float("inf"), dtype=tl.float32)
+    for off in range(0, N, BLOCK):
+        cols = off + tl.arange(0, BLOCK)
+        x = tl.load(x_ptr + cols, mask=cols < N, other=-float("inf")).to(tl.float32)
+        mx = tl.maximum(mx, x)
+    rmax = tl.max(mx)
+    d = tl.zeros([BLOCK], dtype=tl.float32)
+    for off in range(0, N, BLOCK):
+        cols = off + tl.arange(0, BLOCK)
+        x = tl.load(x_ptr + cols, mask=cols < N, other=-float("inf")).to(tl.float32)
+        d += tl.where(cols < N, tl.exp(x - rmax), 0.0)
+    lse = rmax + tl.log(tl.sum(d))
+    t = tl.load(t_ptr + row)
+    xt = tl.load(x_ptr + t).to(tl.float32)
+    tl.store(y_ptr + row, lse - xt)
+def run(x, tgt):
+    M, N = x.shape
+    y = torch.empty((M,), device=x.device, dtype=x.dtype)
+    _k[(M,)](x, tgt, y, x.stride(0), N, BLOCK=1024)
+    return y
+'''
+_CE_ONLINE = '''
+@triton.jit
+def _k(x_ptr, t_ptr, y_ptr, stride, N, BLOCK: tl.constexpr):
+    row = tl.program_id(0); x_ptr += row * stride
+    m = -float("inf"); s = 0.0
+    for off in range(0, N, BLOCK):
+        cols = off + tl.arange(0, BLOCK)
+        x = tl.load(x_ptr + cols, mask=cols < N, other=-float("inf")).to(tl.float32)
+        bm = tl.max(x)
+        nm = tl.maximum(m, bm)
+        s = s * tl.exp(m - nm) + tl.sum(tl.where(cols < N, tl.exp(x - nm), 0.0))
+        m = nm
+    lse = m + tl.log(s)
+    t = tl.load(t_ptr + row)
+    xt = tl.load(x_ptr + t).to(tl.float32)
+    tl.store(y_ptr + row, lse - xt)
+def run(x, tgt):
+    M, N = x.shape
+    y = torch.empty((M,), device=x.device, dtype=x.dtype)
+    _k[(M,)](x, tgt, y, x.stride(0), N, BLOCK=1024)
+    return y
+'''
+
 STRUCTURES = {
+    "softcap_softmax": [_SOFTCAP_WHOLEROW, _SOFTCAP_TWOPASS],
+    "rmsnorm_gemma":   [_RG_SCALAR, _RG_WHOLEROW],
+    "glu":             [_GLU_FLAT, _GLU_ROW],
+    "rope_interleaved": [_RI_STRIDED, _RI_TILED],
+    "cross_entropy":   [_CE_TWOPASS, _CE_ONLINE],
     "gelu":          [_flat_act(_GELU_E), _row_act(_GELU_E)],
     "silu":          [_flat_act(_SILU_E), _row_act(_SILU_E)],
     "relu2":         [_flat_act(_RELU2_E), _row_act(_RELU2_E)],

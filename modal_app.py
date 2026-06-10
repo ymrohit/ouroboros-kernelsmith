@@ -61,10 +61,21 @@ DISCOVERY_OPS = ("rmsnorm_tanh,rmsnorm_sigmoid,rmsnorm_relu,rmsnorm_square,"
                  "layernorm_tanh,layernorm_sigmoid,layernorm_relu,layernorm_square,"
                  "add_layernorm_tanh,add_layernorm_sigmoid,add_layernorm_relu,add_layernorm_square")
 
-# EVERYTHING: the FULL expanded suite — SFT over all original ops + the 16 new (47 total),
-# RL/discovery over every fusion op old+new (32). Nothing left out.
-FULL_SFT_OPS = ALL_OPS + "," + DISCOVERY_OPS
-FULL_RL_OPS  = RL_OPS  + "," + DISCOVERY_OPS
+# V2 EXPANSION — 32 more chain ops (8 new epilogues × {rms,layer}norm × ±residual) and 5 new
+# STANDALONE ops (each with its own gold seed + negative control wired into the selftest).
+# Every one gold-passes the hardened harness and its negative control is rejected (verified
+# on the 4090 before being listed here).
+DISCOVERY_OPS_V2 = ",".join(
+    f"{pre}{norm}_{act}"
+    for act in ("leaky_relu", "relu6", "hardtanh", "elu", "selu", "softplus", "mish", "gelu_erf")
+    for norm in ("rmsnorm", "layernorm")
+    for pre in ("", "add_"))
+STANDALONE_OPS_V2 = "softcap_softmax,rmsnorm_gemma,glu,rope_interleaved,cross_entropy"
+
+# EVERYTHING: the FULL expanded suite — SFT over all original ops + 16 (v1 chains) + 32 (v2
+# chains) + 5 standalone (84 total); RL/discovery over every fusion op old+new (69).
+FULL_SFT_OPS = ALL_OPS + "," + DISCOVERY_OPS + "," + DISCOVERY_OPS_V2 + "," + STANDALONE_OPS_V2
+FULL_RL_OPS  = RL_OPS  + "," + DISCOVERY_OPS + "," + DISCOVERY_OPS_V2 + "," + STANDALONE_OPS_V2
 
 # Qwen3.6's linear-attention fast path needs:
 #   is_fast_path_available = all((causal_conv1d_fn, causal_conv1d_update,
@@ -360,6 +371,25 @@ def rebench():
     _save()
 
 
+@app.function(**COMMON)
+def rebench_shapes(ops: str = "", dtypes: str = "fp16,bf16", n_iters: int = 50,
+                   rotate: bool = True, kernels: str = "outputs/best_kernels"):
+    """V2 SHAPE-GRID re-bench: every best kernel across a (M,N)×dtype grid vs max-autotune,
+    geomean + win-rate + explicit loss regions, plus the rotating-buffer (cache-cold) check
+    at the headline shape. Turns 'wins at one shape' into 'wins across the regime' (or not —
+    losses are reported plainly)."""
+    _gpu_banner(); _restore(); _prep_dirs()
+    cmd = [sys.executable, "-u", "rebench_shapes.py", "--kernels", kernels,
+           "--dtypes", dtypes, "--n-iters", str(n_iters)]
+    if ops:
+        cmd += ["--ops", ops]
+    if rotate:
+        cmd += ["--rotate"]
+    _run(cmd)
+    _save()
+    _push_hf(f"{WORK}/reports", MODEL_REPO, "model", "shape-grid rebench")
+
+
 @app.function(gpu="L4", timeout=1200)
 def verify_chains():
     """DOCTRINE GATE for the EXPANDED fusion grammar (chains.py): every NEW chain op's template
@@ -370,8 +400,10 @@ def verify_chains():
     import specs                       # importing specs runs _register_chains()
     import chains
     from harness import evaluate
-    NEW = {"tanh", "sigmoid", "relu", "square", "abs", "softsign", "hardsigmoid", "hardswish"}
-    new = [(n, srcs) for (n, _k, _ref, srcs) in chains.all_chains() if n.rsplit("_", 1)[-1] in NEW]
+    NEW = {"tanh", "sigmoid", "relu", "square", "abs", "softsign", "hardsigmoid", "hardswish",
+           "relu6", "hardtanh", "elu", "selu", "softplus", "mish"}
+    new = [(n, srcs) for (n, _k, _ref, srcs) in chains.all_chains()
+           if n.rsplit("_", 1)[-1] in NEW or n.endswith(("leaky_relu", "gelu_erf"))]
     print(f"[chains] verifying {len(new)} NEW fused ops (gold-pass, both template variants) ...", flush=True)
     passed = 0
     for name, srcs in new:
@@ -382,12 +414,18 @@ def verify_chains():
         ok = any(verdicts)            # at least one gold template must verify
         passed += ok
         print(f"  {'PASS' if ok else 'FAIL'} {name:24} variants_ok={verdicts}", flush=True)
-    # NEGATIVE CONTROL: a correct rmsnorm_tanh kernel, evaluated as rmsnorm_sigmoid, MUST be rejected.
-    tanh_src = next(s[0] for (n, s) in new if n == "rmsnorm_tanh")
-    rj = evaluate(tanh_src, "rmsnorm_sigmoid", correctness_only=True)
-    rejected = not (rj.status == "ok" and rj.correct)
-    print(f"  WRONG-REJECT (rmsnorm_tanh kernel ⇒ rmsnorm_sigmoid): status={rj.status} "
-          f"correct={rj.correct} → {'REJECTED ✓' if rejected else 'WRONGLY ACCEPTED ✗'}", flush=True)
+    # NEGATIVE CONTROLS: a correct kernel for epilogue A, evaluated under epilogue B's spec,
+    # MUST be rejected — the cross-op rejection that proves the references discriminate.
+    rejected = True
+    for a, b in [("rmsnorm_tanh", "rmsnorm_sigmoid"), ("rmsnorm_mish", "rmsnorm_softplus"),
+                 ("layernorm_elu", "layernorm_selu"), ("add_rmsnorm_relu6", "add_rmsnorm_hardtanh"),
+                 ("rmsnorm_gelu_erf", "rmsnorm_gelu")]:
+        src = next(s[0] for (n, s) in new if n == a)
+        rj = evaluate(src, b, correctness_only=True)
+        rj_ok = not (rj.status == "ok" and rj.correct)
+        rejected &= rj_ok
+        print(f"  WRONG-REJECT ({a} kernel ⇒ {b}): status={rj.status} "
+              f"→ {'REJECTED ✓' if rj_ok else 'WRONGLY ACCEPTED ✗'}", flush=True)
     ok_all = (passed == len(new)) and rejected
     print(f">>> CHAINS_GRAMMAR_VERIFIED = {ok_all}  ({passed}/{len(new)} gold-pass, wrong-reject={rejected})",
           flush=True)
