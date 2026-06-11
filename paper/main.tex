@@ -319,8 +319,9 @@ the \stabOps{}.
 
 \textbf{Stability gate.} Every archived kernel re-benchmarked $5\times$ fresh (full
 referee, anti-gaming guards live, \maxauto{} recompiled each run). Discovery bar:
-$\overline{s} - \widehat{\sigma} > 1$ where $\widehat{\sigma}$ is the population spread of
-the five runs. Result: \textbf{\stabDiscoveries/\stabOps{} discoveries; zero failures;
+\emph{mean} $-$ \emph{spread} $> 1$, i.e.\ $\overline{s} - \widehat{\sigma} > 1$, where
+$\overline{s}$ is the mean speedup and $\widehat{\sigma}$ the population spread across the
+five runs. Result: \textbf{\stabDiscoveries/\stabOps{} discoveries; zero failures;
 zero marginals} (Fig.~\ref{fig:stability}). Mean of per-op means
 $\stabMeanOfMeans\times$; maximum spread $\pm\stabMaxSpread$; weakest
 \texttt{\stabWeakestOp} at $\stabWeakestMean\times\pm\stabWeakestSpread$; strongest
@@ -474,7 +475,7 @@ replication on a 1B model (Table~\ref{tab:ablmc}, Fig.~\ref{fig:ablmc}).
 \toprule
 arm & removes & valid-rate & beat MA & geomean vs MA\\
 \midrule
-control &, & \ablControlValid & \ablControlBeat & \ablControlGm\\
+control & nothing (full loop) & \ablControlValid & \ablControlBeat & \ablControlGm\\
 no-feedback & referee errors in prompt & \ablNofeedbackValid & \ablNofeedbackBeat & \ablNofeedbackGm\\
 distill-only & policy-gradient term & \ablDistillonlyValid & \ablDistillonlyBeat & \textbf{\ablDistillonlyGm}\\
 no-learn & all weight updates & \ablNolearnValid & \ablNolearnBeat & \ablNolearnGm\\
@@ -504,7 +505,7 @@ sits at $\mcNolearnGm$, indistinguishable from control's $\mcControlGm$.
 \toprule
 arm & removes & valid-rate & beat-rate & geomean vs MA (3 seeds)\\
 \midrule
-control &, & \mcControlValid & \mcControlBeat\% & $\mcControlGm \pm \mcControlStd$\\
+control & nothing (full loop) & \mcControlValid & \mcControlBeat\% & $\mcControlGm \pm \mcControlStd$\\
 no-feedback & referee errors in prompt & \mcNofeedbackValid & \mcNofeedbackBeat\% & $\mcNofeedbackGm \pm \mcNofeedbackStd$\\
 distill-only & policy-gradient term & \mcDistillonlyValid & \mcDistillonlyBeat\% & $\mcDistillonlyGm \pm \mcDistillonlyStd$\\
 no-learn & all weight updates & \mcNolearnValid & \mcNolearnBeat\% & $\mcNolearnGm \pm \mcNolearnStd$\\

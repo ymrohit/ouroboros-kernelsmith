@@ -39,8 +39,13 @@ def fig_heatmap():
     fig, ax = plt.subplots(figsize=(6.0, 9.5))
     cmap = plt.get_cmap("RdYlGn")
     im = ax.imshow(Z, aspect="auto", cmap=cmap, vmin=0.6, vmax=2.0)
+    # readable shape labels: small dims shown as-is, large dims as Nk (256 -> "256", 16384 -> "16k")
+    def _sh(v):
+        if v < 1024:
+            return str(v)
+        return f"{v // 1024}k" if v % 1024 == 0 else f"{v / 1024:.1f}k"
     ax.set_xticks(range(len(cell_keys)))
-    ax.set_xticklabels([f"{M//1024}k×{N//1024}k\n{dt}" for M, N, dt in cell_keys],
+    ax.set_xticklabels([f"{_sh(M)}×{_sh(N)}\n{dt}" for M, N, dt in cell_keys],
                        fontsize=5.5, rotation=0)
     ax.set_yticks(range(len(ops)))
     ax.set_yticklabels([o.replace("_", "\\_") if False else o for o in ops], fontsize=5)
