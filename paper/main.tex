@@ -43,8 +43,8 @@ compiler-beating Triton fusion kernels, plus \numKernelsExplore{} exploratory ke
 measured under a separate protocol (a single-shot probe, not the five-run gate). The \stabOps{} \emph{all} clear a five-run stability
 gate against \maxauto{}, and each also holds a geometric-mean win across a shape grid whose
 \gridLossPct\% losing cells we report individually.
-A three-seed ablation on a 1B model finds the training-recipe arms statistically
-indistinguishable on familiar operators, with best-of-$N$ search against the referee
+A three-seed ablation on a 1B model finds the training-recipe arms indistinguishable
+within seed noise on familiar operators, with best-of-$N$ search against the referee
 accounting for nearly all of the loop's value; learning matters instead on operators the
 model has \emph{not} seen. Finally, the referee falsified \falsifications{} beliefs we had
 recorded in advance, among them our own diagnosis of the system's one weak regime. We
@@ -102,8 +102,8 @@ Triton under \emph{two} comparison conditions including the library-as-shipped o
 correctness-gated end-to-end transformer-block composition with its Amdahl ceiling stated.
 
 \item \textbf{Ablations} (\S\ref{sec:ablations}): on familiar operators the recipe's arms
-are statistically indistinguishable (three seeds, on a 1B model), with search against the
-referee accounting for most of the result. Learning matters on operators the model has not
+are indistinguishable within seed noise (three seeds, on a 1B model), with search against
+the referee accounting for most of the result. Learning matters on operators the model has not
 seen (Fig.~\ref{fig:learning}).
 
 \item \textbf{A record of contradicted predictions} (\S\ref{sec:falsification}):
@@ -143,8 +143,8 @@ cheap-oracle version of this recipe, with the oracle-hardening itself as the con
 \textbf{Reward hacking and verifiable rewards.} RL from verifiable rewards is now standard
 in frontier training~\cite{deepseekmath,tulu3}; reward gaming is its known failure mode.
 Our proposal, ship the reward function with implemented exploits as regression tests
-(``negative controls for rewards''), is, to our knowledge, not systematically practiced
-anywhere in the RL-for-code literature, despite being cheap and decisive.
+(``negative controls for rewards''), is one we are not aware of being systematically
+practiced in the RL-for-code literature, despite being cheap and decisive.
 
 \textbf{Compilers.} \texttt{torch.compile}/Inductor with \texttt{max-autotune}
 \cite{pytorch2} is our baseline \emph{and} the incumbent we measure against; Triton
@@ -288,17 +288,23 @@ group-relative policy gradient \cite{deepseekmath} with self-distillation on the
 fastest verified kernel $k^\star$:
 
 \begin{equation}\label{eq:loss}
-\mathcal{L} \;=\; -\frac{1}{G}\sum_{i=1}^{G} A_i \,\log \pi_\theta(k_i\,|\,c)
-\;-\; \log \pi_\theta(k^\star\,|\,c)
-\;+\; \beta\,\big|\log \pi_\theta(k_i|c) - \log \pi_{\mathrm{ref}}(k_i|c)\big|,
+\mathcal{L} \;=\; \frac{1}{G}\sum_{i=1}^{G}\Big(
+-A_i \,\log \pi_\theta(k_i\,|\,c)
+\;+\; \beta\,\big|\log \pi_\theta(k_i|c) - \log \pi_{\mathrm{ref}}(k_i|c)\big|\Big)
+\;-\; \log \pi_\theta(k^\star\,|\,c),
 \qquad A_i = \frac{R_i - \bar R}{\sigma_R}
 \end{equation}
 
-\noindent where the third term is a \emph{drift penalty} to a frozen reference, honestly
+\noindent where the second term is a \emph{drift penalty} to a frozen reference, honestly
 labeled: it is an absolute sequence-log-probability difference, a crude one-sample KL
-proxy, and the production runs disable it ($\beta{=}0$) without observed collapse
-(\S\ref{sec:ablations} suggests why: self-distillation, not the gradient term, carries the
-learning). Prompts carry the referee's structured error feedback from the previous round
+proxy, and the production runs disable it ($\beta{=}0$) without observed collapse.
+Stated plainly: with $\beta{=}0$, and with the policy-gradient term indistinguishable from
+zero effect in the multi-seed ablation (\S\ref{sec:ablations}), the production update
+\emph{reduces to rejection-sampled distillation on per-round champions}, best-of-$G$
+against the referee, then imitation of the verified winner. We keep
+Eq.~\ref{eq:loss} because it is what the code implements; the reduction is the honest
+summary of what the data say the update does, and it sharpens the thesis rather than
+weakening it: a sampler plus the referee is nearly the whole system. Prompts carry the referee's structured error feedback from the previous round
 (the fix-then-retry reflex). The archive keeps one champion per operator; exit validation
 re-measures every champion fresh with the \maxauto{} baseline.
 
@@ -319,6 +325,18 @@ five-run stability gate, and so are not folded into the reproducibility numbers 
 beat \maxauto{}; they are simply not re-run five times). Every reproducibility claim in
 this paper concerns the \stabOps{}.
 
+\textbf{Family structure, stated up front.} \stabChainOps{} of the \stabOps{} gated
+operators are instances of the one fusion grammar
+($[\pm\text{residual}] \rightarrow \{\text{rms},\text{layer}\}\text{norm} \rightarrow
+\text{epilogue}$); the remaining \stabDistinctOps{} span the softmax, GLU, RoPE,
+Gemma-RMSNorm, and cross-entropy families. A reader who counts schedule families rather
+than operators should discount ``\stabOps{} kernels'' accordingly. The grammar exists to
+grade difficulty under controlled variation across epilogues, not to inflate the count;
+what keeps the count honest is that every operator clears the $5\times$ stability gate and
+the shape-grid geomean \emph{individually}, and the epilogues are not interchangeable (the
+softplus/mish family required an overflow-guard idiom the others never elicit;
+Fig.~\ref{fig:learning}).
+
 \textbf{Stability gate.} Every archived kernel re-benchmarked $5\times$ fresh (full
 referee, anti-gaming guards live, \maxauto{} recompiled each run). Discovery bar:
 $\bar{s} - \sigma > 1$, where $\bar{s}$ is the mean speedup and $\sigma$ is the population
@@ -338,8 +356,14 @@ $1024{\times}4096 \ldots 256{\times}16384$; rope family over $(M,D)$), with \max
 (overall $\gridOneGeomean\times$ on the 32 v1-era kernels, $\gridTwoGeomean\times$ on the
 37 discovery-run kernels), all survive the cache-cold rotated check
 (\gridRotOk/\gridRotN), and \gridLossesTotal{} cells (\gridLossPct\%) are \emph{losses,
-reported individually} (Fig.~\ref{fig:heatmap}). The losses have structure:
-\gridShortLossesTotal{} of \gridLossesTotal{} concentrate at $16384\times2048$, many
+reported individually} (Fig.~\ref{fig:heatmap}). One measurement caveat: each grid cell is
+a single measurement session (a median over 50 timed iterations), so a cell at $0.97$ or
+$1.03$ is a tie, not a loss or a win. Re-read with a $\pm 3\%$ grey band, the scale of the
+stability gate's run-to-run spreads, the grid gives \gridBandWins{} wins, \gridBandTies{}
+ties, and \gridBandLosses{} losses; we report both readings so that neither marginal wins
+nor marginal losses are over-counted. The losses have structure under either reading:
+\gridShortLossesTotal{} of \gridLossesTotal{} strict losses (\gridBandShortLosses{} of
+\gridBandLosses{} banded) concentrate at $16384\times2048$, many
 short rows, across two independently trained kernel generations. \S\ref{sec:invention}
 returns to this regime.
 
@@ -371,7 +395,13 @@ own earlier claim that 5 of 11 expert kernels were non-robust to odd shapes: und
 library-API condition all \hthApiVerified{} Liger recipes pass our adversarial sweep,
 the failures were artifacts of \emph{our} extraction wrappers. Second, the forward-only
 cross-entropy comparison is \emph{unfair to Liger} (their CE computes gradients in the
-forward by design) and is excluded from any headline.
+forward by design) and is excluded from any headline. One correlation deserves stating
+plainly rather than leaving for a reviewer: our largest stability-gated win,
+\texttt{\stabStrongestOp} at $\stabStrongestMean\times$, is exactly the operator this
+expert comparison excludes, and Inductor's cross-entropy lowering is a known weak point,
+so the \maxauto{} baseline is softest precisely where our headline number is largest. The
+number is real, reproducible, and gated like every other; its margin should be read as a
+win over a weak compiler path, not over the strongest available implementation.
 
 \subsection{End-to-end composition}
 
@@ -492,10 +522,12 @@ Table~\ref{tab:ablmc} flips it. We keep this table only to make that point.}\lab
 per arm leaves the ordering open to the objection that $n{=}1$. We therefore repeated the
 ablation at three independent seeds per arm on a different and much smaller model, OpenBMB's
 MiniCPM5-1B, which reached the validity gate in \mcSftEpochs{} epochs (\mcSftValid\% valid)
-and ran on a single RTX~4090. The arms are statistically indistinguishable
-(Table~\ref{tab:ablmc}, Fig.~\ref{fig:ablmc}): the spread of geometric means across arms,
-$\mcSpread$, is below twice the largest per-arm standard deviation across seeds,
-$\mcMaxSeedStd$. The cross-check settles it. Distill-only was nominally the best arm in the
+and ran on a single RTX~4090. With three seeds per arm, $n$ is too small for a formal
+hypothesis test and we do not dress one up: what the data show
+(Table~\ref{tab:ablmc}, Fig.~\ref{fig:ablmc}) is that the gaps between arms (max$-$min of
+the four arm geomeans, $\mcSpread$) are within seed noise (the largest per-arm standard
+deviation across seeds is $\mcMaxSeedStd$). A second observation points the same way.
+Distill-only was nominally the best arm in the
 27B single-seed run and is nominally the worst ($\mcDistillonlyGm$) in the 1B three-seed
 average; the same arm appears at both extremes, so the single-seed ordering was noise.
 The no-learn arm, which is best-of-$N$ sampling from the frozen model with no weight updates,
@@ -513,9 +545,10 @@ distill-only & policy-gradient term & \mcDistillonlyValid & \mcDistillonlyBeat\%
 no-learn & all weight updates & \mcNolearnValid & \mcNolearnBeat\% & $\mcNolearnGm \pm \mcNolearnStd$\\
 \bottomrule
 \end{tabular}
-\caption{Multi-seed ablation on MiniCPM5-1B, three seeds per arm. The arms are
-indistinguishable (spread $\mcSpread \le 2\times$ the per-arm seed standard deviation
-$\mcMaxSeedStd$), and every arm beats max-autotune. The 1B model writing compiler-beating
+\caption{Multi-seed ablation on MiniCPM5-1B, three seeds per arm. The arms do not separate
+beyond seed noise (max$-$min gap across arm geomeans $\mcSpread$, largest per-arm seed
+standard deviation $\mcMaxSeedStd$; $n{=}3$ is too small for a formal test), and every arm
+beats max-autotune. The 1B model writing compiler-beating
 kernels at all is discussed in Section~\ref{sec:bounds}.}\label{tab:ablmc}
 \end{table}
 
@@ -577,7 +610,12 @@ $\mcControlGm\times$, Table~\ref{tab:ablmc}). That a 1B model produces verified
 compiler-beating kernels on commodity hardware supports the central point: the proposer is
 replaceable across a wide range of scales, whereas the verifier is not.
 (3) The 27B ablation is single-seed; the 1B replication in Table~\ref{tab:ablmc} is
-three-seed. (4) KernelBench cross-evaluation is
+three-seed. The asymmetry extends to the thesis itself: the claim that search dominates on
+\emph{familiar} operators carries three-seed replication, while the more load-bearing claim,
+that learning matters on \emph{unseen} operators, rests on one 37-operator run and one
+continue-SFT comparison, with no seed replication. The multi-seed discipline this paper
+argues for has so far been applied to the cheaper half of its own thesis.
+(4) KernelBench cross-evaluation is
 out-of-scope-by-construction for our specialist (foreign format, generalist operators);
 the recorded honest probe scored \kbCorrect/\kbN{} and we declined prompt-bridging
 shortcuts that would manufacture a non-comparable number. (5) The loop requires a domain
@@ -605,8 +643,10 @@ against that referee, an open model produced \stabOps{} reproducible compiler-be
 kernels, plus \numKernelsExplore{} exploratory kernels under a separate protocol, repaired
 the one regime where it had been losing, and contradicted our own predictions repeatedly
 along the way. The proposer ranged from 1B to
-27B parameters with no change to the pipeline, and the results did not depend on which model
-filled that slot. The referee did. Where verification is cheap and the quality signal is
+27B parameters with no change to the pipeline; every proposer beat the autotuner, with
+margins that scaled with the model (geomean $\mcControlGm\times$ at 1B,
+$\stabMeanOfMeans\times$ at 27B). What did not depend on which model filled the slot was the
+soundness of the result. That depended on the referee. Where verification is cheap and the quality signal is
 measured rather than judged, this is the part of the system worth investing in, and the part
 that transfers to the next domain.
 

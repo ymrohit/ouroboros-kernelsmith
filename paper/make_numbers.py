@@ -109,6 +109,45 @@ put("gridShortLossesTotal", s1 + s2)
 check("cache-cold rotated all >1.0", r1ok == r1n and r2ok == r2n)
 put("gridRotOk", r1ok + r2ok); put("gridRotN", r1n + r2n)
 
+
+def grid_band(g, band=0.03):
+    """Grey-band re-read: each cell is one measurement session, so cells within
+    +-band of 1.0 are ties, neither wins nor losses."""
+    w = t = lo = sl = 0
+    for r in g["per_op"].values():
+        for c in r["cells"]:
+            if c["status"] != "ok":
+                continue
+            s = c["vs_maxauto"]
+            if s > 1 + band:
+                w += 1
+            elif s < 1 - band:
+                lo += 1
+                if (c["M"], c["N"]) == (16384, 2048):
+                    sl += 1
+            else:
+                t += 1
+    return w, t, lo, sl
+
+
+b1, b2 = grid_band(g1), grid_band(g2)
+put("gridBandWins", b1[0] + b2[0]); put("gridBandTies", b1[1] + b2[1])
+put("gridBandLosses", b1[2] + b2[2]); put("gridBandShortLosses", b1[3] + b2[3])
+check("grey band partitions the full grid",
+      sum(b1[:3]) + sum(b2[:3]) == c1 + c2)
+
+# family structure of the gated ops: chain-grammar instances vs structurally distinct
+import re as _re
+_chainpat = _re.compile(
+    r"^(add_)?(rmsnorm|layernorm)(_(" + "|".join([
+        "gelu_erf", "leaky_relu", "relu2", "relu6", "hardtanh", "hardsigmoid",
+        "hardswish", "softsign", "softplus", "gelu", "silu", "tanh", "sigmoid",
+        "relu", "square", "abs", "elu", "selu", "mish"]) + r"))?$")
+n_chain = sum(1 for op in per if _chainpat.match(op))
+put("stabChainOps", n_chain)
+put("stabDistinctOps", len(per) - n_chain)
+check("family split partitions the gated ops", n_chain < len(per))
+
 # ---------------- V2 discovery run (37 new ops) ---------------------------------------------
 v2 = load(R / "kernelsmith_v2.json")
 fin = v2["final"]; att = v2["attribution"]
