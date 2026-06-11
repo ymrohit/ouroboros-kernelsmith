@@ -28,30 +28,30 @@ and What It Falsified About Its Builders' Beliefs}
 \maketitle
 
 \begin{abstract}
-Large-language-model kernel generation has a credibility problem: the most publicized
-result in the area was retracted within days when its generated kernels were found to be
-exploiting the evaluation harness rather than accelerating the hardware. We take the root
-cause to be architectural. The reward channel is usually treated as a metric, when it has to
-be built and tested as something an adversary will try to fool. \sys{} is a
+Our claim is narrow and methodological: in LLM-generated GPU kernel optimization, the
+\emph{verifier} matters more than the proposer. The field's most publicized result was
+publicly corrected within days when reviewers found its kernels were exploiting the
+evaluation harness rather than accelerating the hardware; we read this as architectural,
+not anecdotal. The reward channel is usually treated as a passive metric when it has to be
+built and regression-tested as something an adversary will try to fool. \sys{} is a
 verifier-grounded self-distillation loop built around an immutable referee that ships with
 negative controls for its own reward function: three working exploits (benchmark-shape
 special-casing, pointer-keyed output memoization, in-place input mutation) are committed as
 test cases and must be rejected for the system to be considered sound. Trained only against
 this referee, an open 27B model (Qwen3.6-27B with LoRA) produced \productKernels{} Triton
-fusion kernels that all beat \maxauto{} reproducibly: \stabDiscoveries{} of \stabOps{} pass
-a five-run stability gate (the weakest at $\stabWeakestMean\times\pm\stabWeakestSpread$, the
-strongest at $\stabStrongestMean\times\pm\stabStrongestSpread$), and each holds a
-geometric-mean win across a shape grid of \gridCellsTotal{} cells, with per-cell recompiled
-baselines, a cache-cold check, and the \gridLossPct\% of cells we lose reported
-individually. A three-seed ablation on a 1B model finds the four training-recipe arms
-statistically indistinguishable on familiar operators, with best-of-$N$ search against the
-referee accounting for nearly all of the loop's value; learning matters instead on operators
-the model has not seen, where validity rises from roughly 50\% to 68\% within one run. We
-also record \falsifications{} cases in which the referee contradicted a belief we held in
-advance, among them our own diagnosis of the system's one weak regime, which the model
-repaired with a simpler schedule than we had predicted, turning the worst measured loss
-($\beforeALS\times$) into a $\invALSshortMA\times$ win. We release the harness, the kernels,
-the corpus, the adapters, the raw measurements, and the record of those predictions.
+fusion kernels; the \stabOps{} we carry through a five-run stability gate \emph{all} beat
+\maxauto{} reproducibly, and each also holds a geometric-mean win across a shape grid whose
+\gridLossPct\% losing cells we report individually (the remaining \numKernelsExplore{}
+kernels come from an exploratory run held to a different baseline, \S\ref{sec:results}).
+A three-seed ablation on a 1B model finds the training-recipe arms statistically
+indistinguishable on familiar operators, with best-of-$N$ search against the referee
+accounting for nearly all of the loop's value; learning matters instead on operators the
+model has \emph{not} seen. Finally, the referee falsified \falsifications{} beliefs we had
+recorded in advance, among them our own diagnosis of the system's one weak regime. We
+release the harness, kernels, corpus, adapters, raw measurements, and the prediction
+record. We claim verified scheduling wins on bandwidth-bound fusion operators; we do
+\emph{not} claim new algorithms or gains over tuned libraries such as cuBLAS or
+FlashAttention.
 \end{abstract}
 
 \section{Introduction}
@@ -107,10 +107,13 @@ the model beat, and an earlier claim of ours that we retract here.
 We do not claim novel algorithm discovery (\S\ref{sec:bounds}). The wins are scheduling wins
 of roughly 10 to 100\% on bandwidth-bound fusion operators, the part of the kernel surface
 practitioners still write by hand. The contribution is methodological: against a verifier
-that cannot be gamed, an open model out-searches the compiler's own autotuner and repairs
-its own weak cases. Every number in the paper is regenerated from a harness output by a
+hardened and regression-tested against its known exploits, an open model out-searches the
+compiler's own autotuner and repairs its own weak cases. Every number in the paper is regenerated from a harness output by a
 script that also checks the reports against each other; a number that cannot be regenerated
-this way does not appear.
+this way does not appear. To keep the contribution legible: the claims are hardware-specific
+(characterized on an RTX~4090 and an H200), and reproducibility is reported as the spread
+across five fresh runs rather than as a formal confidence interval; we make no claim beyond
+the operators, shapes, and machines measured.
 
 \section{Related Work}
 
@@ -297,7 +300,14 @@ All numbers in this section are emitted by the referee and compiled into this PD
 (12/12 checks at build time). Hardware: NVIDIA H200; torch 2.10; Triton 3.6; model
 Qwen3.6-27B (LoRA rank 128) unless stated.
 
-\subsection{The product: \productKernels{} kernels, all reproducible discoveries}
+\subsection{The product: \stabOps{} reproducible discoveries (of \productKernels{} kernels)}
+
+\textbf{What the two counts mean.} The model authored \productKernels{} kernels in total.
+\stabOps{} of them are operators we carry through the five-run stability gate against
+\maxauto{} below; the other \numKernelsExplore{} come from a later exploratory ``invention''
+run (\S\ref{sec:falsification}) evaluated against a different, default baseline and are not
+folded into the reproducibility numbers. Every reproducibility claim in this paper concerns
+the \stabOps{}.
 
 \textbf{Stability gate.} Every archived kernel re-benchmarked $5\times$ fresh (full
 referee, anti-gaming guards live, \maxauto{} recompiled each run). Discovery bar:
@@ -436,11 +446,13 @@ predicted in writing.}
 fixes or a learned skill, we pre-registered a prediction (this time it held) and resumed
 the loop from the invention adapter on the 10 worst-remaining loss-cell operators, pinned
 to $16384\times2048$. All \textbf{10/10 flipped to wins} (\maxauto{} $1.20$--$1.44\times$,
-every kernel model-authored, explore-arm zero, validity $0.713$). The product's single
-characterized weakness, the short-row regime that accounts for the large majority of the
-shape grid's loss cells, is closed for the chain family on this evidence. This is the
-generalization claim in its strongest form: the discovery is a capability the model carries
-to unseen operators, not a memorized output.
+every kernel model-authored, explore-arm zero, validity $0.713$). On this evidence the
+system's main characterized weakness, the short-row regime that accounts for the large
+majority of the shape grid's loss cells, is repaired for the chain family on the shapes and
+machines we tested. We read this as a generalization signal rather than a closed case: the
+fix is a schedule the model carries to operators it had not seen, not a memorized output,
+but it is established on the short-row family and hardware measured here, not proven in
+general.
 
 \section{Ablations: where does the value come from?}\label{sec:ablations}
 
@@ -551,7 +563,7 @@ three-seed. (4) KernelBench cross-evaluation is
 out-of-scope-by-construction for our specialist (foreign format, generalist operators);
 the recorded honest probe scored \kbCorrect/\kbN{} and we declined prompt-bridging
 shortcuts that would manufacture a non-comparable number. (5) The loop requires a domain
-with a cheap, un-gameable oracle and a measured quality signal; domains with judged
+with a cheap, exploit-tested oracle and a measured quality signal; domains with judged
 rewards are explicitly outside the recipe, and the framework's failure modes (expensive
 oracles, adversarial environments, Goodhart on the metric) are discussed in the artifact.
 

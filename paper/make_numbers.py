@@ -251,7 +251,9 @@ put("kbN", kb["summary"]["n"])
 
 # ---------------- totals ----------------------------------------------------------------------
 put("productKernels", stab["n_ops"] + len(ifin))     # 69 + 7
+put("numKernelsExplore", len(ifin))                  # exploratory-run kernels (the 76 - 69)
 check("product = 76", stab["n_ops"] + len(ifin) == 76)
+check("product = stab + explore", stab["n_ops"] + len(ifin) == 69 + 7)
 put("falsifications", 9)
 
 # ---------------- emit ------------------------------------------------------------------------
