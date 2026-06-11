@@ -301,7 +301,9 @@ put("productKernels", stab["n_ops"] + len(ifin))     # 69 + 7
 put("numKernelsExplore", len(ifin))                  # exploratory-run kernels (the 76 - 69)
 check("product = 76", stab["n_ops"] + len(ifin) == 76)
 check("product = stab + explore", stab["n_ops"] + len(ifin) == 69 + 7)
-put("falsifications", 9)
+# 10th entry added 2026-06-11: the hand-transcribed no-learn headline, contradicted by the
+# completed artifact recovered from the training volume (docs/KEY_FINDINGS.md entry 11)
+put("falsifications", 10)
 
 # ---------------- emit ------------------------------------------------------------------------
 out = ROOT / "paper" / "numbers.tex"

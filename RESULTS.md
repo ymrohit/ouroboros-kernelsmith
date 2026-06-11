@@ -164,7 +164,8 @@ problems vs ~69% familiar. Product → **76 kernels** (69 stability-gated + the 
 kernels, which stay a **single-shot probe vs max-autotune** — deliberately NOT folded into
 the reproducibility set; the paper states this protocol split explicitly).
 → `reports/invention_verdict.md` · the referee-overruled-the-human catalog:
-`docs/KEY_FINDINGS.md` (8 recorded instances + open falsifiable predictions).
+`docs/KEY_FINDINGS.md` (running tally as of 2026-06-11: 10 falsifications + 2
+partial-mixed + 1 ratified prediction).
 
 ## V2.8 The repair transfers ✅ (pre-registered prediction — HELD)
 Resumed from the invention adapter on the **10 worst remaining loss-cell operators**, pinned
@@ -190,8 +191,9 @@ removed from `paper/make_numbers.py`; provenance note in `reports/ablations.md`.
 
 ## V2.10 The paper
 `paper/main.pdf` — *"The Referee Is the Product"* (13 pp): negative controls for reward
-channels as the contribution, kernels as evidence, plus the falsification ledger (9
-contradicted beliefs, 1 held prediction). Every number regenerates from harness JSONs via
+channels as the contribution, kernels as evidence, plus the falsification ledger (10
+contradicted beliefs, 1 held prediction — the 10th is the no-learn transcription the
+volume's completed artifact overruled). Every number regenerates from harness JSONs via
 `paper/make_numbers.py` (20/20 cross-report consistency checks fail the build on
 contradiction). Code + paper: `github.com/ymrohit/ouroboros-kernelsmith` (private).
 

@@ -164,3 +164,18 @@ STRENGTHENS the conclusion. Bonus: a 1B model writes kernels beating max-autotun
 (geomean ~1.10x), SFT'd to 100% valid in 2 epochs -- the OpenBMB + Tiny Titan sponsor
 result, all at $0. Note: my own seed-0 preview prediction (control on top) was also noise.
 → reports/ablations_minicpm_multiseed.md.
+
+## The no-learn transcription (2026-06-11) — falsified by the durable artifact (entry 11)
+
+While syncing H200 reports from the Modal volume: the volume holds the COMPLETED
+`ablation_nolearn.json` (args confirm the arm, 24/24 rounds, per-op rows + attribution).
+The headline we had carried since the save race — 1.302 / 0.969 / 18, hand-transcribed
+"pre-clobber" and hardcoded into `make_numbers.py` — was WRONG, and wrong against
+ourselves: the artifact says **1.340 / 0.995 / 23**. No-learn matches control outright
+(1.340 vs 1.338), strengthening the search-dominates reading. Entry 9's recorded "~97% of
+control" is superseded (it is ~100%); entry 9 stands as written because the ledger does
+not rewrite history, it appends. The hardcoded fallback is deleted; a build check now
+requires all four arms to come from completed JSONs. The lesson is entry 8's, repeated
+with a transcription instead of a log: a number without a regenerable artifact behind it
+is a belief, not a measurement. Ledger: **10 falsifications + 2 partial-mixed + 1
+ratified.** → `reports/ablations.md` (correction note).

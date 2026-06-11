@@ -616,8 +616,12 @@ better than RL; the single-seed ablation ordering of Section~\ref{sec:ablations}
 adequacy of a small anti-memoization perturbation, which one of our own negative controls
 rejected before any model could exploit it; the verifiability of an operator (\texttt{l1norm})
 whose outputs fall below the fp16 tolerance; an early benchmark that timed a memory copy and
-reported compiler ties; and the assumption that an all-green log without a durable artifact
-was sufficient evidence, which forced us to re-run a gate. One prediction held: that the
+reported compiler ties; the assumption that an all-green log without a durable artifact
+was sufficient evidence, which forced us to re-run a gate; and, caught while preparing this
+paper, a hand-transcribed headline for the no-learn arm of Table~\ref{tab:abl} that the
+completed artifact, recovered from the training volume after a save race, contradicted: the
+transcription had understated the arm ($1.302$ against the artifact's $1.340$), and the
+correction strengthened the very claim it touched. One prediction held: that the
 loss-regime repair would transfer (10/10 in Section~\ref{sec:invention}). We report this not
 for its own sake but because it is the practical consequence of the design. When the
 verifier is honest, the builders do not have to be right, and the record of where they were
