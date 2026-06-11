@@ -246,7 +246,7 @@ All three must be \textsc{rejected}, each by its intended guard, with its specif
 --- for the self-test to pass. They are, on both GPUs tested
 (\selftestPassFortyNinety/\selftestCasesFortyNinety{} on \selftestMachineA{};
 \selftestPassHTwoHundred/\selftestCasesHTwoHundred{} on \selftestMachineB).
-We commend this practice, \emph{unit tests for reward functions}, to anyone training
+We recommend treating these as \emph{unit tests for reward functions} in any system trained
 against measured rewards.
 
 \section{The Loop}\label{sec:loop}
@@ -320,9 +320,9 @@ the \stabOps{}.
 
 \textbf{Stability gate.} Every archived kernel re-benchmarked $5\times$ fresh (full
 referee, anti-gaming guards live, \maxauto{} recompiled each run). Discovery bar:
-\emph{mean} $-$ \emph{spread} $> 1$, i.e.\ $\overline{s} - \widehat{\sigma} > 1$, where
-$\overline{s}$ is the mean speedup and $\widehat{\sigma}$ the population spread across the
-five runs. Result: \textbf{\stabDiscoveries/\stabOps{} discoveries; zero failures;
+$\bar{s} - \sigma > 1$, where $\bar{s}$ is the mean speedup and $\sigma$ is the population
+standard deviation across the five fresh runs. We call $\sigma$ the run-to-run
+\emph{spread} throughout the paper. Result: \textbf{\stabDiscoveries/\stabOps{} discoveries; zero failures;
 zero marginals} (Fig.~\ref{fig:stability}). Mean of per-op means
 $\stabMeanOfMeans\times$; maximum spread $\pm\stabMaxSpread$; weakest
 \texttt{\stabWeakestOp} at $\stabWeakestMean\times\pm\stabWeakestSpread$; strongest
@@ -626,9 +626,9 @@ Reinforcement Learning in LLMs}. arXiv preprint, 2025.
 \bibitem{cudal1} X. Li et al. \emph{CUDA-L1: Improving CUDA Optimization via Contrastive
 Reinforcement Learning}. arXiv preprint, 2025.
 \bibitem{alphatensor} A. Fawzi et al. \emph{Discovering Faster Matrix Multiplication
-Algorithms with Reinforcement Learning}. Nature 610, 2022.
+Algorithms with Reinforcement Learning}. Nature \textbf{610}, 47--53, 2022.
 \bibitem{alphadev} D. Mankowitz et al. \emph{Faster Sorting Algorithms Discovered Using
-Deep Reinforcement Learning}. Nature 618, 2023.
+Deep Reinforcement Learning}. Nature \textbf{618}, 257--263, 2023.
 \bibitem{stoke} E. Schkufza, R. Sharma, A. Aiken. \emph{Stochastic Superoptimization}.
 ASPLOS, 2013.
 \bibitem{deepseekmath} Z. Shao et al. \emph{DeepSeekMath: Pushing the Limits of

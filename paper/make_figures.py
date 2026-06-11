@@ -79,7 +79,7 @@ def fig_stability():
     ax.set_yticklabels(names, fontsize=4.6)
     ax.set_xlabel("mean speedup vs torch.compile max-autotune (5 fresh runs, ±population spread)")
     ax.set_title(f"Stability gate: {stab['n_discoveries']}/{stab['n_ops']} kernels beat "
-                 "max-autotune reproducibly (mean − spread > 1)", fontsize=8)
+                 "max-autotune reproducibly (mean minus spread > 1)", fontsize=8)
     ax.set_xlim(0.95, 2.15)
     fig.tight_layout()
     fig.savefig(FIG / "stability.pdf")
