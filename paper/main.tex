@@ -10,7 +10,7 @@
 \usepackage{lmodern}
 \usepackage{caption}
 \captionsetup{font=small,labelfont=bf}
-\input{numbers}   % AUTO-GENERATED from harness-emitted reports/ — the only number source
+\input{numbers}   % AUTO-GENERATED from harness-emitted reports/ -- the only number source
 
 \lstset{basicstyle=\ttfamily\scriptsize,breaklines=true,frame=single,framesep=4pt}
 
@@ -243,8 +243,8 @@ the timed loop's identical-arguments assumption unsound. \emph{Countermeasure:} 
 correctness phase compares inputs before/after and rejects mutators outright.
 \end{enumerate}
 
-All three must be \textsc{rejected}, each by its intended guard, with its specific error
---- for the self-test to pass. They are, on both GPUs tested
+All three must be \textsc{rejected}, each by its intended guard, with its specific error,
+for the self-test to pass. They are, on both GPUs tested
 (\selftestPassFortyNinety/\selftestCasesFortyNinety{} on \selftestMachineA{};
 \selftestPassHTwoHundred/\selftestCasesHTwoHundred{} on \selftestMachineB).
 We recommend treating these as \emph{unit tests for reward functions} in any system trained
@@ -315,8 +315,8 @@ Stated plainly: with $\beta{=}0$, and with the policy-gradient term indistinguis
 zero effect in the multi-seed ablation (\S\ref{sec:ablations}), the production update
 \emph{reduces to rejection-sampled distillation on per-round champions}, best-of-$G$
 against the referee, then imitation of the verified winner. We keep
-Eq.~\ref{eq:loss} because it is what the code implements; the reduction is the honest
-summary of what the data say the update does, and it sharpens the thesis rather than
+Eq.~\ref{eq:loss} because it is what the code implements; the reduction is what the data
+say the update actually does, and it sharpens the thesis rather than
 weakening it: a sampler plus the referee is nearly the whole system. Prompts carry the referee's structured error feedback from the previous round
 (the fix-then-retry reflex). The archive keeps one champion per operator; exit validation
 re-measures every champion fresh with the \maxauto{} baseline.
@@ -364,7 +364,7 @@ $\stabMeanOfMeans\times$; largest run-to-run spread $\sigma = \stabMaxSpread$; w
 \textbf{Shape generality.} Every kernel was re-benchmarked across a
 $(M,N)\times\{\text{fp16},\text{bf16}\}$ grid (matrix family:
 $1024{\times}4096 \ldots 256{\times}16384$; rope family over $(M,D)$), with \maxauto{}
-\emph{recompiled per cell} and the anti-gaming guards active in every cell ---
+\emph{recompiled per cell} and the anti-gaming guards active in every cell:
 \gridCellsTotal{} cells total. \textbf{All \stabOps{} kernels hold geomean $>1$}
 (overall $\gridOneGeomean\times$ on the 32 v1-era kernels, $\gridTwoGeomean\times$ on the
 37 discovery-run kernels), all survive the cache-cold rotated check
@@ -414,8 +414,8 @@ own earlier claim that 5 of 11 expert kernels were non-robust to odd shapes: und
 library-API condition all \hthApiVerified{} Liger recipes pass our adversarial sweep,
 the failures were artifacts of \emph{our} extraction wrappers. Second, the forward-only
 cross-entropy comparison is \emph{unfair to Liger} (their CE computes gradients in the
-forward by design) and is excluded from any headline. One correlation deserves stating
-plainly rather than leaving for a reviewer: our largest stability-gated win,
+forward by design) and is excluded from any headline. One correlation is better stated by
+us than found by a reviewer: our largest stability-gated win,
 \texttt{\stabStrongestOp} at $\stabStrongestMean\times$, is exactly the operator this
 expert comparison excludes, and Inductor's cross-entropy lowering is a known weak point,
 so the \maxauto{} baseline is softest precisely where our headline number is largest. The
