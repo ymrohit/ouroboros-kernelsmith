@@ -590,7 +590,7 @@ Everything regenerates from commands: the harness self-test
 (\texttt{modal\_app.py} entrypoints), and this paper's every number
 (\texttt{paper/make\_numbers.py}, which fails the build on cross-report inconsistency)
 and figure (\texttt{paper/make\_figures.py}). The artifact includes the
-\productKernels{} kernels, adapters (2B and 27B), the verified corpus, raw five-sample
+\productKernels{} kernels, adapters (1B and 27B), the verified corpus, raw five-sample
 stability data, per-cell grid data, run transcripts where retrievable (with an honest
 note on which are windows), and the falsification ledger.
 
@@ -598,9 +598,10 @@ note on which are windows), and the falsification ledger.
 
 We have treated the reward channel of an RL-for-code system the way security-critical code
 is treated, with its exploits written out, committed, and rejected on every build. Trained
-against that referee, an open model produced \productKernels{} kernels that beat the
-incumbent compiler reproducibly, repaired the one regime where it had been losing, and
-contradicted our own predictions repeatedly along the way. The proposer ranged from 1B to
+against that referee, an open model produced \stabOps{} reproducible compiler-beating
+kernels, plus \numKernelsExplore{} exploratory kernels under a separate baseline, repaired
+the one regime where it had been losing, and contradicted our own predictions repeatedly
+along the way. The proposer ranged from 1B to
 27B parameters with no change to the pipeline, and the results did not depend on which model
 filled that slot. The referee did. Where verification is cheap and the quality signal is
 measured rather than judged, this is the part of the system worth investing in, and the part
