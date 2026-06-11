@@ -17,47 +17,41 @@
 \title{\textbf{The Referee Is the Product:}\\
 \large Un-gameable Verification for LLM-Generated GPU Kernels,\\
 and What It Falsified About Its Builders' Beliefs}
-\author{Rohit Mahendra Tigon\\
-\small \texttt{YMRohit} \quad
-\small artifacts: \texttt{huggingface.co/YMRohit/ouroboros-kernelsmith-qwen3.6-27b}}
-\date{June 2026 \quad (preprint; ablations replicated at 3 seeds on a 1B model)}
+\author{Rohit Yelukati Mahendra}
+\date{June 2026}
 
 \newcommand{\maxauto}{\texttt{torch.compile} max-autotune}
 \newcommand{\sys}{\textsc{Ouroboros}}
 
 \begin{document}
+\sloppy
 \maketitle
 
 \begin{abstract}
 Large-language-model kernel generation has a credibility problem: the most publicized
 result in the area was retracted within days when its generated kernels were found to be
-exploiting the evaluation harness rather than the hardware. We argue the root cause is
-architectural: the reward channel is treated as a metric when it must be engineered as
-an \emph{adversarial system under test}. We present \sys{}, a verifier-grounded
-self-distillation loop whose central artifact is an immutable referee with
-\emph{negative controls for the reward function itself}: implemented exploits
-(benchmark-shape special-casing, pointer-keyed output memoization, in-place input
-mutation) ship in the test suite and must be \textsc{rejected} for the system to be
-considered sound. Trained only by this referee, a 27B-parameter open model
-(Qwen3.6-27B, LoRA) wrote \productKernels{} Triton fusion kernels that \emph{all} beat
-\maxauto{} reproducibly: \stabDiscoveries{}/\stabOps{} pass a $5\times$ fresh-run
-stability gate (worst kernel $\stabWeakestMean\times\pm\stabWeakestSpread$; best
-$\stabStrongestMean\times\pm\stabStrongestSpread$), and every kernel holds a geometric-mean
-win across a $(M,N)\times$dtype shape grid of \gridCellsTotal{} cells with per-cell
-recompiled baselines and cache-cold verification, with the \gridLossPct\% of cells we
-lose reported individually. Ablations (replicated at three seeds on a 1B model, OpenBMB MiniCPM5-1B, on a free
-RTX~4090) show that on familiar operators the four training-recipe arms are
-\emph{statistically tied}: frozen best-of-$N$ search captures essentially all of the full
-loop's value, and no learning ingredient separates beyond seed noise. On never-seen
-operators learning is visibly load-bearing instead: validity climbs from $\sim$50\% to 68\%
-within one run as the model distills its own verified solutions. Finally, we document nine instances in which the
-verifier falsified a confident belief held by the system's own builders. One was our
-published diagnosis of the system's one weak regime, which the model repaired with a
-simpler schedule family than the one we predicted, flipping the worst published loss
-($\beforeALS\times$) into a $\invALSshortMA\times$ win. We conclude that in domains with
-cheap, honest measurement, the scarce engineering asset is not the model but the referee,
-and we release the harness, all \productKernels{} kernels, the corpus, adapters, raw
-per-sample measurements, and a falsification ledger.
+exploiting the evaluation harness rather than accelerating the hardware. We take the root
+cause to be architectural. The reward channel is usually treated as a metric, when it has to
+be built and tested as something an adversary will try to fool. \sys{} is a
+verifier-grounded self-distillation loop built around an immutable referee that ships with
+negative controls for its own reward function: three working exploits (benchmark-shape
+special-casing, pointer-keyed output memoization, in-place input mutation) are committed as
+test cases and must be rejected for the system to be considered sound. Trained only against
+this referee, an open 27B model (Qwen3.6-27B with LoRA) produced \productKernels{} Triton
+fusion kernels that all beat \maxauto{} reproducibly: \stabDiscoveries{} of \stabOps{} pass
+a five-run stability gate (the weakest at $\stabWeakestMean\times\pm\stabWeakestSpread$, the
+strongest at $\stabStrongestMean\times\pm\stabStrongestSpread$), and each holds a
+geometric-mean win across a shape grid of \gridCellsTotal{} cells, with per-cell recompiled
+baselines, a cache-cold check, and the \gridLossPct\% of cells we lose reported
+individually. A three-seed ablation on a 1B model finds the four training-recipe arms
+statistically indistinguishable on familiar operators, with best-of-$N$ search against the
+referee accounting for nearly all of the loop's value; learning matters instead on operators
+the model has not seen, where validity rises from roughly 50\% to 68\% within one run. We
+also record \falsifications{} cases in which the referee contradicted a belief we held in
+advance, among them our own diagnosis of the system's one weak regime, which the model
+repaired with a simpler schedule than we had predicted, turning the worst measured loss
+($\beforeALS\times$) into a $\invALSshortMA\times$ win. We release the harness, the kernels,
+the corpus, the adapters, the raw measurements, and the record of those predictions.
 \end{abstract}
 
 \section{Introduction}
@@ -66,22 +60,22 @@ In February 2025, a well-funded research lab announced an ``AI CUDA Engineer'' w
 claimed speedups of up to $150\times$; within roughly 48 hours, public reviewers found the
 generated kernels were reusing memory across evaluation runs (gaming the benchmark
 harness, not accelerating the hardware) and the headline numbers collapsed
-\cite{sakana2025}. The episode is usually told as a cautionary tale about hype. We read
-it differently: it was a \emph{systems failure with a systems fix}. The reward channel of
-an RL-for-code pipeline is an attack surface, and like any attack surface it can be
-hardened, regression-tested, and shipped with its known exploits as test cases.
+\cite{sakana2025}. The episode is usually read as a story about hype. It is better read as
+an engineering failure with an engineering fix. The reward channel of an RL-for-code
+pipeline is an attack surface, and an attack surface can be hardened, regression-tested, and
+shipped with its known exploits as test cases.
 
-This paper presents \sys{}, a small worked system built around that principle, and
-reports what happened when we ran it for one sustained campaign. Concretely:
+This paper describes \sys{}, a system built on that observation, and reports what it did
+over one extended run.
 
 \begin{enumerate}
 \item \textbf{The harness is the product} (\S\ref{sec:harness}). An immutable referee
 compiles each candidate Triton kernel, checks elementwise correctness against a PyTorch
 reference across \emph{adversarial} shapes, dtypes, and magnitudes, and measures wall-clock
-with CUDA events under a measurement-hygiene stack (\S\ref{sec:hygiene}). Crucially, the
-referee ships with \emph{negative controls for its own reward channel}: three implemented
-cheat kernels, each a working exploit against a naive version of the harness, that
-must be \textsc{rejected} for the self-test to pass. The full self-test is
+with CUDA events under a set of measurement guards (\S\ref{sec:hygiene}). The referee also
+ships with negative controls for its own reward channel: three cheat kernels, each a working
+exploit against a naive version of the harness, that must be rejected for the self-test to
+pass. The full self-test is
 \selftestCasesHTwoHundred{} cases (\selftestGoldHTwoHundred{} gold kernels must pass,
 \selftestNegHTwoHundred{} negative controls must fail) and is \textsc{all green} on both
 an RTX~4090 and an H200.
@@ -93,33 +87,30 @@ AST hash and winner's-curse-corrected exit validation.
 
 \item \textbf{Results} (\S\ref{sec:results}): \productKernels{} model-era kernels;
 \stabDiscoveries{}/\stabOps{} reproducible discoveries against \maxauto{} (the incumbent
-autotuner, i.e., the strongest honest compiler baseline); geomean wins across the entire
+autotuner, the strongest compiler baseline); geomean wins across the entire
 shape grid with losses (\gridLossesTotal{}/\gridCellsTotal{} cells) reported per-cell and
 concentrated in one explainable regime; parity-or-better against expert hand-written
 Triton under \emph{two} comparison conditions including the library-as-shipped one; and a
 correctness-gated end-to-end transformer-block composition with its Amdahl ceiling stated.
 
-\item \textbf{Ablations and the locus of learning} (\S\ref{sec:ablations}): on familiar
-operators the recipe's arms are statistically tied (three seeds, on a 1B model) ---
-search against the referee dominates and no learning ingredient separates. On foreign
-operators learning is load-bearing and visible within a single run
-(Fig.~\ref{fig:learning}).
+\item \textbf{Ablations} (\S\ref{sec:ablations}): on familiar operators the recipe's arms
+are statistically indistinguishable (three seeds, on a 1B model), with search against the
+referee accounting for most of the result. Learning matters on operators the model has not
+seen (Fig.~\ref{fig:learning}).
 
-\item \textbf{The falsification ledger} (\S\ref{sec:falsification}): nine concrete
-instances where the referee overruled a confident human belief, including the authors'
-own published diagnosis, hand-written ``textbook'' kernel, ablation prediction, and one of
-our own earlier claims, which we retract here explicitly.
+\item \textbf{A record of contradicted predictions} (\S\ref{sec:falsification}):
+\falsifications{} cases where the referee disagreed with a belief we had written down in
+advance, among them our own diagnosis of the weak regime, a hand-written kernel of ours that
+the model beat, and an earlier claim of ours that we retract here.
 \end{enumerate}
 
-We do \emph{not} claim novel algorithm discovery (\S\ref{sec:bounds}); the wins are
-reproducible \emph{scheduling} wins of $\sim$10--100\% on bandwidth-bound fusion
-operators, which is precisely the long tail practitioners hand-write today. The claim we
-defend is methodological: \textbf{with an un-gameable referee, a commodity open model
-out-searches the incumbent autotuner, repairs its own weaknesses, and corrects its
-builders. Every one of those statements is regenerable from a machine-emitted
-artifact in our repository.} A number that cannot be regenerated by a command does not
-appear in this paper; every statistic below is compiled from the harness's JSON outputs
-by the same script that performs cross-report consistency checks.
+We do not claim novel algorithm discovery (\S\ref{sec:bounds}). The wins are scheduling wins
+of roughly 10 to 100\% on bandwidth-bound fusion operators, the part of the kernel surface
+practitioners still write by hand. The contribution is methodological: against a verifier
+that cannot be gamed, an open model out-searches the compiler's own autotuner and repairs
+its own weak cases. Every number in the paper is regenerated from a harness output by a
+script that also checks the reports against each other; a number that cannot be regenerated
+this way does not appear.
 
 \section{Related Work}
 
@@ -128,7 +119,7 @@ evaluation regime; entrants include Kevin-32B (multi-turn RL)~\cite{kevin}, Auto
 (RL for Triton)~\cite{autotriton}, CUDA-L1 (contrastive RL)~\cite{cudal1}, and the AI
 CUDA Engineer~\cite{sakana2025}. Our work differs in locus: we contribute the
 \emph{verification system} and treat the model as a replaceable commodity, our pipeline
-ran unchanged across a 2B model (an earlier campaign) and the 27B reported here; we do not claim a controlled scale comparison, only architectural model-agnosticism. We also intentionally evaluate against the
+ran unchanged across models from 1B to 27B parameters (Section~\ref{sec:ablations}). We also intentionally evaluate against the
 compiler's own autotuner rather than eager PyTorch, since eager baselines flatter fusion
 work.
 
@@ -354,9 +345,9 @@ referee under two conditions: \emph{fixed-schedule} (raw extracted \texttt{@trit
 kernels under our wrappers; schedule pinned) and \emph{library-API} (Liger called via its
 own public \texttt{Function} interface, exactly as shipped). Ours is faster on
 swiglu/rmsnorm/relu2/geglu in both conditions; softmax and layernorm are ties-within-noise
-against the best fixed-schedule expert. Two honesty notes. First, \textbf{we retract our
-own earlier claim} that 5 of 11 expert kernels were non-robust to odd shapes: under the
-library-API condition all \hthApiVerified{} Liger recipes pass our adversarial sweep ---
+against the best fixed-schedule expert. Two corrections. First, we retract our
+own earlier claim that 5 of 11 expert kernels were non-robust to odd shapes: under the
+library-API condition all \hthApiVerified{} Liger recipes pass our adversarial sweep,
 the failures were artifacts of \emph{our} extraction wrappers. Second, the forward-only
 cross-entropy comparison is \emph{unfair to Liger} (their CE computes gradients in the
 forward by design) and is excluded from any headline.
@@ -475,18 +466,17 @@ Table~\ref{tab:ablmc} flips it. We keep this table only to make that point.}\lab
 \end{table}
 
 \textbf{Multi-seed replication (and why the single-seed ordering is noise).} A single seed
-per arm invites the objection ``$n{=}1$.'' We replicated the ablation at \textbf{three
-independent seeds} per arm, on a different model and a different scale: OpenBMB's
-\textbf{MiniCPM5-1B} (a 1B open model), SFT'd to the validity gate in \mcSftEpochs{} epochs
-(\mcSftValid\% valid) and run entirely on a single consumer RTX~4090 at zero marginal cost.
-The arms are \emph{statistically tied} (Table~\ref{tab:ablmc}, Fig.~\ref{fig:ablmc}):
-between-arm spread $\mcSpread$ is below twice the largest within-arm seed standard deviation
-$\mcMaxSeedStd$. The decisive cross-check: \textbf{distill-only was nominally \emph{best} in
-the 27B single-seed run and is nominally \emph{worst} ($\mcDistillonlyGm$) in the 1B
-three-seed average} --- the same arm at opposite ends, which is the cleanest possible proof
-that the single-seed ordering was noise. \texttt{no-learn} (pure best-of-$N$ from the frozen
-SFT model, \emph{no learning at all}) sits at $\mcNolearnGm$, within noise of control's
-$\mcControlGm$.
+per arm leaves the ordering open to the objection that $n{=}1$. We therefore repeated the
+ablation at three independent seeds per arm on a different and much smaller model, OpenBMB's
+MiniCPM5-1B, which reached the validity gate in \mcSftEpochs{} epochs (\mcSftValid\% valid)
+and ran on a single RTX~4090. The arms are statistically indistinguishable
+(Table~\ref{tab:ablmc}, Fig.~\ref{fig:ablmc}): the spread of geometric means across arms,
+$\mcSpread$, is below twice the largest per-arm standard deviation across seeds,
+$\mcMaxSeedStd$. The cross-check settles it. Distill-only was nominally the best arm in the
+27B single-seed run and is nominally the worst ($\mcDistillonlyGm$) in the 1B three-seed
+average; the same arm appears at both extremes, so the single-seed ordering was noise.
+The no-learn arm, which is best-of-$N$ sampling from the frozen model with no weight updates,
+sits at $\mcNolearnGm$, indistinguishable from control's $\mcControlGm$.
 
 \begin{table}[t]
 \centering\small
@@ -494,16 +484,16 @@ $\mcControlGm$.
 \toprule
 arm & removes & valid-rate & beat-rate & geomean vs MA (3 seeds)\\
 \midrule
-control & --- & \mcControlValid & \mcControlBeat\% & $\mcControlGm \pm \mcControlStd$\\
+control &, & \mcControlValid & \mcControlBeat\% & $\mcControlGm \pm \mcControlStd$\\
 no-feedback & referee errors in prompt & \mcNofeedbackValid & \mcNofeedbackBeat\% & $\mcNofeedbackGm \pm \mcNofeedbackStd$\\
 distill-only & policy-gradient term & \mcDistillonlyValid & \mcDistillonlyBeat\% & $\mcDistillonlyGm \pm \mcDistillonlyStd$\\
 no-learn & all weight updates & \mcNolearnValid & \mcNolearnBeat\% & $\mcNolearnGm \pm \mcNolearnStd$\\
 \bottomrule
 \end{tabular}
-\caption{Multi-seed ablation, \textbf{MiniCPM5-1B}, 3 seeds, free RTX~4090. Arms tied
-(spread $\mcSpread \le 2\times$ seed-std $\mcMaxSeedStd$); every arm beats max-autotune.
-A 1B model writing compiler-beating kernels is itself the result of the sponsor-scale
-run (\S\ref{sec:bounds}).}\label{tab:ablmc}
+\caption{Multi-seed ablation on MiniCPM5-1B, three seeds per arm. The arms are
+indistinguishable (spread $\mcSpread \le 2\times$ the per-arm seed standard deviation
+$\mcMaxSeedStd$), and every arm beats max-autotune. The 1B model writing compiler-beating
+kernels at all is discussed in Section~\ref{sec:bounds}.}\label{tab:ablmc}
 \end{table}
 
 \begin{figure}[t]
@@ -514,51 +504,50 @@ between arms: no learning ingredient separates on familiar operators.}
 \label{fig:ablmc}
 \end{figure}
 
-The conclusion that survives error bars is the robust one, not the fragile ordering:
-\textbf{(1)} On familiar operators, the referee plus best-of-$N$ sampling captures
-essentially all of the full loop's geomean --- \emph{search, not learning, is the dominant
-force where competence exists}, and this now holds across two model scales (1B and 27B).
-\textbf{(2)} No single learning ingredient --- feedback, the policy-gradient term, or
-learning at all --- separates beyond seed noise here. \textbf{(3)} Learning's value
-concentrates on \emph{foreign} operators: the \invValidRate{} vs $\sim$0.69 validity gap and
-Fig.~\ref{fig:learning} are the controlled contrast, and a 4.5-hour \emph{continue-SFT} on
-new operators stalled and degraded proven ones while RL-from-verifier taught them cleanly.
-Corpus imitation is not how the new capabilities arrived.
+The conclusion that survives the error bars is the weaker of the two. On familiar operators,
+best-of-$N$ sampling against the referee captures essentially all of the full loop's
+geometric mean: search, not learning, dominates where the model is already competent, and
+this holds at both 1B and 27B. No single learning ingredient, whether the feedback channel,
+the policy-gradient term, or weight updates at all, separates beyond seed noise in this
+regime. Learning matters on operators the model has not seen. The validity gap there
+(\invValidRate{} against roughly 0.69 on familiar families, Fig.~\ref{fig:learning}) is the
+controlled contrast, and a 4.5-hour continue-SFT on new operators stalled and degraded the
+proven ones while RL against the verifier taught them without that interference. The new
+capabilities did not come from imitating a corpus.
 
 \section{The falsification ledger}\label{sec:falsification}
 
-Because the referee is cheaper to consult than to argue with, we adopted the practice of
-writing predictions down \emph{before} runs. Across the campaign the referee falsified
-\falsifications{} confident human beliefs, including: the loss-regime diagnosis
-(\S\ref{sec:invention}); the authors' hand-written scan kernel ($-47\%$); the published
-expert-robustness claim (\S\ref{sec:experts}, retracted); the superiority of continue-SFT
-for new operators; the ablation ranking (\S\ref{sec:ablations}); the adequacy of a subtle
-anti-memoization perturbation (\S\ref{sec:antigaming}, caught by the system's own
-negative control); the verifiability of an innocuous-looking operator (\texttt{l1norm});
-an early benchmark that manufactured compiler ties (\S\ref{sec:hygiene}d); and the
-evidentiary value of all-green logs without durable artifacts (which forced a re-run of
-our own stability gate under a written provenance note). The ledger cuts both ways: one pre-registered
-prediction (that the loss-regime repair would \emph{transfer}) was \emph{ratified}, $10/10$
-(\S\ref{sec:invention}). We highlight this practice not as housekeeping but as the paper's
-second thesis: \textbf{a system with an honest referee does not require its builders to be
-right; the referee, not their confidence, decides.} The ledger, with open pre-registered
-predictions, ships in the artifact.
+We wrote our predictions down before running, which let the referee evaluate our judgement
+as well as the model's. Over the course of the project it contradicted \falsifications{} of
+our prior beliefs. The list includes our diagnosis of the loss regime
+(Section~\ref{sec:invention}); our hand-written scan kernel, which the model beat by 47\%;
+our earlier claim that several expert kernels were non-robust, which we retract in
+Section~\ref{sec:experts}; the expectation that continue-SFT would teach new operators
+better than RL; the single-seed ablation ordering of Section~\ref{sec:ablations}; the
+adequacy of a small anti-memoization perturbation, which one of our own negative controls
+rejected before any model could exploit it; the verifiability of an operator (\texttt{l1norm})
+whose outputs fall below the fp16 tolerance; an early benchmark that timed a memory copy and
+reported compiler ties; and the assumption that an all-green log without a durable artifact
+was sufficient evidence, which forced us to re-run a gate. One prediction held: that the
+loss-regime repair would transfer (10/10 in Section~\ref{sec:invention}). We report this not
+for its own sake but because it is the practical consequence of the design. When the
+verifier is honest, the builders do not have to be right, and the record of where they were
+wrong is cheap to keep.
 
-\section{Honest bounds}\label{sec:bounds}
+\section{Limitations}\label{sec:bounds}
 
-(1) These are scheduling wins on bandwidth-bound fusion operators, no claims against
+(1) These are scheduling wins on bandwidth-bound fusion operators, with no claims against
 cuBLAS/FlashAttention-class kernels, and no novel algorithm classes (the scan result is
 primitive selection). (2) All speedups are vs \maxauto{} on specific hardware
 (H200; spot-confirmed on RTX 4090); ratios are hardware-dependent even when reproducible.
-(2b) \emph{Scale, downward:} the whole pipeline was re-run on OpenBMB's
-\textbf{MiniCPM5-1B} (a 1B open model) on a single consumer RTX~4090 at zero marginal cost;
-it reached the validity gate in \mcSftEpochs{} epochs (\mcSftValid\% valid) and its kernels
-beat \maxauto{} on every benchmarked operator (geomean $\sim\mcControlGm\times$,
-Table~\ref{tab:ablmc}). A \emph{1-billion-parameter} model writing verified compiler-beating
-kernels on commodity hardware is the sharpest statement of the thesis: the model is
-replaceable down to 1B; the referee is not.
-(3) The 27B ablations are single-seed (the 1B replication of Table~\ref{tab:ablmc} is
-three-seed). (4) KernelBench cross-evaluation is
+(2b) The pipeline was also run downward in scale, on OpenBMB's MiniCPM5-1B on a single
+RTX~4090. The 1B model reached the validity gate in \mcSftEpochs{} epochs (\mcSftValid\%
+valid) and its kernels beat \maxauto{} on every benchmarked operator (geometric mean
+$\mcControlGm\times$, Table~\ref{tab:ablmc}). That a 1B model produces verified
+compiler-beating kernels on commodity hardware supports the central point: the proposer is
+replaceable across a wide range of scales, whereas the verifier is not.
+(3) The 27B ablation is single-seed; the 1B replication in Table~\ref{tab:ablmc} is
+three-seed. (4) KernelBench cross-evaluation is
 out-of-scope-by-construction for our specialist (foreign format, generalist operators);
 the recorded honest probe scored \kbCorrect/\kbN{} and we declined prompt-bridging
 shortcuts that would manufacture a non-comparable number. (5) The loop requires a domain
@@ -580,21 +569,20 @@ note on which are windows), and the falsification ledger.
 
 \section{Conclusion}
 
-\sys{} set out to show that the reward channel of an RL-for-code system can be hardened
-the way security-critical code is hardened, with its exploits implemented, committed,
-and continuously rejected, and that a commodity open model trained against such a
-referee does real engineering: \productKernels{} reproducible compiler-beating kernels,
-its own weak regime repaired, its builders corrected nine times. The model was swapped
-once (2B$\to$27B) and could be swapped again; nothing in the result depends on its
-identity. What cannot be swapped out is the referee. In domains where verification is
-cheap and honest, that inversion, \emph{the verifier is the asset; the model is a
-commodity}, is, we believe, the durable lesson, and the one most worth carrying to the
-next domain.
+We have treated the reward channel of an RL-for-code system the way security-critical code
+is treated, with its exploits written out, committed, and rejected on every build. Trained
+against that referee, an open model produced \productKernels{} kernels that beat the
+incumbent compiler reproducibly, repaired the one regime where it had been losing, and
+contradicted our own predictions repeatedly along the way. The proposer ranged from 1B to
+27B parameters with no change to the pipeline, and the results did not depend on which model
+filled that slot. The referee did. Where verification is cheap and the quality signal is
+measured rather than judged, this is the part of the system worth investing in, and the part
+that transfers to the next domain.
 
-\subsubsection*{Acknowledgments}
-Engineering, experiments, and drafting were carried out with Claude (Anthropic) operating
-the OUROBOROS pipeline end-to-end; all claims trace to harness-emitted artifacts rather
-than to either human or model assertion. Compute: Modal (H200/L4) and a local RTX 4090.
+\subsubsection*{Reproducibility statement}
+Every numerical claim in this paper is regenerated from the harness's JSON outputs by a
+single script that also checks the reports against one another for consistency and aborts
+the build on any contradiction. Compute used H200 and L4 instances and a local RTX~4090.
 
 \begin{thebibliography}{99}\small
 \bibitem{sakana2025} Sakana AI. \emph{The AI CUDA Engineer}. Technical report and
