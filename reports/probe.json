@@ -1,0 +1,69 @@
+{
+  "entropy": {
+    "k": 4,
+    "verified": 0,
+    "statuses": [
+      "incorrect",
+      "incorrect",
+      "incorrect",
+      "incorrect"
+    ],
+    "best": null
+  },
+  "kl_div": {
+    "k": 4,
+    "verified": 0,
+    "statuses": [
+      "incorrect",
+      "incorrect",
+      "crash",
+      "incorrect"
+    ],
+    "best": null
+  },
+  "cumsum": {
+    "k": 4,
+    "verified": 1,
+    "statuses": [
+      "compile_fail",
+      "compile_fail",
+      "ok",
+      "compile_fail"
+    ],
+    "best": {
+      "vs_maxauto": 1.3211,
+      "vs_compile": 1.3945,
+      "vs_eager": 6.4404,
+      "latency_ms": 0.11162,
+      "src": "@triton.jit\ndef _k(x_ptr, y_ptr, stride, N, BLOCK: tl.constexpr):\n    row = tl.program_id(0); x_ptr += row * stride; y_ptr += row * stride\n    # We need to perform an inclusive scan.\n    # Because triton doesn't have a native scan primitive that works across blocks easily\n    # without shared memory and complex synchronization, we can do a simple approach:\n    # load all elements, compute prefix sum.\n    # However, for large N, we might need multiple blocks.\n    # The prompt says \"carry across blocks\".\n    # Let's assume N fits in a reasonable block size or we handle multiple blocks.\n    # Given the signature (M, N) -> (M, N), and typical triton patterns,\n    # let's try to handle arbitrary N with a block size that fits in registers/shared memory.\n    # A simple inclusive scan within a block is easy.\n    # Across blocks, we need to pass the last cumulative sum to the next block.\n    \n    # Let's use a block size of 4096 or similar, but triton limits block sizes.\n    # Let's assume N is not extremely large, or we process in chunks.\n    # Actually, for a general solution, we can process the row in chunks.\n    \n    # Strategy:\n    # 1. Load a chunk of the row.\n    # 2. Compute inclusive scan for this chunk.\n    # 3. Add the carry from previous chunks to all elements in this chunk.\n    # 4. Store.\n    # 5. Pass the last element's cumulative sum as carry to the next chunk.\n    \n    # We need a loop over chunks.\n    \n    carry = 0.0\n    for off in range(0, N, BLOCK):\n        cols = off + tl.arange(0, BLOCK); MM = cols < N\n        x = tl.load(x_ptr + cols, mask=MM, other=0.0).to(tl.float32)\n        # Inclusive scan of x\n        # We can use a cumulative sum approach.\n        # tl.cumsum is available in newer triton versions, but let's assume standard ops.\n        # If tl.cumsum is available:\n        # s = tl.cumsum(x)\n        # But let's write it manually or use tl.cumsum if available.\n        # The prompt implies a standard environment. tl.cumsum exists in triton.\n        s = tl.cumsum(x)\n        # Add carry\n        s = s + carry\n        tl.store(y_ptr + cols, s, mask=MM)\n        # Update carry: last element of this block's scan\n        # The last element is at index BLOCK-1, but masked.\n        # We need the cumulative sum of the entire row up to this point.\n        # The last valid element in this block is at min(off + BLOCK - 1, N - 1).\n        # The value s at that position is the new carry.\n        # We can extract it by taking the last element of s, but we need to be careful with masking.\n        # A simpler way: sum(x) is the total added in this block.\n        # carry += sum(x)\n        carry += tl.sum(x)\n\ndef run(x):\n    M, N = x.shape; y = torch.empty_like(x)\n    _k[(M,)](x, y, x.stride(0), N, BLOCK=4096)\n    return y"
+    }
+  },
+  "rmsnorm_wide": {
+    "k": 4,
+    "verified": 0,
+    "statuses": [
+      "compile_fail",
+      "compile_fail",
+      "compile_fail",
+      "compile_fail"
+    ],
+    "best": null
+  },
+  "dequant_int8": {
+    "k": 4,
+    "verified": 4,
+    "statuses": [
+      "ok",
+      "ok",
+      "ok",
+      "ok"
+    ],
+    "best": {
+      "vs_maxauto": 1.3163,
+      "vs_compile": 1.3265,
+      "vs_eager": 5.1327,
+      "latency_ms": 0.10035,
+      "src": "@triton.jit\ndef _k(q_ptr, s_ptr, y_ptr, stride, N, BLOCK: tl.constexpr):\n    row = tl.program_id(0); q_ptr += row * stride; y_ptr += row * stride\n    scale = tl.load(s_ptr + row).to(tl.float32)\n    for off in range(0, N, BLOCK):\n        cols = off + tl.arange(0, BLOCK); MM = cols < N\n        q = tl.load(q_ptr + cols, mask=MM, other=0).to(tl.float32)\n        y = q * scale\n        tl.store(y_ptr + cols, y, mask=MM)\ndef run(q, scale):\n    M, N = q.shape; y = torch.empty((M, N), device=q.device, dtype=torch.float16)\n    _k[(M,)](q, scale, y, q.stride(0), N, BLOCK=4096)\n    return y"
+    }
+  }
+}

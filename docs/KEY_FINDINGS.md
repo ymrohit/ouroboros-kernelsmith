@@ -138,3 +138,15 @@ not per-op luck; the product's one characterized weakness is closed for the chai
 → `reports/f1_transfer_verdict.md`. Note: this prediction was *correct* — pre-registration
 grades the human in both directions, and the referee here ratified rather than overruled.
 Standing falsifications remain at nine; confirmed predictions now one.
+
+## Inference-only probe (2026-06-11) — prediction partly falsified (entry 10)
+
+Probed the trained 27B at PURE INFERENCE (no RL) on 5 never-RL'd ops, A100-80GB, ~$1.
+Result: dequant_int8 4/4 one-shot (1.32x MA), cumsum 1/4 (1.32x MA), rmsnorm_wide /
+entropy / kl_div all 0/4. Cleanly separates raw model knowledge (genuine one-shot
+generalization exists on some unseen ops) from what the loop adds (reliability + crossing
+the coupled-double-reduction boundary + regime transfer). My pre-probe prediction was
+partly wrong: too pessimistic on the speedups (guessed 1.0-1.2x, got 1.32x), too optimistic
+on rmsnorm_wide (guessed coin-flip, got 0/4). The referee corrected the human in both
+directions. → reports/probe_verdict.md. Ledger: 9 falsifications + 2 partial-mixed + 1
+ratified.
