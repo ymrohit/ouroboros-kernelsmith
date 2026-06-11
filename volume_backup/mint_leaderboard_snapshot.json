@@ -1,0 +1,323 @@
+{
+  "add_layernorm_gelu": {
+    "op": "add_layernorm_gelu",
+    "name": "OUROBOROS-27B \ud83d\udc51",
+    "speedup_compile": 1.31,
+    "speedup_eager": 5.1,
+    "ts": 1781163320,
+    "champion": true
+  },
+  "add_layernorm_silu": {
+    "op": "add_layernorm_silu",
+    "name": "OUROBOROS-27B \ud83d\udc51",
+    "speedup_compile": 1.122,
+    "speedup_eager": 4.5,
+    "ts": 1781163320,
+    "champion": true
+  },
+  "add_layernorm_tanh": {
+    "op": "add_layernorm_tanh",
+    "name": "OUROBOROS-27B \ud83d\udc51",
+    "speedup_compile": 1.295,
+    "speedup_eager": 4.9,
+    "ts": 1781163320,
+    "champion": true
+  },
+  "add_rmsnorm_gelu": {
+    "op": "add_rmsnorm_gelu",
+    "name": "OUROBOROS-27B \ud83d\udc51",
+    "speedup_compile": 1.294,
+    "speedup_eager": 5.2,
+    "ts": 1781163320,
+    "champion": true
+  },
+  "add_rmsnorm_relu": {
+    "op": "add_rmsnorm_relu",
+    "name": "OUROBOROS-27B \ud83d\udc51",
+    "speedup_compile": 1.251,
+    "speedup_eager": 5.0,
+    "ts": 1781163320,
+    "champion": true
+  },
+  "add_rmsnorm_silu": {
+    "op": "add_rmsnorm_silu",
+    "name": "OUROBOROS-27B \ud83d\udc51",
+    "speedup_compile": 1.182,
+    "speedup_eager": 4.7,
+    "ts": 1781163320,
+    "champion": true
+  },
+  "add_rmsnorm_tanh": {
+    "op": "add_rmsnorm_tanh",
+    "name": "OUROBOROS-27B \ud83d\udc51",
+    "speedup_compile": 1.294,
+    "speedup_eager": 5.0,
+    "ts": 1781163320,
+    "champion": true
+  },
+  "geglu": {
+    "op": "geglu",
+    "name": "OUROBOROS-27B \ud83d\udc51",
+    "speedup_compile": 1.252,
+    "speedup_eager": 5.0,
+    "ts": 1781163320,
+    "champion": true
+  },
+  "layernorm_gelu": {
+    "op": "layernorm_gelu",
+    "name": "OUROBOROS-27B \ud83d\udc51",
+    "speedup_compile": 1.484,
+    "speedup_eager": 5.7,
+    "ts": 1781163320,
+    "champion": true
+  },
+  "layernorm_relu": {
+    "op": "layernorm_relu",
+    "name": "OUROBOROS-27B \ud83d\udc51",
+    "speedup_compile": 1.425,
+    "speedup_eager": 5.1,
+    "ts": 1781163320,
+    "champion": true
+  },
+  "layernorm_sigmoid": {
+    "op": "layernorm_sigmoid",
+    "name": "OUROBOROS-27B \ud83d\udc51",
+    "speedup_compile": 1.417,
+    "speedup_eager": 5.0,
+    "ts": 1781163320,
+    "champion": true
+  },
+  "layernorm_tanh": {
+    "op": "layernorm_tanh",
+    "name": "OUROBOROS-27B \ud83d\udc51",
+    "speedup_compile": 1.52,
+    "speedup_eager": 5.8,
+    "ts": 1781163320,
+    "champion": true
+  },
+  "rmsnorm_gelu": {
+    "op": "rmsnorm_gelu",
+    "name": "OUROBOROS-27B \ud83d\udc51",
+    "speedup_compile": 1.541,
+    "speedup_eager": 6.0,
+    "ts": 1781163320,
+    "champion": true
+  },
+  "rmsnorm_relu": {
+    "op": "rmsnorm_relu",
+    "name": "OUROBOROS-27B \ud83d\udc51",
+    "speedup_compile": 1.413,
+    "speedup_eager": 5.3,
+    "ts": 1781163320,
+    "champion": true
+  },
+  "rmsnorm_sigmoid": {
+    "op": "rmsnorm_sigmoid",
+    "name": "OUROBOROS-27B \ud83d\udc51",
+    "speedup_compile": 1.464,
+    "speedup_eager": 5.2,
+    "ts": 1781163320,
+    "champion": true
+  },
+  "rmsnorm_silu": {
+    "op": "rmsnorm_silu",
+    "name": "OUROBOROS-27B \ud83d\udc51",
+    "speedup_compile": 1.444,
+    "speedup_eager": 5.2,
+    "ts": 1781163320,
+    "champion": true
+  },
+  "rmsnorm_tanh": {
+    "op": "rmsnorm_tanh",
+    "name": "OUROBOROS-27B \ud83d\udc51",
+    "speedup_compile": 1.561,
+    "speedup_eager": 5.8,
+    "ts": 1781163320,
+    "champion": true
+  },
+  "softmax": {
+    "op": "softmax",
+    "name": "OUROBOROS-27B \ud83d\udc51",
+    "speedup_compile": 2.045,
+    "speedup_eager": 7.4,
+    "ts": 1781163320,
+    "champion": true
+  },
+  "softmax_scale": {
+    "op": "softmax_scale",
+    "name": "OUROBOROS-27B \ud83d\udc51",
+    "speedup_compile": 1.693,
+    "speedup_eager": 5.8,
+    "ts": 1781163320,
+    "champion": true
+  },
+  "swiglu": {
+    "op": "swiglu",
+    "name": "OUROBOROS-27B \ud83d\udc51",
+    "speedup_compile": 1.275,
+    "speedup_eager": 5.1,
+    "ts": 1781163320,
+    "champion": true
+  },
+  "u:demo:rmsnorm_tanh": {
+    "op": "rmsnorm_tanh",
+    "name": "demo",
+    "speedup_compile": 1.053,
+    "speedup_eager": 11.51,
+    "ts": 1781167012
+  },
+  "u:demo:add_layernorm_silu": {
+    "op": "add_layernorm_silu",
+    "name": "demo",
+    "speedup_compile": 1.052,
+    "speedup_eager": 16.54,
+    "ts": 1781167100
+  },
+  "u:demo:layernorm_sigmoid": {
+    "op": "layernorm_sigmoid",
+    "name": "demo",
+    "speedup_compile": 1.082,
+    "speedup_eager": 16.6,
+    "ts": 1781167183
+  },
+  "u:demo:add_rmsnorm_gelu": {
+    "op": "add_rmsnorm_gelu",
+    "name": "demo",
+    "speedup_compile": 1.04,
+    "speedup_eager": 24.8,
+    "ts": 1781167269
+  },
+  "u:rohit:add_rmsnorm_gelu": {
+    "op": "add_rmsnorm_gelu",
+    "name": "rohit",
+    "speedup_compile": 1.047,
+    "speedup_eager": 24.87,
+    "ts": 1781174897
+  },
+  "u:uitest:layernorm_gelu": {
+    "op": "layernorm_gelu",
+    "name": "uitest",
+    "speedup_compile": 1.103,
+    "speedup_eager": 37.09,
+    "ts": 1781175664
+  },
+  "u:Rohit:softmax": {
+    "op": "softmax",
+    "name": "Rohit",
+    "speedup_compile": 1.055,
+    "speedup_eager": 4.83,
+    "ts": 1781175680
+  },
+  "u:kid:chain|rms|0|gelu": {
+    "op": "RMSNorm \u2192 gelu",
+    "name": "kid",
+    "speedup_compile": 1.054,
+    "speedup_eager": 30.81,
+    "ts": 1781176344
+  },
+  "u:27B:softmax": {
+    "op": "softmax",
+    "name": "27B",
+    "speedup_compile": 1.702,
+    "speedup_eager": 4.22,
+    "ts": 1781176889
+  },
+  "u:27B:rmsnorm_gelu": {
+    "op": "rmsnorm_gelu",
+    "name": "27B",
+    "speedup_compile": 1.252,
+    "speedup_eager": 23.22,
+    "ts": 1781176945
+  },
+  "u:27B:swiglu": {
+    "op": "swiglu",
+    "name": "27B",
+    "speedup_compile": 1.137,
+    "speedup_eager": 5.94,
+    "ts": 1781176992
+  },
+  "u:uitest:rmsnorm_gelu": {
+    "op": "RMSNorm \u2192 gelu",
+    "name": "uitest",
+    "speedup_compile": 1.088,
+    "speedup_eager": 30.11,
+    "ts": 1781179940
+  },
+  "u:anonymous:rmsnorm_gelu": {
+    "op": "RMSNorm \u2192 gelu",
+    "name": "anonymous",
+    "speedup_compile": 1.091,
+    "speedup_eager": 30.32,
+    "ts": 1781182043
+  },
+  "u:healthcheck:rmsnorm_gelu": {
+    "op": "RMSNorm \u2192 gelu",
+    "name": "healthcheck",
+    "speedup_compile": 1.089,
+    "speedup_eager": 30.31,
+    "ts": 1781182290
+  },
+  "u:fixtest:add_layernorm_silu": {
+    "op": "residual + LayerNorm \u2192 silu",
+    "name": "fixtest",
+    "speedup_compile": 1.067,
+    "speedup_eager": 16.57,
+    "ts": 1781182545
+  },
+  "u:rohit:softmax": {
+    "op": "softmax",
+    "name": "rohit",
+    "speedup_compile": 2.104,
+    "speedup_eager": 4.63,
+    "ts": 1781183076
+  },
+  "u:warmcheck:rmsnorm_gelu": {
+    "op": "RMSNorm \u2192 gelu",
+    "name": "warmcheck",
+    "speedup_compile": 1.058,
+    "speedup_eager": 30.76,
+    "ts": 1781183768
+  },
+  "u:verify:rmsnorm_gelu": {
+    "op": "RMSNorm \u2192 gelu",
+    "name": "verify",
+    "speedup_compile": 1.042,
+    "speedup_eager": 30.32,
+    "ts": 1781184297
+  },
+  "u:verify:rmsnorm_silu": {
+    "op": "RMSNorm \u2192 silu",
+    "name": "verify",
+    "speedup_compile": 1.053,
+    "speedup_eager": 14.42,
+    "ts": 1781184375
+  },
+  "u:verify:rmsnorm_gelu_erf": {
+    "op": "RMSNorm \u2192 gelu_erf",
+    "name": "verify",
+    "speedup_compile": 1.053,
+    "speedup_eager": 20.28,
+    "ts": 1781184461
+  },
+  "u:verify:rmsnorm_leaky_relu": {
+    "op": "RMSNorm \u2192 leaky_relu",
+    "name": "verify",
+    "speedup_compile": 1.062,
+    "speedup_eager": 15.87,
+    "ts": 1781184553
+  },
+  "u:verify:rmsnorm_elu": {
+    "op": "RMSNorm \u2192 elu",
+    "name": "verify",
+    "speedup_compile": 1.057,
+    "speedup_eager": 19.64,
+    "ts": 1781184641
+  },
+  "u:verify:rmsnorm_mish": {
+    "op": "RMSNorm \u2192 mish",
+    "name": "verify",
+    "speedup_compile": 1.063,
+    "speedup_eager": 26.53,
+    "ts": 1781184732
+  }
+}

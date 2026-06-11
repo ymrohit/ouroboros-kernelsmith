@@ -160,11 +160,42 @@ via the split-row schedules the human diagnosis predicted: the model's simpler w
 kernels falsified the stated hypothesis. `cumsum`: loop-free `tl.cumsum` whole-row beats
 the human carry-loop gold by 47% (invention-lite: primitive selection, labeled precisely).
 `entropy`/`kl_div` resisted (capability boundary, stated). LM valid-rate 49.7% on foreign
-problems vs ~69% familiar. Product → **76 kernels** (stability gate on the 7 running).
+problems vs ~69% familiar. Product → **76 kernels** (69 stability-gated + the 7 invention
+kernels, which stay a **single-shot probe vs max-autotune** — deliberately NOT folded into
+the reproducibility set; the paper states this protocol split explicitly).
 → `reports/invention_verdict.md` · the referee-overruled-the-human catalog:
 `docs/KEY_FINDINGS.md` (8 recorded instances + open falsifiable predictions).
 
-## V2.8 Hygiene (so the integrity is inspectable)
+## V2.8 The repair transfers ✅ (pre-registered prediction — HELD)
+Resumed from the invention adapter on the **10 worst remaining loss-cell operators**, pinned
+to 16384×2048: **10/10 flipped to wins** (1.20–1.44× vs max-autotune, every kernel
+model-authored, explore arm zero, validity 0.713). The whole-row schedule is a carried
+skill, not four lucky fixes. → `reports/f1_transfer_verdict.md`, adapter `rl_adapter_f1`.
+
+## V2.9 Ablations: where does the value come from?
+**27B, single seed per arm** (8 familiar ops, 24 rounds): all four arms 8/8 vs max-autotune,
+geomeans 1.31–1.36 — ordering is seed noise (kept in the paper only to make that point).
+**Multi-seed replication: MiniCPM5-1B, 3 seeds × 4 arms, RTX 4090** — arms within seed
+noise (max−min 0.045 vs largest per-arm SD 0.030); frozen best-of-N ≈ full loop. **On
+familiar operators, search against the referee dominates; learning matters on unseen
+operators** (the 37-op run + the softplus/mish idiom acquisition are the contrast).
+→ `reports/ablations.md`, `reports/ablations_minicpm_multiseed.md`,
+`reports/minicpm_ablation/` (12 per-seed JSONs).
+
+**Data correction (2026-06-11):** the no-learn 27B row originally read 1.302/0.969/18 from
+a pre-clobber transcription; the **completed** JSON recovered from the Modal volume (args
+confirm the arm, 24/24 rounds, per-op rows intact) gives **1.340/0.995/23** — no-learn
+matches control outright, *strengthening* the search-dominates reading. Hardcoded fallback
+removed from `paper/make_numbers.py`; provenance note in `reports/ablations.md`.
+
+## V2.10 The paper
+`paper/main.pdf` — *"The Referee Is the Product"* (13 pp): negative controls for reward
+channels as the contribution, kernels as evidence, plus the falsification ledger (9
+contradicted beliefs, 1 held prediction). Every number regenerates from harness JSONs via
+`paper/make_numbers.py` (20/20 cross-report consistency checks fail the build on
+contradiction). Code + paper: `github.com/ymrohit/ouroboros-kernelsmith` (private).
+
+## V2.11 Hygiene (so the integrity is inspectable)
 Git history (v1 snapshot → every V2 change), top-level README (claim→evidence→bounds→repro),
 MIT LICENSE, CI + 11 CPU tests, `_2068` dataset naming fixed to actual counts, pseudo-KL
 relabeled as the |Δ seq-logprob| drift penalty it is, README_MODAL marked historical,
