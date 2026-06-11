@@ -15,7 +15,7 @@
 \lstset{basicstyle=\ttfamily\scriptsize,breaklines=true,frame=single,framesep=4pt}
 
 \title{\textbf{The Referee Is the Product:}\\
-\large Un-gameable Verification for LLM-Generated GPU Kernels,\\
+\large Exploit-Tested Verification for LLM-Generated GPU Kernels,\\
 and What It Falsified About Its Builders' Beliefs}
 \author{Rohit Yelukati Mahendra}
 \date{June 2026}
@@ -38,11 +38,11 @@ verifier-grounded self-distillation loop built around an immutable referee that 
 negative controls for its own reward function: three working exploits (benchmark-shape
 special-casing, pointer-keyed output memoization, in-place input mutation) are committed as
 test cases and must be rejected for the system to be considered sound. Trained only against
-this referee, an open 27B model (Qwen3.6-27B with LoRA) produced \productKernels{} Triton
-fusion kernels; the \stabOps{} we carry through a five-run stability gate \emph{all} beat
-\maxauto{} reproducibly, and each also holds a geometric-mean win across a shape grid whose
-\gridLossPct\% losing cells we report individually (the remaining \numKernelsExplore{}
-kernels come from an exploratory run held to a different baseline, \S\ref{sec:results}).
+this referee, an open 27B model (Qwen3.6-27B with LoRA) produced \stabOps{} reproducible
+compiler-beating Triton fusion kernels, plus \numKernelsExplore{} exploratory kernels
+evaluated under a separate baseline. The \stabOps{} \emph{all} clear a five-run stability
+gate against \maxauto{}, and each also holds a geometric-mean win across a shape grid whose
+\gridLossPct\% losing cells we report individually.
 A three-seed ablation on a 1B model finds the training-recipe arms statistically
 indistinguishable on familiar operators, with best-of-$N$ search against the referee
 accounting for nearly all of the loop's value; learning matters instead on operators the
@@ -67,6 +67,14 @@ shipped with its known exploits as test cases.
 
 This paper describes \sys{}, a system built on that observation, and reports what it did
 over one extended run.
+
+\paragraph{What this paper is, and is not.} It is \emph{not} a new GPU algorithm; \emph{not}
+a ``bigger model writes better kernels'' result; \emph{not} a benchmark-leaderboard entry.
+It is a paper about building the reward channel itself as an \textbf{adversarially tested
+product}: a referee shipped with its own working exploits as regression tests. Everything
+that follows, the kernels, the stability gates, the ablations, is \emph{evidence that this
+methodology works}, not the contribution. The thesis the rest of the paper is organized to
+test is blunt: \textbf{the proposer is replaceable; the referee is the durable asset.}
 
 \begin{enumerate}
 \item \textbf{The harness is the product} (\S\ref{sec:harness}). An immutable referee
@@ -526,6 +534,13 @@ regime. Learning matters on operators the model has not seen. The validity gap t
 controlled contrast, and a 4.5-hour continue-SFT on new operators stalled and degraded the
 proven ones while RL against the verifier taught them without that interference. The new
 capabilities did not come from imitating a corpus.
+
+We state the implication rather than hedge it. Where the model is already competent, the
+loop's value lives in \emph{search against a trustworthy referee}, not in the training
+recipe, and this holds at both 1B and 27B. That is not a disappointing ablation; it is the
+thesis arriving on schedule. A proposer that contributes little beyond samples is a proposer
+you can swap for a cheaper one, which is precisely why the referee, and not the model, is
+the asset worth building and keeping.
 
 \section{The falsification ledger}\label{sec:falsification}
 
