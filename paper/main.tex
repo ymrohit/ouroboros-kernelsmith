@@ -325,7 +325,9 @@ re-measures every champion fresh with the \maxauto{} baseline.
 
 All numbers in this section are emitted by the referee and compiled into this PDF by
 \texttt{make\_numbers.py}, which also enforces cross-report consistency
-(12/12 checks at build time). Hardware: NVIDIA H200; torch 2.10; Triton 3.6; model
+(\consistencyChecks{} checks at the time of this build; the count is itself a generated
+macro, since a hardcoded one had already gone stale once). Hardware: NVIDIA H200; torch
+2.10; Triton 3.6; model
 Qwen3.6-27B (LoRA rank 128) unless stated.
 
 \subsection{The product: \stabOps{} reproducible discoveries (of \productKernels{} kernels)}
@@ -442,9 +444,10 @@ $\times$ norm/residual variants, plus softcap-softmax, Gemma-RMSNorm, GLU, inter
 RoPE, fused cross-entropy), with the templated-mutation arm disabled (the model wrote
 every candidate): \textbf{\vTwoOk/\vTwoOps{} validated correct and beat \maxauto{} on
 fresh exit measurement} ($\vTwoMinMA\times$--$\vTwoMaxMA\times$), \vTwoLM/\vTwoOps{}
-winning kernels model-authored, \vTwoVerified/\vTwoEvaluated{} sampled kernels verified
-(\vTwoValidRate), \vTwoLeadTakes{} archive lead-takes, explore-arm contribution
-\textbf{\vTwoExplore}. The model beat its own strongest gold seed on fused cross-entropy
+winning kernels model-authored (the other two champions remain pre-existing gold seeds
+that no sampled kernel beat), \vTwoVerified/\vTwoEvaluated{} sampled kernels verified
+(\vTwoValidRate), \vTwoLeadTakes{} archive lead-takes. The model beat its own strongest
+gold seed on fused cross-entropy
 ($\vTwoCEMA\times$ vs \maxauto, model-authored). Learning is visible \emph{inside} the
 run: the softplus/mish family, which requires an overflow-guard idiom
 ($\mathrm{softplus}(x) = x$ for $x > 20$, else $\log(1{+}e^x)$), verified
@@ -506,7 +509,7 @@ predicted in writing.}
 fixes or a learned skill, we pre-registered a prediction (this time it held) and resumed
 the loop from the invention adapter on the 10 worst-remaining loss-cell operators, pinned
 to $16384\times2048$. All \textbf{10/10 flipped to wins} (\maxauto{} $1.20$--$1.44\times$,
-every kernel model-authored, explore-arm zero, validity $0.713$). On this evidence the
+every kernel model-authored, explore arm disabled, validity $0.713$). On this evidence the
 system's main characterized weakness, the short-row regime that accounts for the large
 majority of the shape grid's loss cells, is repaired for the chain family on the shapes and
 machines we tested. We read this as a generalization signal rather than a closed case: the
@@ -618,10 +621,14 @@ rejected before any model could exploit it; the verifiability of an operator (\t
 whose outputs fall below the fp16 tolerance; an early benchmark that timed a memory copy and
 reported compiler ties; the assumption that an all-green log without a durable artifact
 was sufficient evidence, which forced us to re-run a gate; and, caught while preparing this
-paper, a hand-transcribed headline for the no-learn arm of Table~\ref{tab:abl} that the
+paper, a hand-transcribed entry for the no-learn arm of Table~\ref{tab:abl} that the
 completed artifact, recovered from the training volume after a save race, contradicted: the
-transcription had understated the arm ($1.302$ against the artifact's $1.340$), and the
-correction strengthened the very claim it touched. One prediction held: that the
+transcription had understated the arm on both its geomean and its valid-rate ($1.302$/$0.969$
+against the artifact's $1.340$/$0.995$). That row had been the one number in the paper
+carried by a hardcoded fallback rather than by \texttt{make\_numbers.py}; the fallback is
+deleted, Table~\ref{tab:abl} now regenerates from the recovered artifact like every other
+number, a build check refuses any arm without a completed report file, and the correction
+strengthened the very claim it touched. One prediction held: that the
 loss-regime repair would transfer (10/10 in Section~\ref{sec:invention}). We report this not
 for its own sake but because it is the practical consequence of the design. When the
 verifier is honest, the builders do not have to be right, and the record of where they were
