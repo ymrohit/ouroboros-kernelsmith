@@ -353,6 +353,44 @@ def selftest():
     _save()
 
 
+@app.function(gpu=os.environ.get("OURO_PROBE_GPU", "A100-80GB"),
+              volumes={VOL: outputs, CACHE: hf_cache}, secrets=[hf_secret], timeout=3600)
+def probe(adapter: str = "outputs/rl_adapter_v2",
+          ops: str = "entropy,kl_div,cumsum,rmsnorm_wide,dequant_int8",
+          k: int = 4, temp: float = 0.6, max_new: int = 1024,
+          model: str = DEFAULT_MODEL):
+    """INFERENCE-ONLY probe (no RL): how does the trained 27B do on ops it was never
+    RL-trained on, sampling k kernels each and verifying through the harness? Runs on a
+    SMALLER/cheaper GPU than training (A100-80GB fits the 27B in bf16). Honest read on raw
+    generalization: which uncertain ops the model can one-shot, and how fast."""
+    import json
+    _gpu_banner(); _restore(); _prep_dirs()
+    sys.path.insert(0, WORK); os.chdir(WORK)
+    from rl_kernelsmith import Proposer, extract_kernel
+    from harness import evaluate
+    prop = Proposer(model, temp=temp, kl=False, max_new=max_new, load_adapter=adapter)
+    results = {}
+    for op in [o.strip() for o in ops.split(",") if o.strip()]:
+        comps, _ = prop.sample(prop.prompt(op, ""), k)
+        srcs = [extract_kernel(prop.tok.decode(c, skip_special_tokens=True)) for c in comps]
+        verds, best = [], None
+        for s in srcs:
+            r = evaluate(s, op, strong=True)
+            verds.append(r.status)
+            if r.status == "ok" and (best is None or r.speedup_maxauto > best["vs_maxauto"]):
+                best = {"vs_maxauto": r.speedup_maxauto, "vs_compile": r.speedup_compile,
+                        "vs_eager": r.speedup_eager, "latency_ms": r.latency_ms, "src": s}
+        n_ok = sum(1 for v in verds if v == "ok")
+        results[op] = {"k": k, "verified": n_ok, "statuses": verds, "best": best}
+        bm = f"{best['vs_maxauto']:.3f}x MA, {best['vs_compile']:.3f}x compile" if best else "NONE verified"
+        print(f"[probe] {op:16}: {n_ok}/{k} verified | best {bm}", flush=True)
+    json.dump(results, open(f"{WORK}/reports/probe.json", "w"), indent=2)
+    _save()
+    summary = {o: "%d/%d" % (r["verified"], r["k"]) for o, r in results.items()}
+    print("[probe] verdict per op:", summary, flush=True)
+    return {o: (r["best"]["vs_maxauto"] if r["best"] else None) for o, r in results.items()}
+
+
 @app.function(**COMMON)
 def sft(
     epochs: int = 30,
