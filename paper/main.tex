@@ -40,7 +40,7 @@ special-casing, pointer-keyed output memoization, in-place input mutation) are c
 test cases and must be rejected for the system to be considered sound. Trained only against
 this referee, an open 27B model (Qwen3.6-27B with LoRA) produced \stabOps{} reproducible
 compiler-beating Triton fusion kernels, plus \numKernelsExplore{} exploratory kernels
-evaluated under a separate baseline. The \stabOps{} \emph{all} clear a five-run stability
+measured under a separate protocol (a single-shot probe, not the five-run gate). The \stabOps{} \emph{all} clear a five-run stability
 gate against \maxauto{}, and each also holds a geometric-mean win across a shape grid whose
 \gridLossPct\% losing cells we report individually.
 A three-seed ablation on a 1B model finds the training-recipe arms statistically
@@ -314,9 +314,10 @@ Qwen3.6-27B (LoRA rank 128) unless stated.
 \textbf{What the two counts mean.} The model authored \productKernels{} kernels in total.
 \stabOps{} of them are operators we carry through the five-run stability gate against
 \maxauto{} below; the other \numKernelsExplore{} come from a later exploratory ``invention''
-run (\S\ref{sec:invention}) evaluated against a different, default baseline and are not
-folded into the reproducibility numbers. Every reproducibility claim in this paper concerns
-the \stabOps{}.
+run (\S\ref{sec:invention}), measured as a single-shot probe rather than through the
+five-run stability gate, and so are not folded into the reproducibility numbers (they do
+beat \maxauto{}; they are simply not re-run five times). Every reproducibility claim in
+this paper concerns the \stabOps{}.
 
 \textbf{Stability gate.} Every archived kernel re-benchmarked $5\times$ fresh (full
 referee, anti-gaming guards live, \maxauto{} recompiled each run). Discovery bar:
@@ -324,7 +325,7 @@ $\bar{s} - \sigma > 1$, where $\bar{s}$ is the mean speedup and $\sigma$ is the 
 standard deviation across the five fresh runs. We call $\sigma$ the run-to-run
 \emph{spread} throughout the paper. Result: \textbf{\stabDiscoveries/\stabOps{} discoveries; zero failures;
 zero marginals} (Fig.~\ref{fig:stability}). Mean of per-op means
-$\stabMeanOfMeans\times$; maximum spread $\pm\stabMaxSpread$; weakest
+$\stabMeanOfMeans\times$; largest run-to-run spread $\sigma = \stabMaxSpread$; weakest
 \texttt{\stabWeakestOp} at $\stabWeakestMean\times\pm\stabWeakestSpread$; strongest
 \texttt{\stabStrongestOp} at $\stabStrongestMean\times\pm\stabStrongestSpread$
 (model-authored).
@@ -593,15 +594,15 @@ Everything regenerates from commands: the harness self-test
 (\texttt{paper/make\_numbers.py}, which fails the build on cross-report inconsistency)
 and figure (\texttt{paper/make\_figures.py}). The artifact includes the
 \productKernels{} kernels, adapters (1B and 27B), the verified corpus, raw five-sample
-stability data, per-cell grid data, run transcripts where retrievable (with an honest
-note on which are windows), and the falsification ledger.
+stability data, per-cell grid data, run transcripts where retrievable (with notes where
+logs are partial or truncated), and the falsification ledger.
 
 \section{Conclusion}
 
 We have treated the reward channel of an RL-for-code system the way security-critical code
 is treated, with its exploits written out, committed, and rejected on every build. Trained
 against that referee, an open model produced \stabOps{} reproducible compiler-beating
-kernels, plus \numKernelsExplore{} exploratory kernels under a separate baseline, repaired
+kernels, plus \numKernelsExplore{} exploratory kernels under a separate protocol, repaired
 the one regime where it had been losing, and contradicted our own predictions repeatedly
 along the way. The proposer ranged from 1B to
 27B parameters with no change to the pipeline, and the results did not depend on which model
