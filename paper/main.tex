@@ -189,6 +189,7 @@ kernel would pass, an unverifiable spec is not allowed to exist in the suite.
 
 \begin{table}[t]
 \centering\small
+{\setlength{\tabcolsep}{14pt}%
 \begin{tabular}{lcc}
 \toprule
 storage dtype & rtol & atol\\
@@ -197,7 +198,7 @@ fp32 & $2\times10^{-4}$ & $2\times10^{-5}$\\
 fp16 & $2\times10^{-2}$ & $2\times10^{-3}$\\
 bf16 & $3\times10^{-2}$ & $8\times10^{-3}$\\
 \bottomrule
-\end{tabular}
+\end{tabular}}
 \caption{Derived tolerance envelopes (internals accumulate in fp32). Per-operator
 overrides exist only where derived and documented (scan; entropy).}\label{tab:tol}
 \end{table}
@@ -271,7 +272,15 @@ programs''; structural diversity is what teaches ``write Triton.''
 \subsection{Phase 2: verifier-rewarded search with self-distillation}
 Each round, for operator $c$: sample a group $\{k_i\}_{i=1}^{G}$ from
 $\pi_\theta(\cdot\,|\,c,\text{feedback})$, evaluate each through the referee (deduplicated
-by canonicalized-AST hash so a cosmetic rewrite is never re-measured), and assign
+by canonicalized-AST hash so a cosmetic rewrite is never re-measured), and assign a reward.
+A configurable fraction of each group comes not from the model but from a
+\emph{templated-mutation explore arm}: peephole transforms of the current archive champion
+(block size, \texttt{num\_warps}, \texttt{num\_stages} launch-knob changes), whose verified
+survivors enter the model only through the distillation term. The discovery and invention
+runs of \S\ref{sec:results} \emph{disable} this arm so that authorship attribution is
+clean; where it ran, its contribution to final champions is reported per run and was zero,
+which itself supports the replaceable-proposer reading (nothing the knob-twiddler can reach
+is beyond the model). The reward is
 
 \begin{equation}\label{eq:reward}
 R(k) =
@@ -283,7 +292,11 @@ R(k) =
 \end{cases}
 \end{equation}
 
-\noindent (correctness first, then speed, one scalar). The update combines a
+\noindent (correctness first, then speed, one scalar). Note the deliberate baseline switch:
+the in-loop reward $s_{\mathrm{compile}}$ is measured against default
+\texttt{torch.compile}, which is cheap enough to rebuild every round, while every gate and
+every published number uses the more expensive \maxauto{}, a fast bar inside the search,
+the incumbent at the door. The update combines a
 group-relative policy gradient \cite{deepseekmath} with self-distillation on the round's
 fastest verified kernel $k^\star$:
 
@@ -388,7 +401,13 @@ cells: losses, printed rather than hidden. The loss region is one regime, not no
 Comparisons against Liger-Kernel, Unsloth, and the Triton tutorials run through the same
 referee under two conditions: \emph{fixed-schedule} (raw extracted \texttt{@triton.jit}
 kernels under our wrappers; schedule pinned) and \emph{library-API} (Liger called via its
-own public \texttt{Function} interface, exactly as shipped). Ours is faster on
+own public \texttt{Function} interface, exactly as shipped). The comparison set is dictated
+by what the experts ship, so it includes three v1-era standalone operators, plain
+\texttt{rmsnorm}, plain \texttt{layernorm}, and \texttt{relu2} (squared ReLU), that are not
+among the \stabOps{} gated operators (the gated suite carries the norms only in
+residual/epilogue chain forms and squared-ReLU only as a chain epilogue); their numbers
+live in the comparison report, not in the reproducibility set, and the build script now
+enforces that this comparison-only set is exactly these three. Ours is faster on
 swiglu/rmsnorm/relu2/geglu in both conditions; softmax and layernorm are ties-within-noise
 against the best fixed-schedule expert. Two corrections. First, we retract our
 own earlier claim that 5 of 11 expert kernels were non-robust to odd shapes: under the
@@ -562,8 +581,12 @@ between arms: no learning ingredient separates on familiar operators.}
 
 The conclusion that survives the error bars is the weaker of the two. On familiar operators,
 best-of-$N$ sampling against the referee captures essentially all of the full loop's
-geometric mean: search, not learning, dominates where the model is already competent, and
-this holds at both 1B and 27B. No single learning ingredient, whether the feedback channel,
+geometric mean: search, not learning, dominates where the model is already competent. To be
+precise about where that is established: the multi-seed result holds at 1B; the single-seed
+27B run is \emph{consistent} with it (no-learn reaches \ablNolearnPctOfControl\% of
+control's geomean, 8/8 operators beating \maxauto{}, Table~\ref{tab:abl}) but, being the
+same single-seed evidence whose arm ordering we dismissed above, cannot independently
+confirm it. No single learning ingredient, whether the feedback channel,
 the policy-gradient term, or weight updates at all, separates beyond seed noise in this
 regime. Learning matters on operators the model has not seen. The validity gap there
 (\invValidRate{} against roughly 0.69 on familiar families, Fig.~\ref{fig:learning}) is the
@@ -573,10 +596,13 @@ capabilities did not come from imitating a corpus.
 
 We state the implication rather than hedge it. Where the model is already competent, the
 loop's value lives in \emph{search against a trustworthy referee}, not in the training
-recipe, and this holds at both 1B and 27B. That is not a disappointing ablation; it is the
+recipe, established with seeds at 1B and consistent with the single 27B run. That is not a
+disappointing ablation; it is the
 thesis arriving on schedule. A proposer that contributes little beyond samples is a proposer
 you can swap for a cheaper one, which is precisely why the referee, and not the model, is
-the asset worth building and keeping.
+the asset worth building and keeping. The sharpest single piece of evidence for that
+replaceability sits in \S\ref{sec:bounds}: the same pipeline, unchanged, produced verified
+compiler-beating kernels from a 1B model on a single desktop GPU.
 
 \section{The falsification ledger}\label{sec:falsification}
 

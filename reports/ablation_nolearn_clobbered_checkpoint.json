@@ -1,0 +1,323 @@
+{
+  "args": {
+    "model": "Qwen/Qwen3.6-27B",
+    "ops": "rmsnorm_gelu,layernorm_gelu,add_rmsnorm_silu,softmax_scale,geglu,swiglu,add_layernorm,qknorm_rope",
+    "rounds": 24,
+    "group": 8,
+    "temp": 1.0,
+    "no_llm": false,
+    "no_kl": true,
+    "max_new": 1024,
+    "load_adapter": "outputs/sft_adapter",
+    "explore_frac": 0.0,
+    "out": "reports/ablation_nolearn.json",
+    "kernels_dir": "outputs/abl_nolearn_kernels",
+    "save_adapter": "outputs/abl_nolearn",
+    "no_feedback": false,
+    "distill_only": false,
+    "no_learn": true
+  },
+  "history": [
+    {
+      "round": 1,
+      "op": "rmsnorm_gelu",
+      "evaluated": 7,
+      "best_speedup_vs_compile": 1.5682,
+      "product": {
+        "rmsnorm_gelu": 1.568,
+        "layernorm_gelu": 1.278,
+        "add_rmsnorm_silu": 1.08,
+        "softmax_scale": 1.688,
+        "geglu": 1.272,
+        "swiglu": 1.232,
+        "add_layernorm": 1.054,
+        "qknorm_rope": 1.285
+      },
+      "lm_verified_this_round": 8,
+      "lm_verified_rate": 1.0,
+      "best_owner": {
+        "rmsnorm_gelu": "LM",
+        "layernorm_gelu": "seed",
+        "add_rmsnorm_silu": "seed",
+        "softmax_scale": "seed",
+        "geglu": "seed",
+        "swiglu": "seed",
+        "add_layernorm": "seed",
+        "qknorm_rope": "seed"
+      }
+    },
+    {
+      "round": 2,
+      "op": "layernorm_gelu",
+      "evaluated": 8,
+      "best_speedup_vs_compile": 1.5341,
+      "product": {
+        "rmsnorm_gelu": 1.568,
+        "layernorm_gelu": 1.534,
+        "add_rmsnorm_silu": 1.08,
+        "softmax_scale": 1.688,
+        "geglu": 1.272,
+        "swiglu": 1.232,
+        "add_layernorm": 1.054,
+        "qknorm_rope": 1.285
+      },
+      "lm_verified_this_round": 8,
+      "lm_verified_rate": 1.0,
+      "best_owner": {
+        "rmsnorm_gelu": "LM",
+        "layernorm_gelu": "LM",
+        "add_rmsnorm_silu": "seed",
+        "softmax_scale": "seed",
+        "geglu": "seed",
+        "swiglu": "seed",
+        "add_layernorm": "seed",
+        "qknorm_rope": "seed"
+      }
+    },
+    {
+      "round": 3,
+      "op": "add_rmsnorm_silu",
+      "evaluated": 6,
+      "best_speedup_vs_compile": 1.2214,
+      "product": {
+        "rmsnorm_gelu": 1.568,
+        "layernorm_gelu": 1.534,
+        "add_rmsnorm_silu": 1.221,
+        "softmax_scale": 1.688,
+        "geglu": 1.272,
+        "swiglu": 1.232,
+        "add_layernorm": 1.054,
+        "qknorm_rope": 1.285
+      },
+      "lm_verified_this_round": 8,
+      "lm_verified_rate": 1.0,
+      "best_owner": {
+        "rmsnorm_gelu": "LM",
+        "layernorm_gelu": "LM",
+        "add_rmsnorm_silu": "LM",
+        "softmax_scale": "seed",
+        "geglu": "seed",
+        "swiglu": "seed",
+        "add_layernorm": "seed",
+        "qknorm_rope": "seed"
+      }
+    },
+    {
+      "round": 4,
+      "op": "softmax_scale",
+      "evaluated": 8,
+      "best_speedup_vs_compile": 1.6987,
+      "product": {
+        "rmsnorm_gelu": 1.568,
+        "layernorm_gelu": 1.534,
+        "add_rmsnorm_silu": 1.221,
+        "softmax_scale": 1.699,
+        "geglu": 1.272,
+        "swiglu": 1.232,
+        "add_layernorm": 1.054,
+        "qknorm_rope": 1.285
+      },
+      "lm_verified_this_round": 8,
+      "lm_verified_rate": 1.0,
+      "best_owner": {
+        "rmsnorm_gelu": "LM",
+        "layernorm_gelu": "LM",
+        "add_rmsnorm_silu": "LM",
+        "softmax_scale": "LM",
+        "geglu": "seed",
+        "swiglu": "seed",
+        "add_layernorm": "seed",
+        "qknorm_rope": "seed"
+      }
+    },
+    {
+      "round": 5,
+      "op": "geglu",
+      "evaluated": 8,
+      "best_speedup_vs_compile": 1.2718,
+      "product": {
+        "rmsnorm_gelu": 1.568,
+        "layernorm_gelu": 1.534,
+        "add_rmsnorm_silu": 1.221,
+        "softmax_scale": 1.699,
+        "geglu": 1.272,
+        "swiglu": 1.232,
+        "add_layernorm": 1.054,
+        "qknorm_rope": 1.285
+      },
+      "lm_verified_this_round": 7,
+      "lm_verified_rate": 0.975,
+      "best_owner": {
+        "rmsnorm_gelu": "LM",
+        "layernorm_gelu": "LM",
+        "add_rmsnorm_silu": "LM",
+        "softmax_scale": "LM",
+        "geglu": "seed",
+        "swiglu": "seed",
+        "add_layernorm": "seed",
+        "qknorm_rope": "seed"
+      }
+    },
+    {
+      "round": 6,
+      "op": "swiglu",
+      "evaluated": 6,
+      "best_speedup_vs_compile": 1.2408,
+      "product": {
+        "rmsnorm_gelu": 1.568,
+        "layernorm_gelu": 1.534,
+        "add_rmsnorm_silu": 1.221,
+        "softmax_scale": 1.699,
+        "geglu": 1.272,
+        "swiglu": 1.241,
+        "add_layernorm": 1.054,
+        "qknorm_rope": 1.285
+      },
+      "lm_verified_this_round": 8,
+      "lm_verified_rate": 0.979,
+      "best_owner": {
+        "rmsnorm_gelu": "LM",
+        "layernorm_gelu": "LM",
+        "add_rmsnorm_silu": "LM",
+        "softmax_scale": "LM",
+        "geglu": "seed",
+        "swiglu": "LM",
+        "add_layernorm": "seed",
+        "qknorm_rope": "seed"
+      }
+    },
+    {
+      "round": 7,
+      "op": "add_layernorm",
+      "evaluated": 6,
+      "best_speedup_vs_compile": 1.1476,
+      "product": {
+        "rmsnorm_gelu": 1.568,
+        "layernorm_gelu": 1.534,
+        "add_rmsnorm_silu": 1.221,
+        "softmax_scale": 1.699,
+        "geglu": 1.272,
+        "swiglu": 1.241,
+        "add_layernorm": 1.148,
+        "qknorm_rope": 1.285
+      },
+      "lm_verified_this_round": 8,
+      "lm_verified_rate": 0.982,
+      "best_owner": {
+        "rmsnorm_gelu": "LM",
+        "layernorm_gelu": "LM",
+        "add_rmsnorm_silu": "LM",
+        "softmax_scale": "LM",
+        "geglu": "seed",
+        "swiglu": "LM",
+        "add_layernorm": "LM",
+        "qknorm_rope": "seed"
+      }
+    },
+    {
+      "round": 8,
+      "op": "qknorm_rope",
+      "evaluated": 6,
+      "best_speedup_vs_compile": 1.2852,
+      "product": {
+        "rmsnorm_gelu": 1.568,
+        "layernorm_gelu": 1.534,
+        "add_rmsnorm_silu": 1.221,
+        "softmax_scale": 1.699,
+        "geglu": 1.272,
+        "swiglu": 1.241,
+        "add_layernorm": 1.148,
+        "qknorm_rope": 1.285
+      },
+      "lm_verified_this_round": 8,
+      "lm_verified_rate": 0.984,
+      "best_owner": {
+        "rmsnorm_gelu": "LM",
+        "layernorm_gelu": "LM",
+        "add_rmsnorm_silu": "LM",
+        "softmax_scale": "LM",
+        "geglu": "seed",
+        "swiglu": "LM",
+        "add_layernorm": "LM",
+        "qknorm_rope": "seed"
+      }
+    },
+    {
+      "round": 9,
+      "op": "rmsnorm_gelu",
+      "evaluated": 6,
+      "best_speedup_vs_compile": 1.5682,
+      "product": {
+        "rmsnorm_gelu": 1.568,
+        "layernorm_gelu": 1.534,
+        "add_rmsnorm_silu": 1.221,
+        "softmax_scale": 1.699,
+        "geglu": 1.272,
+        "swiglu": 1.241,
+        "add_layernorm": 1.148,
+        "qknorm_rope": 1.285
+      },
+      "lm_verified_this_round": 8,
+      "lm_verified_rate": 0.986,
+      "best_owner": {
+        "rmsnorm_gelu": "LM",
+        "layernorm_gelu": "LM",
+        "add_rmsnorm_silu": "LM",
+        "softmax_scale": "LM",
+        "geglu": "seed",
+        "swiglu": "LM",
+        "add_layernorm": "LM",
+        "qknorm_rope": "seed"
+      }
+    },
+    {
+      "round": 10,
+      "op": "layernorm_gelu",
+      "evaluated": 7,
+      "best_speedup_vs_compile": 1.5341,
+      "product": {
+        "rmsnorm_gelu": 1.568,
+        "layernorm_gelu": 1.534,
+        "add_rmsnorm_silu": 1.221,
+        "softmax_scale": 1.699,
+        "geglu": 1.272,
+        "swiglu": 1.241,
+        "add_layernorm": 1.148,
+        "qknorm_rope": 1.285
+      },
+      "lm_verified_this_round": 8,
+      "lm_verified_rate": 0.988,
+      "best_owner": {
+        "rmsnorm_gelu": "LM",
+        "layernorm_gelu": "LM",
+        "add_rmsnorm_silu": "LM",
+        "softmax_scale": "LM",
+        "geglu": "seed",
+        "swiglu": "LM",
+        "add_layernorm": "LM",
+        "qknorm_rope": "seed"
+      }
+    }
+  ],
+  "checkpoint_round": 10,
+  "in_search_best": {
+    "rmsnorm_gelu": 1.5682,
+    "layernorm_gelu": 1.5341,
+    "add_rmsnorm_silu": 1.2214,
+    "softmax_scale": 1.6987,
+    "geglu": 1.2718,
+    "swiglu": 1.2408,
+    "add_layernorm": 1.1476,
+    "qknorm_rope": 1.2852
+  },
+  "best_owner": {
+    "rmsnorm_gelu": "LM",
+    "layernorm_gelu": "LM",
+    "add_rmsnorm_silu": "LM",
+    "softmax_scale": "LM",
+    "geglu": "seed",
+    "swiglu": "LM",
+    "add_layernorm": "LM",
+    "qknorm_rope": "seed"
+  }
+}

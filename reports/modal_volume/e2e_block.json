@@ -1,22 +1,22 @@
 {
-  "device": "NVIDIA GeForce RTX 4090",
+  "device": "NVIDIA H200",
   "rows": 8192,
   "hidden": 4096,
   "ffn": 11008,
-  "kernels": "/home/tihor/webllm/verifier-self-distillation-loop/domains/hackathon-build-small/ouroboros-modal/ouroboros/seed_kernels",
+  "kernels": "outputs/best_kernels",
   "max_abs_err_vs_eager": 0.0029296875,
   "block_ms": {
-    "eager": 16.85825538635254,
-    "compile_ma": 20.224319458007812,
-    "ours": 15.539616107940674
+    "eager": 4.118943929672241,
+    "compile_ma": 3.57585608959198,
+    "ours": 3.6028640270233154
   },
   "speedup": {
-    "vs_eager": 1.0849,
-    "vs_compile_ma": 1.3015
+    "vs_eager": 1.1432,
+    "vs_compile_ma": 0.9925
   },
   "nongemm_ms": {
-    "eager": 1.9527679681777954,
-    "ours": 0.2303999960422516
+    "eager": 0.7784959971904755,
+    "ours": 0.07156800106167793
   },
-  "gemm_fraction_of_eager_block": 0.8842
+  "gemm_fraction_of_eager_block": 0.811
 }

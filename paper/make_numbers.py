@@ -212,8 +212,10 @@ for a in ARMS:
             abl[a] = {"valid": d["attribution"]["lm_verified_rate"],
                       "leads": d["attribution"]["lm_archive_wins"],
                       "ok": len(v), "beat": sum(1 for x in v if x > 1), "gm": geomean(v)}
-# nolearn headline recovered pre-clobber (provenance in reports/ablations.md)
-abl.setdefault("nolearn", {"valid": 0.969, "leads": 18, "ok": 8, "beat": 8, "gm": 1.302})
+# every arm must come from a completed JSON (final + attribution); the nolearn file was
+# once clobbered by a mid-run checkpoint and is now restored from the Modal volume
+# (provenance + correction note in reports/ablations.md) — no hardcoded fallbacks
+check("all four 27B ablation arms read from completed JSONs", set(abl) == set(ARMS))
 for a in ARMS:
     d = abl[a]
     cap = a.capitalize().replace("_", "")
@@ -265,6 +267,12 @@ api_ok = sum(1 for v in rows.values() for e in v["experts"].values()
              if e.get("condition") == "library_api" and e["status"] == "ok")
 put("hthApiVerified", api_ok)
 check("Liger API condition all verified (5)", api_ok == 5)
+# the comparison set is dictated by what the experts ship; any op it carries that is NOT
+# in the gated 69 must be one of the three documented v1-era standalones
+hth_outside = sorted(set(rows) - set(per))
+check("expert-comparison ops outside the gated suite are exactly the documented three",
+      hth_outside == ["layernorm", "relu2", "rmsnorm"])
+put("hthOutsideGated", len(hth_outside))
 
 # ---------------- e2e block -----------------------------------------------------------------
 # Prefer a genuine H200 file; the 4090 file is the local reports copy. They MUST be distinct
