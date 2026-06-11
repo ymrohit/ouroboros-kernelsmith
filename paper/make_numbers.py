@@ -185,6 +185,39 @@ for a in ARMS:
 check("distill-only beat control on geomean", abl["distillonly"]["gm"] > abl["control"]["gm"])
 put("ablNolearnPctOfControl", f"{100.0 * abl['nolearn']['gm'] / abl['control']['gm']:.0f}")
 
+# ---------------- multi-seed MiniCPM ablation (1B, local 4090) ------------------------------
+MA = R / "minicpm_ablation"
+if MA.exists():
+    import statistics as _st
+    mc = {}
+    for arm in ARMS:
+        gms, vs, beats = [], [], []
+        for s in (0, 1, 2):
+            d = load(MA / f"abl_{arm}_s{s}.json")
+            vv = [r["validated_speedup_vs_maxautotune"] for r in d["final"].values() if r["status"] == "ok"]
+            gms.append(geomean(vv)); vs.append(d["attribution"]["lm_verified_rate"])
+            beats.append(sum(1 for x in vv if x > 1) / len(vv))
+        mc[arm] = (gms, vs, beats)
+        cap = arm.capitalize()
+        put("mc" + cap + "Gm", f"{_st.mean(gms):.3f}")
+        put("mc" + cap + "Std", f"{_st.pstdev(gms):.3f}")
+        put("mc" + cap + "Valid", f"{_st.mean(vs):.3f}")
+        put("mc" + cap + "Beat", f"{_st.mean(beats)*100:.0f}")
+    gmeans = {a: _st.mean(mc[a][0]) for a in ARMS}
+    gstds = {a: _st.pstdev(mc[a][0]) for a in ARMS}
+    spread = max(gmeans.values()) - min(gmeans.values())
+    maxstd = max(gstds.values())
+    put("mcSpread", f"{spread:.3f}")
+    put("mcMaxSeedStd", f"{maxstd:.3f}")
+    put("mcBestArm", max(gmeans, key=gmeans.get))
+    put("mcWorstArm", min(gmeans, key=gmeans.get))
+    check("MiniCPM arms statistically tied (spread <= 2*max seed std)", spread <= 2 * maxstd)
+    check("distill-only flipped (worst on 1B-3seed vs best on 27B-1seed)",
+          min(gmeans, key=gmeans.get) == "distillonly")
+    sftmc = load(MA / "sft_minicpm.json")
+    put("mcSftValid", f"{100*sftmc['best_mean_validrate']:.0f}")
+    put("mcSftEpochs", len(sftmc["history"]))
+
 # ---------------- expert head-to-head --------------------------------------------------------
 h2h = load(R / "headtohead_experts.json")
 rows = {k: v for k, v in h2h.items() if not k.startswith("_")}

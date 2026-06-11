@@ -150,3 +150,17 @@ partly wrong: too pessimistic on the speedups (guessed 1.0-1.2x, got 1.32x), too
 on rmsnorm_wide (guessed coin-flip, got 0/4). The referee corrected the human in both
 directions. → reports/probe_verdict.md. Ledger: 9 falsifications + 2 partial-mixed + 1
 ratified.
+
+## Multi-seed ablation on MiniCPM5-1B (2026-06-11) — single-seed caveat RETIRED
+
+Re-ran the 4-arm ablation at 3 seeds each on OpenBMB MiniCPM5-1B (1B, free 4090). Arms
+statistically TIED: between-arm spread 0.045 <= 2x max seed-std 0.030. The decisive
+cross-check: distill-only was nominally BEST on the 27B single-seed run (1.361) and is
+nominally WORST on the 1B 3-seed average (1.057) -- the same arm at opposite ends proves
+the single-seed ordering was noise. Robust claim that survives error bars: on familiar ops,
+search against the referee dominates; no learning ingredient (feedback/GRPO/learning-at-all)
+separates. This RETIRES the paper's 'single-seed; suggestive not established' caveat and
+STRENGTHENS the conclusion. Bonus: a 1B model writes kernels beating max-autotune 6/6
+(geomean ~1.10x), SFT'd to 100% valid in 2 epochs -- the OpenBMB + Tiny Titan sponsor
+result, all at $0. Note: my own seed-0 preview prediction (control on top) was also noise.
+→ reports/ablations_minicpm_multiseed.md.

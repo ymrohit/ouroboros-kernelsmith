@@ -1,0 +1,121 @@
+{
+  "args": {
+    "model": "openbmb/MiniCPM5-1B",
+    "ops": "rmsnorm,softmax,swiglu,add_rmsnorm,layernorm_gelu,geglu",
+    "epochs": 25,
+    "patience": 6,
+    "lora_rank": 64,
+    "lr": 0.0002,
+    "batch": 4,
+    "accum": 2,
+    "grad_ckpt": true,
+    "warmup": 0.05,
+    "eval_temps": "0.4,0.7",
+    "eval_k": 6,
+    "gate": 0.8,
+    "corpus_only": false,
+    "skip_baseline": true,
+    "out": "outputs/sft_adapter",
+    "load_adapter": null
+  },
+  "cold_baseline": {},
+  "history": [
+    {
+      "epoch": 1,
+      "mean_validrate_lowT": 0.8333333333333334,
+      "per_op": {
+        "rmsnorm": {
+          "validrate_by_temp": {
+            "0.4": 1.0,
+            "0.7": 0.833
+          },
+          "distinct_valid_structures": 1
+        },
+        "softmax": {
+          "validrate_by_temp": {
+            "0.4": 1.0,
+            "0.7": 0.5
+          },
+          "distinct_valid_structures": 1
+        },
+        "swiglu": {
+          "validrate_by_temp": {
+            "0.4": 0.5,
+            "0.7": 0.667
+          },
+          "distinct_valid_structures": 3
+        },
+        "add_rmsnorm": {
+          "validrate_by_temp": {
+            "0.4": 1.0,
+            "0.7": 1.0
+          },
+          "distinct_valid_structures": 2
+        },
+        "layernorm_gelu": {
+          "validrate_by_temp": {
+            "0.4": 0.5,
+            "0.7": 1.0
+          },
+          "distinct_valid_structures": 1
+        },
+        "geglu": {
+          "validrate_by_temp": {
+            "0.4": 1.0,
+            "0.7": 1.0
+          },
+          "distinct_valid_structures": 2
+        }
+      }
+    },
+    {
+      "epoch": 2,
+      "mean_validrate_lowT": 1.0,
+      "per_op": {
+        "rmsnorm": {
+          "validrate_by_temp": {
+            "0.4": 1.0,
+            "0.7": 1.0
+          },
+          "distinct_valid_structures": 2
+        },
+        "softmax": {
+          "validrate_by_temp": {
+            "0.4": 1.0,
+            "0.7": 1.0
+          },
+          "distinct_valid_structures": 2
+        },
+        "swiglu": {
+          "validrate_by_temp": {
+            "0.4": 1.0,
+            "0.7": 1.0
+          },
+          "distinct_valid_structures": 2
+        },
+        "add_rmsnorm": {
+          "validrate_by_temp": {
+            "0.4": 1.0,
+            "0.7": 1.0
+          },
+          "distinct_valid_structures": 3
+        },
+        "layernorm_gelu": {
+          "validrate_by_temp": {
+            "0.4": 1.0,
+            "0.7": 1.0
+          },
+          "distinct_valid_structures": 2
+        },
+        "geglu": {
+          "validrate_by_temp": {
+            "0.4": 1.0,
+            "0.7": 1.0
+          },
+          "distinct_valid_structures": 4
+        }
+      }
+    }
+  ],
+  "best_mean_validrate": 1.0
+}

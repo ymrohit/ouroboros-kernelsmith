@@ -179,6 +179,40 @@ def fig_flip():
     print("flip.pdf")
 
 
+def fig_minicpm_ablation():
+    import statistics as stt
+    MA = R / "minicpm_ablation"
+    if not MA.exists():
+        print("minicpm_ablation/ missing, skip"); return
+    arms = ["control", "nofeedback", "distillonly", "nolearn"]
+    labels = ["full loop", "$-$feedback", "$-$GRPO", "$-$learning"]
+    means, stds = [], []
+    for a in arms:
+        gms = []
+        for s in (0, 1, 2):
+            d = load(MA / f"abl_{a}_s{s}.json")
+            vv = [r["validated_speedup_vs_maxautotune"] for r in d["final"].values() if r["status"] == "ok"]
+            gms.append(math.exp(sum(math.log(x) for x in vv if x > 0) / len([x for x in vv if x > 0])))
+        means.append(stt.mean(gms)); stds.append(stt.pstdev(gms))
+    fig, ax = plt.subplots(figsize=(4.6, 2.4))
+    x = np.arange(4)
+    ax.bar(x, means, yerr=stds, color=["#444", "#888", "#2a9d2a", "#bbb"], capsize=4,
+           error_kw={"lw": 1.0})
+    ax.axhline(1.0, color="k", lw=0.8, ls=":")
+    ax.set_xticks(x); ax.set_xticklabels(labels, fontsize=7)
+    ax.set_ylabel("geomean vs max-autotune")
+    ax.set_ylim(1.0, 1.18)
+    for xi, m, s in zip(x, means, stds):
+        ax.text(xi, m + s + 0.004, f"{m:.3f}", ha="center", fontsize=6)
+    ax.set_title("Multi-seed ablation, MiniCPM5-1B (3 seeds, free 4090): arms tied;\n"
+                 "all beat max-autotune. Error bars $\\geq$ between-arm gaps.", fontsize=7.5)
+    fig.tight_layout()
+    fig.savefig(FIG / "minicpm_ablation.pdf")
+    plt.close(fig)
+    print("minicpm_ablation.pdf")
+
+
 if __name__ == "__main__":
     fig_heatmap(); fig_stability(); fig_ablation(); fig_learning(); fig_flip()
+    fig_minicpm_ablation()
     print("all figures ->", FIG)

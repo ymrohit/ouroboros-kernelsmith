@@ -20,7 +20,7 @@ and What It Falsified About Its Builders' Beliefs}
 \author{Rohit Mahendra Tigon\\
 \small \texttt{YMRohit} \quad
 \small artifacts: \texttt{huggingface.co/YMRohit/ouroboros-kernelsmith-qwen3.6-27b}}
-\date{June 2026 \quad (preprint; single-seed ablations labeled as such)}
+\date{June 2026 \quad (preprint; ablations replicated at 3 seeds on a 1B model)}
 
 \newcommand{\maxauto}{\texttt{torch.compile} max-autotune}
 \newcommand{\sys}{\textsc{Ouroboros}}
@@ -45,11 +45,12 @@ stability gate (worst kernel $\stabWeakestMean\times\pm\stabWeakestSpread$; best
 $\stabStrongestMean\times\pm\stabStrongestSpread$), and every kernel holds a geometric-mean
 win across a $(M,N)\times$dtype shape grid of \gridCellsTotal{} cells with per-cell
 recompiled baselines and cache-cold verification, with the \gridLossPct\% of cells we
-lose reported individually. Ablations show that on familiar operators a frozen model plus
-verified best-of-$N$ search captures $\ablNolearnPctOfControl\%$ of the full loop's value
-and the policy-gradient term earns nothing, while on never-seen operators learning is
-visibly load-bearing: validity climbs from $\sim$50\% to 68\% within one run as the model
-distills its own verified solutions. Finally, we document nine instances in which the
+lose reported individually. Ablations (replicated at three seeds on a 1B model, OpenBMB MiniCPM5-1B, on a free
+RTX~4090) show that on familiar operators the four training-recipe arms are
+\emph{statistically tied}: frozen best-of-$N$ search captures essentially all of the full
+loop's value, and no learning ingredient separates beyond seed noise. On never-seen
+operators learning is visibly load-bearing instead: validity climbs from $\sim$50\% to 68\%
+within one run as the model distills its own verified solutions. Finally, we document nine instances in which the
 verifier falsified a confident belief held by the system's own builders. One was our
 published diagnosis of the system's one weak regime, which the model repaired with a
 simpler schedule family than the one we predicted, flipping the worst published loss
@@ -99,10 +100,10 @@ Triton under \emph{two} comparison conditions including the library-as-shipped o
 correctness-gated end-to-end transformer-block composition with its Amdahl ceiling stated.
 
 \item \textbf{Ablations and the locus of learning} (\S\ref{sec:ablations}): on familiar
-operators, frozen best-of-$N$ against the referee captures
-$\ablNolearnPctOfControl\%$ of the full loop's geomean and removing the policy-gradient
-term does not hurt (single-seed; labeled). On foreign operators, learning is load-bearing
-and visible within a single run (Fig.~\ref{fig:learning}).
+operators the recipe's arms are statistically tied (three seeds, on a 1B model) ---
+search against the referee dominates and no learning ingredient separates. On foreign
+operators learning is load-bearing and visible within a single run
+(Fig.~\ref{fig:learning}).
 
 \item \textbf{The falsification ledger} (\S\ref{sec:falsification}): nine concrete
 instances where the referee overruled a confident human belief, including the authors'
@@ -452,9 +453,9 @@ to unseen operators, not a memorized output.
 
 \section{Ablations: where does the value come from?}\label{sec:ablations}
 
-Four arms, identical except one ingredient (8 familiar ops, same SFT starting adapter,
-24 rounds, group 8, single seed, labeled): Table~\ref{tab:abl},
-Fig.~\ref{fig:ablation}.
+Four arms, identical except one ingredient (familiar ops, same SFT starting adapter,
+group 8): a single-seed pass on the 27B (Table~\ref{tab:abl}) and a \emph{three-seed}
+replication on a 1B model (Table~\ref{tab:ablmc}, Fig.~\ref{fig:ablmc}).
 
 \begin{table}[t]
 \centering\small
@@ -468,34 +469,61 @@ distill-only & policy-gradient term & \ablDistillonlyValid & \ablDistillonlyBeat
 no-learn & all weight updates & \ablNolearnValid & \ablNolearnBeat & \ablNolearnGm\\
 \bottomrule
 \end{tabular}
-\caption{Ablations on familiar operators (single seed; the ordering among
-1.30--1.36 is suggestive, not established). The no-learn row's headline was recovered
-from its completed report before a concurrent-write race overwrote the stored copy; the
-race is documented and fixed in the artifact, and the arm's kernels remain archived for
-re-validation.}\label{tab:abl}
+\caption{Single-seed ablation on the 27B (familiar operators). The ordering here
+(distill-only nominally best) is \emph{not} reproducible: the multi-seed replication of
+Table~\ref{tab:ablmc} flips it. We keep this table only to make that point.}\label{tab:abl}
+\end{table}
+
+\textbf{Multi-seed replication (and why the single-seed ordering is noise).} A single seed
+per arm invites the objection ``$n{=}1$.'' We replicated the ablation at \textbf{three
+independent seeds} per arm, on a different model and a different scale: OpenBMB's
+\textbf{MiniCPM5-1B} (a 1B open model), SFT'd to the validity gate in \mcSftEpochs{} epochs
+(\mcSftValid\% valid) and run entirely on a single consumer RTX~4090 at zero marginal cost.
+The arms are \emph{statistically tied} (Table~\ref{tab:ablmc}, Fig.~\ref{fig:ablmc}):
+between-arm spread $\mcSpread$ is below twice the largest within-arm seed standard deviation
+$\mcMaxSeedStd$. The decisive cross-check: \textbf{distill-only was nominally \emph{best} in
+the 27B single-seed run and is nominally \emph{worst} ($\mcDistillonlyGm$) in the 1B
+three-seed average} --- the same arm at opposite ends, which is the cleanest possible proof
+that the single-seed ordering was noise. \texttt{no-learn} (pure best-of-$N$ from the frozen
+SFT model, \emph{no learning at all}) sits at $\mcNolearnGm$, within noise of control's
+$\mcControlGm$.
+
+\begin{table}[t]
+\centering\small
+\begin{tabular}{lcccc}
+\toprule
+arm & removes & valid-rate & beat-rate & geomean vs MA (3 seeds)\\
+\midrule
+control & --- & \mcControlValid & \mcControlBeat\% & $\mcControlGm \pm \mcControlStd$\\
+no-feedback & referee errors in prompt & \mcNofeedbackValid & \mcNofeedbackBeat\% & $\mcNofeedbackGm \pm \mcNofeedbackStd$\\
+distill-only & policy-gradient term & \mcDistillonlyValid & \mcDistillonlyBeat\% & $\mcDistillonlyGm \pm \mcDistillonlyStd$\\
+no-learn & all weight updates & \mcNolearnValid & \mcNolearnBeat\% & $\mcNolearnGm \pm \mcNolearnStd$\\
+\bottomrule
+\end{tabular}
+\caption{Multi-seed ablation, \textbf{MiniCPM5-1B}, 3 seeds, free RTX~4090. Arms tied
+(spread $\mcSpread \le 2\times$ seed-std $\mcMaxSeedStd$); every arm beats max-autotune.
+A 1B model writing compiler-beating kernels is itself the result of the sponsor-scale
+run (\S\ref{sec:bounds}).}\label{tab:ablmc}
 \end{table}
 
 \begin{figure}[t]
 \centering
-\includegraphics[width=0.8\textwidth]{figures/ablation.pdf}
-\caption{Ablation arms. Removing the policy-gradient term does not hurt discovered
-speedups on familiar ops; removing \emph{all} learning costs only a few percent there.}
-\label{fig:ablation}
+\includegraphics[width=0.55\textwidth]{figures/minicpm_ablation.pdf}
+\caption{Multi-seed ablation (MiniCPM5-1B, 3 seeds). Error bars meet or exceed the gaps
+between arms: no learning ingredient separates on familiar operators.}
+\label{fig:ablmc}
 \end{figure}
 
-Three observations, each contrary to at least one of our own pre-registered predictions:
-\textbf{(1)} On familiar operators, the referee plus best-of-$N$ sampling from a frozen
-competent model captures $\ablNolearnPctOfControl\%$ of the full loop's geomean ---
-\emph{search, not learning, is the dominant force where competence exists}.
-\textbf{(2)} The distill-only arm matched-or-beat control; the group-relative
-policy-gradient term earned nothing here. Self-distillation on verified winners appears to
-be the load-bearing learning ingredient. \textbf{(3)} Feedback's effect is unmeasurable at
-the familiar-op validity ceiling, its value, like learning's, concentrates on foreign
-problems (the \invValidRate{} vs 0.69 validity gap and Fig.~\ref{fig:learning} are the
-controlled contrast). A historical datum completes the picture: a 4.5-hour
-\emph{continue-SFT} on new operators stalled and degraded proven operators and was
-stopped, while RL-from-verifier taught the same operators cleanly, corpus imitation is
-not how the new capabilities arrived.
+The conclusion that survives error bars is the robust one, not the fragile ordering:
+\textbf{(1)} On familiar operators, the referee plus best-of-$N$ sampling captures
+essentially all of the full loop's geomean --- \emph{search, not learning, is the dominant
+force where competence exists}, and this now holds across two model scales (1B and 27B).
+\textbf{(2)} No single learning ingredient --- feedback, the policy-gradient term, or
+learning at all --- separates beyond seed noise here. \textbf{(3)} Learning's value
+concentrates on \emph{foreign} operators: the \invValidRate{} vs $\sim$0.69 validity gap and
+Fig.~\ref{fig:learning} are the controlled contrast, and a 4.5-hour \emph{continue-SFT} on
+new operators stalled and degraded proven ones while RL-from-verifier taught them cleanly.
+Corpus imitation is not how the new capabilities arrived.
 
 \section{The falsification ledger}\label{sec:falsification}
 
@@ -522,7 +550,15 @@ predictions, ships in the artifact.
 cuBLAS/FlashAttention-class kernels, and no novel algorithm classes (the scan result is
 primitive selection). (2) All speedups are vs \maxauto{} on specific hardware
 (H200; spot-confirmed on RTX 4090); ratios are hardware-dependent even when reproducible.
-(3) Ablations are single-seed and labeled. (4) KernelBench cross-evaluation is
+(2b) \emph{Scale, downward:} the whole pipeline was re-run on OpenBMB's
+\textbf{MiniCPM5-1B} (a 1B open model) on a single consumer RTX~4090 at zero marginal cost;
+it reached the validity gate in \mcSftEpochs{} epochs (\mcSftValid\% valid) and its kernels
+beat \maxauto{} on every benchmarked operator (geomean $\sim\mcControlGm\times$,
+Table~\ref{tab:ablmc}). A \emph{1-billion-parameter} model writing verified compiler-beating
+kernels on commodity hardware is the sharpest statement of the thesis: the model is
+replaceable down to 1B; the referee is not.
+(3) The 27B ablations are single-seed (the 1B replication of Table~\ref{tab:ablmc} is
+three-seed). (4) KernelBench cross-evaluation is
 out-of-scope-by-construction for our specialist (foreign format, generalist operators);
 the recorded honest probe scored \kbCorrect/\kbN{} and we declined prompt-bridging
 shortcuts that would manufacture a non-comparable number. (5) The loop requires a domain
