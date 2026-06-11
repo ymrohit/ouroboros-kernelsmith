@@ -114,8 +114,9 @@ the model beat, and an earlier claim of ours that we retract here.
 
 We do not claim novel algorithm discovery (\S\ref{sec:bounds}). The wins are scheduling wins
 of roughly 10 to 100\% on bandwidth-bound fusion operators, the part of the kernel surface
-practitioners still write by hand. The contribution is methodological: against a verifier
-hardened and regression-tested against its known exploits, an open model out-searches the
+practitioners still write by hand. What we contribute is the method, not the kernels:
+against a verifier hardened and regression-tested against its known exploits, an open model
+out-searches the
 compiler's own autotuner and repairs its own weak cases. Every number in the paper is regenerated from a harness output by a
 script that also checks the reports against each other; a number that cannot be regenerated
 this way does not appear. To keep the contribution legible: the claims are hardware-specific
@@ -219,7 +220,7 @@ and baselines alike) so nothing stays L2-resident, the cache-cold cross-check.
 
 \subsection{Negative controls for the reward channel}\label{sec:antigaming}
 
-The distinctive design element. We wrote three working exploits against the naive
+The part that is unusual: we wrote three working exploits against the naive
 harness and committed them as permanent test cases:
 
 \begin{enumerate}
@@ -313,7 +314,7 @@ Qwen3.6-27B (LoRA rank 128) unless stated.
 \textbf{What the two counts mean.} The model authored \productKernels{} kernels in total.
 \stabOps{} of them are operators we carry through the five-run stability gate against
 \maxauto{} below; the other \numKernelsExplore{} come from a later exploratory ``invention''
-run (\S\ref{sec:falsification}) evaluated against a different, default baseline and are not
+run (\S\ref{sec:invention}) evaluated against a different, default baseline and are not
 folded into the reproducibility numbers. Every reproducibility claim in this paper concerns
 the \stabOps{}.
 
@@ -436,7 +437,7 @@ loop-free \texttt{tl.cumsum} kernel, beating our hand-written carry-loop gold by
 $\sim$47\% ($\invCumsumMA\times$ vs \maxauto, $\invCumsumC\times$ vs compile), correct
 across the full sweep. Primitive selection and schedule simplification, verified, not a
 new parallel algorithm.
-\item \textbf{The capability boundary, stated:} on \texttt{entropy} and \texttt{kl\_div}
+\item \textbf{Where the model's competence stops:} on \texttt{entropy} and \texttt{kl\_div}
 the model produced many verified kernels but never beat the hand-written two/three-pass
 golds (which themselves stand at $\invEntropyMA\times$ and $\invKLMA\times$ vs \maxauto).
 Authorship there remains human.
