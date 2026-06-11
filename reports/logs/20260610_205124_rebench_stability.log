@@ -1,0 +1,20 @@
+stability re-bench: 5x per op vs max-autotune (the incumbent autotuner)
+========================================================================
+  cumsum       vs max-autotune: mean 1.322 ± 0.018  (min 1.294, max 1.340) | vs compile 1.891 | DISCOVERY (beats max-autotune, robust)
+               raw: [1.339, 1.329, 1.34, 1.309, 1.294]
+  entropy      vs max-autotune: mean 1.550 ± 0.024  (min 1.518, max 1.579) | vs compile 1.866 | DISCOVERY (beats max-autotune, robust)
+               raw: [1.579, 1.528, 1.518, 1.554, 1.571]
+  kl_div       vs max-autotune: mean 1.248 ± 0.010  (min 1.233, max 1.262) | vs compile 1.325 | DISCOVERY (beats max-autotune, robust)
+               raw: [1.241, 1.233, 1.249, 1.256, 1.262]
+  rmsnorm_short vs max-autotune: mean 1.374 ± 0.025  (min 1.335, max 1.410) | vs compile 1.463 | DISCOVERY (beats max-autotune, robust)
+               raw: [1.388, 1.41, 1.366, 1.335, 1.371]
+  softmax_short vs max-autotune: mean 1.817 ± 0.022  (min 1.779, max 1.843) | vs compile 2.069 | DISCOVERY (beats max-autotune, robust)
+               raw: [1.843, 1.812, 1.821, 1.779, 1.832]
+  layernorm_gelu_short vs max-autotune: mean 1.463 ± 0.008  (min 1.453, max 1.476) | vs compile 1.613 | DISCOVERY (beats max-autotune, robust)
+               raw: [1.476, 1.457, 1.464, 1.464, 1.453]
+  add_layernorm_sigmoid_short vs max-autotune: mean 1.225 ± 0.007  (min 1.215, max 1.235) | vs compile 1.338 | DISCOVERY (beats max-autotune, robust)
+               raw: [1.235, 1.215, 1.23, 1.219, 1.226]
+========================================================================
+7/7 DISCOVERIES (mean - spread > 1.0 vs max-autotune) | report -> /root/ouroboros/reports/rebench_stability.json
+Discovery bar: the model beat the incumbent scheduling search reproducibly.
+Anything ~1.0 = ceiling on these bandwidth-bound ops. Failures recorded, never hidden.
