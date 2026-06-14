@@ -6,5 +6,6 @@ outputs/
 external/
 *.log
 .hf-cache/
+.claude/
 ouroboros/datasets/
 ouroboros/external/
