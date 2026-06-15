@@ -9,11 +9,17 @@ recorded stability gate. The result is not self-reported by the model. A kernel 
 after it compiles, matches a PyTorch reference on adversarial inputs, and is timed with CUDA
 events against eager PyTorch, `torch.compile`, and max-autotune.
 
+The same loop also works at small scale. A MiniCPM5-1B replication on a single RTX 4090
+reached the validity gate and produced compiler-beating kernels across 3 seeds and 4
+ablation arms. That matters because it shows the result is not only a large-model effect:
+the referee plus search loop can make a 1B open model useful for real kernel work.
+
 ## Summary
 
 - 69 of 69 final kernels beat max-autotune reproducibly across 5 fresh runs.
 - 67 of 69 winning kernels are model-authored.
 - The explore arm contributed zero winning kernels.
+- MiniCPM5-1B also writes kernels that beat max-autotune in the multi-seed ablation run.
 - The V2 suite covers 101 verified specs: explicit ops, generated norm chains, and V2
   standalone transformer ops.
 - The harness rejects wrong kernels, shape-specialized kernels, memoized outputs, and
@@ -35,6 +41,7 @@ Every row below points to a recorded report in this repository.
 | V2 final stability gate, all 69 kernels | 69 of 69 kernels beat max-autotune reproducibly. Per-sample JSON is included. | `reports/rebench_stability_v2.md` |
 | Head-to-head vs expert Triton | OUROBOROS is faster on all 5 comparable ops under the fixed-schedule condition. | `reports/headtohead_experts_qwen3.6-27b.md` |
 | RL vs continue-SFT on 16 unseen ops | RL self-distillation learned all 16. Continue-SFT stalled and was stopped. | `reports/discovery_newops_qwen3.6-27b.md` |
+| MiniCPM5-1B multi-seed ablation on RTX 4090 | A 1B open model reached 100% validity on the 6-op SFT gate, then all 12 RL/search runs beat max-autotune. Beat-rate range: 83% to 100%. | `reports/ablations_minicpm_multiseed.md` |
 | Harness self-test, V2 | 14 gold kernels pass, 13 negative controls are rejected, and 3 anti-gaming controls are rejected. | `ouroboros/reports/harness_selftest.json` |
 | End-to-end composed MLP block, V2 on 4090 | Correct block output, 1.085x vs eager and 1.301x vs compile-MA at block level. | `ouroboros/reports/e2e_block.json` |
 
