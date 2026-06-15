@@ -17,7 +17,8 @@ the referee plus search loop can make a 1B open model useful for real kernel wor
 ## Summary
 
 - 69 of 69 final kernels beat max-autotune reproducibly across 5 fresh runs.
-- 67 of 69 winning kernels are model-authored.
+- 65 of 69 winning kernels are model-authored by upstream search-report attribution;
+  the other 4 are gold-seed-owned winners kept by the verifier.
 - The explore arm contributed zero winning kernels.
 - MiniCPM5-1B also writes kernels that beat max-autotune in the multi-seed ablation run.
 - The V2 suite covers 101 verified specs: explicit ops, generated norm chains, and V2
@@ -38,7 +39,7 @@ Every row below points to a recorded report in this repository.
 | 5-run stability rebench on H200 | 32 of 32 ops beat max-autotune reproducibly. Includes 16 original ops and 16 new ops; 30 of 32 are model-authored. | `reports/rebench_stability_qwen3.6-27b.md` |
 | V2 discovery run, 37 unseen ops on H200 | 37 of 37 validated and beat max-autotune fresh, with speedups from 1.16x to 2.09x. 35 of 37 are model-authored. | `reports/kernelsmith_v2.json` |
 | V2 shape-grid for the 37 new kernels, 440 cells | 37 of 37 have geomean > 1.0. Overall geomean: 1.480x. 51 loss cells are reported, with 46 in one known regime. | `reports/rebench_shapes_v2_qwen3.6-27b.md` |
-| V2 final stability gate, all 69 kernels | 69 of 69 kernels beat max-autotune reproducibly. Per-sample JSON is included. | `reports/rebench_stability_v2.md` |
+| V2 final stability gate, all 69 kernels | 69 of 69 kernels beat max-autotune reproducibly. Attribution is copied into the JSON from the upstream search reports: 65 model-authored, 4 seed-owned. | `reports/rebench_stability_v2.md` |
 | Head-to-head vs expert Triton | OUROBOROS is faster on all 5 comparable ops under the fixed-schedule condition. | `reports/headtohead_experts_qwen3.6-27b.md` |
 | RL vs continue-SFT on 16 unseen ops | RL self-distillation learned all 16. Continue-SFT stalled and was stopped. | `reports/discovery_newops_qwen3.6-27b.md` |
 | MiniCPM5-1B multi-seed ablation on RTX 4090 | A 1B open model reached 100% validity on the 6-op SFT gate, then all 12 RL/search runs beat max-autotune. Beat-rate range: 83% to 100%. | `reports/ablations_minicpm_multiseed.md` |

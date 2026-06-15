@@ -20,7 +20,8 @@ Artifacts (private): 🤗 `YMRohit/ouroboros-kernelsmith-qwen3.6-27b`.
 
 ## Headline
 - **32 / 32 fusion ops beat `torch.compile` max-autotune reproducibly** (5× stability rebench,
-  mean − spread > 1.0): 16 original + 16 new — **every one model-authored.**
+  mean − spread > 1.0): 16 original + 16 new; **30/32 winning kernels are model-authored**
+  by source-run attribution.
 - **Beat hand-written expert Triton on all 5 comparable ops** (Liger / Unsloth / Triton tutorial).
 - Honest bound: these are reproducible **scheduling** wins (~10–85%) over the incumbent autotuner on
   bandwidth-bound ops — NOT wins over cuBLAS/FlashAttention-class kernels, NOT novel algorithms.
@@ -62,7 +63,8 @@ stopped). The verifier's reward beats corpus-imitation for teaching new ops.
 ## Where everything lives
 HF repo `YMRohit/ouroboros-kernelsmith-qwen3.6-27b`:
 - `sft_adapter/`, `rl_adapter/` (orig 16/16), `rl_adapter_newops/` (new 16) — LoRA, 2.55 GB each
-- `best_kernels/` — 32 model-authored fast Triton kernels (THE product)
+- `best_kernels/` — fast Triton kernels selected by the verifier; 30/32 v1 winners are
+  model-authored, and the final 69-kernel stability gate has 65/69 model-authored winners.
 - `datasets/` (corpus, also `YMRohit/ouroboros-kernel-corpus`) · `reports/` (the 4 below)
 - Reports: `cold_baseline`, `rebench_stability`, `headtohead_experts`, `discovery_newops` (.md)
 
@@ -143,12 +145,13 @@ RL self-distill resumed from `rl_adapter_newops` over the 32 new chain ops + 5 s
   1–3/8, pass-2 was 8/8 (self-distill on pass-1's verified winners taught the idiom).
 - Attribution: 617/888 LM kernels verified (69.5%), 101 archive lead-takes, explore arm
   contributed **zero** kernels.
-- **Product: 69 model-era kernels** (32 v1 + 37 v2).
+- **Product: 69 stability-gated kernels** (32 v1 + 37 v2), with 65/69 model-authored by
+  upstream search-report attribution.
 - **Shape-grid gate (37 new): PASSED** — 37/37 geomean > 1.0 vs max-autotune (overall
   1.480×), 37/37 cache-cold, 51/440 loss cells with 46 at the same 16384×2048 regime the
   v1 kernels lose in (two independent runs, one identical boundary).
   → `reports/rebench_shapes_v2_qwen3.6-27b.md`
-- **5× stability gate over ALL 69 kernels: PASSED — 69/69 DISCOVERIES** (mean − spread
+- **5× stability gate over ALL 69 kernels: PASSED — 69/69 stability-gated kernels** (mean − spread
   > 1.0 vs max-autotune on 5 fresh runs each; mean of means 1.299×, max spread ±0.052;
   weakest 1.113 ± 0.015, strongest `cross_entropy` 2.038 ± 0.031). Durable per-sample JSON:
   `reports/rebench_stability_v2.json` (+ .md). The print-only first run was re-done after

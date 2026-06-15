@@ -18,7 +18,9 @@
         1.1934,
         1.1565
       ],
-      "robust": true
+      "robust": true,
+      "authored_by": "LM",
+      "attribution_source": "v1_original"
     },
     "add_layernorm_elu": {
       "verdict": "DISCOVERY (beats max-autotune, robust)",
@@ -34,7 +36,9 @@
         1.1993,
         1.2372
       ],
-      "robust": true
+      "robust": true,
+      "authored_by": "LM",
+      "attribution_source": "v2_discovery"
     },
     "add_layernorm_gelu": {
       "verdict": "DISCOVERY (beats max-autotune, robust)",
@@ -50,7 +54,9 @@
         1.2928,
         1.2801
       ],
-      "robust": true
+      "robust": true,
+      "authored_by": "LM",
+      "attribution_source": "v1_original"
     },
     "add_layernorm_gelu_erf": {
       "verdict": "DISCOVERY (beats max-autotune, robust)",
@@ -66,7 +72,9 @@
         1.1023,
         1.0997
       ],
-      "robust": true
+      "robust": true,
+      "authored_by": "LM",
+      "attribution_source": "v2_discovery"
     },
     "add_layernorm_hardtanh": {
       "verdict": "DISCOVERY (beats max-autotune, robust)",
@@ -82,7 +90,9 @@
         1.1636,
         1.1634
       ],
-      "robust": true
+      "robust": true,
+      "authored_by": "LM",
+      "attribution_source": "v2_discovery"
     },
     "add_layernorm_leaky_relu": {
       "verdict": "DISCOVERY (beats max-autotune, robust)",
@@ -98,7 +108,9 @@
         1.1702,
         1.1507
       ],
-      "robust": true
+      "robust": true,
+      "authored_by": "LM",
+      "attribution_source": "v2_discovery"
     },
     "add_layernorm_mish": {
       "verdict": "DISCOVERY (beats max-autotune, robust)",
@@ -114,7 +126,9 @@
         1.3647,
         1.3489
       ],
-      "robust": true
+      "robust": true,
+      "authored_by": "LM",
+      "attribution_source": "v2_discovery"
     },
     "add_layernorm_relu": {
       "verdict": "DISCOVERY (beats max-autotune, robust)",
@@ -130,7 +144,9 @@
         1.1693,
         1.1728
       ],
-      "robust": true
+      "robust": true,
+      "authored_by": "LM",
+      "attribution_source": "v1_newops"
     },
     "add_layernorm_relu6": {
       "verdict": "DISCOVERY (beats max-autotune, robust)",
@@ -146,7 +162,9 @@
         1.1792,
         1.1918
       ],
-      "robust": true
+      "robust": true,
+      "authored_by": "LM",
+      "attribution_source": "v2_discovery"
     },
     "add_layernorm_selu": {
       "verdict": "DISCOVERY (beats max-autotune, robust)",
@@ -162,7 +180,9 @@
         1.1978,
         1.1993
       ],
-      "robust": true
+      "robust": true,
+      "authored_by": "LM",
+      "attribution_source": "v2_discovery"
     },
     "add_layernorm_sigmoid": {
       "verdict": "DISCOVERY (beats max-autotune, robust)",
@@ -178,7 +198,9 @@
         1.1546,
         1.1433
       ],
-      "robust": true
+      "robust": true,
+      "authored_by": "LM",
+      "attribution_source": "v1_newops"
     },
     "add_layernorm_silu": {
       "verdict": "DISCOVERY (beats max-autotune, robust)",
@@ -194,7 +216,9 @@
         1.1205,
         1.1224
       ],
-      "robust": true
+      "robust": true,
+      "authored_by": "LM",
+      "attribution_source": "v1_original"
     },
     "add_layernorm_softplus": {
       "verdict": "DISCOVERY (beats max-autotune, robust)",
@@ -210,7 +234,9 @@
         1.2051,
         1.2416
       ],
-      "robust": true
+      "robust": true,
+      "authored_by": "LM",
+      "attribution_source": "v2_discovery"
     },
     "add_layernorm_square": {
       "verdict": "DISCOVERY (beats max-autotune, robust)",
@@ -226,7 +252,9 @@
         1.1636,
         1.168
       ],
-      "robust": true
+      "robust": true,
+      "authored_by": "LM",
+      "attribution_source": "v1_newops"
     },
     "add_layernorm_tanh": {
       "verdict": "DISCOVERY (beats max-autotune, robust)",
@@ -242,7 +270,9 @@
         1.2231,
         1.2434
       ],
-      "robust": true
+      "robust": true,
+      "authored_by": "LM",
+      "attribution_source": "v1_newops"
     },
     "add_rmsnorm": {
       "verdict": "DISCOVERY (beats max-autotune, robust)",
@@ -258,7 +288,9 @@
         1.2319,
         1.2079
       ],
-      "robust": true
+      "robust": true,
+      "authored_by": "LM",
+      "attribution_source": "v1_original"
     },
     "add_rmsnorm_elu": {
       "verdict": "DISCOVERY (beats max-autotune, robust)",
@@ -274,7 +306,9 @@
         1.2465,
         1.2851
       ],
-      "robust": true
+      "robust": true,
+      "authored_by": "LM",
+      "attribution_source": "v2_discovery"
     },
     "add_rmsnorm_gelu": {
       "verdict": "DISCOVERY (beats max-autotune, robust)",
@@ -290,7 +324,9 @@
         1.2959,
         1.2788
       ],
-      "robust": true
+      "robust": true,
+      "authored_by": "LM",
+      "attribution_source": "v1_original"
     },
     "add_rmsnorm_gelu_erf": {
       "verdict": "DISCOVERY (beats max-autotune, robust)",
@@ -306,7 +342,9 @@
         1.1457,
         1.1451
       ],
-      "robust": true
+      "robust": true,
+      "authored_by": "LM",
+      "attribution_source": "v2_discovery"
     },
     "add_rmsnorm_hardtanh": {
       "verdict": "DISCOVERY (beats max-autotune, robust)",
@@ -322,7 +360,9 @@
         1.2328,
         1.2518
       ],
-      "robust": true
+      "robust": true,
+      "authored_by": "LM",
+      "attribution_source": "v2_discovery"
     },
     "add_rmsnorm_leaky_relu": {
       "verdict": "DISCOVERY (beats max-autotune, robust)",
@@ -338,7 +378,9 @@
         1.2272,
         1.2297
       ],
-      "robust": true
+      "robust": true,
+      "authored_by": "LM",
+      "attribution_source": "v2_discovery"
     },
     "add_rmsnorm_mish": {
       "verdict": "DISCOVERY (beats max-autotune, robust)",
@@ -354,7 +396,9 @@
         1.4429,
         1.4365
       ],
-      "robust": true
+      "robust": true,
+      "authored_by": "LM",
+      "attribution_source": "v2_discovery"
     },
     "add_rmsnorm_relu": {
       "verdict": "DISCOVERY (beats max-autotune, robust)",
@@ -370,7 +414,9 @@
         1.2469,
         1.2412
       ],
-      "robust": true
+      "robust": true,
+      "authored_by": "LM",
+      "attribution_source": "v1_newops"
     },
     "add_rmsnorm_relu6": {
       "verdict": "DISCOVERY (beats max-autotune, robust)",
@@ -386,7 +432,9 @@
         1.2151,
         1.2533
       ],
-      "robust": true
+      "robust": true,
+      "authored_by": "LM",
+      "attribution_source": "v2_discovery"
     },
     "add_rmsnorm_rope": {
       "verdict": "DISCOVERY (beats max-autotune, robust)",
@@ -402,7 +450,9 @@
         1.2734,
         1.2286
       ],
-      "robust": true
+      "robust": true,
+      "authored_by": "LM",
+      "attribution_source": "v1_original"
     },
     "add_rmsnorm_selu": {
       "verdict": "DISCOVERY (beats max-autotune, robust)",
@@ -418,7 +468,9 @@
         1.2597,
         1.3067
       ],
-      "robust": true
+      "robust": true,
+      "authored_by": "LM",
+      "attribution_source": "v2_discovery"
     },
     "add_rmsnorm_sigmoid": {
       "verdict": "DISCOVERY (beats max-autotune, robust)",
@@ -434,7 +486,9 @@
         1.2213,
         1.2201
       ],
-      "robust": true
+      "robust": true,
+      "authored_by": "LM",
+      "attribution_source": "v1_newops"
     },
     "add_rmsnorm_silu": {
       "verdict": "DISCOVERY (beats max-autotune, robust)",
@@ -450,7 +504,9 @@
         1.2019,
         1.1719
       ],
-      "robust": true
+      "robust": true,
+      "authored_by": "LM",
+      "attribution_source": "v1_original"
     },
     "add_rmsnorm_softplus": {
       "verdict": "DISCOVERY (beats max-autotune, robust)",
@@ -466,7 +522,9 @@
         1.1658,
         1.1975
       ],
-      "robust": true
+      "robust": true,
+      "authored_by": "LM",
+      "attribution_source": "v2_discovery"
     },
     "add_rmsnorm_square": {
       "verdict": "DISCOVERY (beats max-autotune, robust)",
@@ -482,7 +540,9 @@
         1.1909,
         1.2071
       ],
-      "robust": true
+      "robust": true,
+      "authored_by": "LM",
+      "attribution_source": "v1_newops"
     },
     "add_rmsnorm_tanh": {
       "verdict": "DISCOVERY (beats max-autotune, robust)",
@@ -498,7 +558,9 @@
         1.2583,
         1.2229
       ],
-      "robust": true
+      "robust": true,
+      "authored_by": "LM",
+      "attribution_source": "v1_newops"
     },
     "cross_entropy": {
       "verdict": "DISCOVERY (beats max-autotune, robust)",
@@ -514,7 +576,9 @@
         2.0319,
         2.0261
       ],
-      "robust": true
+      "robust": true,
+      "authored_by": "LM",
+      "attribution_source": "v2_discovery"
     },
     "geglu": {
       "verdict": "DISCOVERY (beats max-autotune, robust)",
@@ -530,7 +594,9 @@
         1.2286,
         1.234
       ],
-      "robust": true
+      "robust": true,
+      "authored_by": "LM",
+      "attribution_source": "v1_original"
     },
     "glu": {
       "verdict": "DISCOVERY (beats max-autotune, robust)",
@@ -546,7 +612,9 @@
         1.2669,
         1.2373
       ],
-      "robust": true
+      "robust": true,
+      "authored_by": "LM",
+      "attribution_source": "v2_discovery"
     },
     "layernorm_elu": {
       "verdict": "DISCOVERY (beats max-autotune, robust)",
@@ -562,7 +630,9 @@
         1.2974,
         1.3456
       ],
-      "robust": true
+      "robust": true,
+      "authored_by": "LM",
+      "attribution_source": "v2_discovery"
     },
     "layernorm_gelu": {
       "verdict": "DISCOVERY (beats max-autotune, robust)",
@@ -578,7 +648,9 @@
         1.4588,
         1.4179
       ],
-      "robust": true
+      "robust": true,
+      "authored_by": "LM",
+      "attribution_source": "v1_original"
     },
     "layernorm_gelu_erf": {
       "verdict": "DISCOVERY (beats max-autotune, robust)",
@@ -594,7 +666,9 @@
         1.2542,
         1.1379
       ],
-      "robust": true
+      "robust": true,
+      "authored_by": "LM",
+      "attribution_source": "v2_discovery"
     },
     "layernorm_hardtanh": {
       "verdict": "DISCOVERY (beats max-autotune, robust)",
@@ -610,7 +684,9 @@
         1.304,
         1.3096
       ],
-      "robust": true
+      "robust": true,
+      "authored_by": "LM",
+      "attribution_source": "v2_discovery"
     },
     "layernorm_leaky_relu": {
       "verdict": "DISCOVERY (beats max-autotune, robust)",
@@ -626,7 +702,9 @@
         1.2863,
         1.2515
       ],
-      "robust": true
+      "robust": true,
+      "authored_by": "LM",
+      "attribution_source": "v2_discovery"
     },
     "layernorm_mish": {
       "verdict": "DISCOVERY (beats max-autotune, robust)",
@@ -642,7 +720,9 @@
         1.4714,
         1.4661
       ],
-      "robust": true
+      "robust": true,
+      "authored_by": "LM",
+      "attribution_source": "v2_discovery"
     },
     "layernorm_relu": {
       "verdict": "DISCOVERY (beats max-autotune, robust)",
@@ -658,7 +738,9 @@
         1.2851,
         1.2636
       ],
-      "robust": true
+      "robust": true,
+      "authored_by": "LM",
+      "attribution_source": "v1_newops"
     },
     "layernorm_relu6": {
       "verdict": "DISCOVERY (beats max-autotune, robust)",
@@ -674,7 +756,9 @@
         1.2702,
         1.2639
       ],
-      "robust": true
+      "robust": true,
+      "authored_by": "LM",
+      "attribution_source": "v2_discovery"
     },
     "layernorm_selu": {
       "verdict": "DISCOVERY (beats max-autotune, robust)",
@@ -690,7 +774,9 @@
         1.2828,
         1.2738
       ],
-      "robust": true
+      "robust": true,
+      "authored_by": "LM",
+      "attribution_source": "v2_discovery"
     },
     "layernorm_sigmoid": {
       "verdict": "DISCOVERY (beats max-autotune, robust)",
@@ -706,7 +792,9 @@
         1.2498,
         1.2541
       ],
-      "robust": true
+      "robust": true,
+      "authored_by": "LM",
+      "attribution_source": "v1_newops"
     },
     "layernorm_softplus": {
       "verdict": "DISCOVERY (beats max-autotune, robust)",
@@ -722,7 +810,9 @@
         1.3363,
         1.3977
       ],
-      "robust": true
+      "robust": true,
+      "authored_by": "LM",
+      "attribution_source": "v2_discovery"
     },
     "layernorm_square": {
       "verdict": "DISCOVERY (beats max-autotune, robust)",
@@ -738,7 +828,9 @@
         1.3045,
         1.2958
       ],
-      "robust": true
+      "robust": true,
+      "authored_by": "LM",
+      "attribution_source": "v1_newops"
     },
     "layernorm_tanh": {
       "verdict": "DISCOVERY (beats max-autotune, robust)",
@@ -754,7 +846,9 @@
         1.4411,
         1.4608
       ],
-      "robust": true
+      "robust": true,
+      "authored_by": "LM",
+      "attribution_source": "v1_newops"
     },
     "qknorm_rope": {
       "verdict": "DISCOVERY (beats max-autotune, robust)",
@@ -770,7 +864,9 @@
         1.3171,
         1.1944
       ],
-      "robust": true
+      "robust": true,
+      "authored_by": "seed",
+      "attribution_source": "v1_original"
     },
     "reglu": {
       "verdict": "DISCOVERY (beats max-autotune, robust)",
@@ -786,7 +882,9 @@
         1.2779,
         1.2453
       ],
-      "robust": true
+      "robust": true,
+      "authored_by": "LM",
+      "attribution_source": "v1_original"
     },
     "rmsnorm_elu": {
       "verdict": "DISCOVERY (beats max-autotune, robust)",
@@ -802,7 +900,9 @@
         1.3026,
         1.2961
       ],
-      "robust": true
+      "robust": true,
+      "authored_by": "LM",
+      "attribution_source": "v2_discovery"
     },
     "rmsnorm_gelu": {
       "verdict": "DISCOVERY (beats max-autotune, robust)",
@@ -818,7 +918,9 @@
         1.5255,
         1.4962
       ],
-      "robust": true
+      "robust": true,
+      "authored_by": "LM",
+      "attribution_source": "v1_original"
     },
     "rmsnorm_gelu_erf": {
       "verdict": "DISCOVERY (beats max-autotune, robust)",
@@ -834,7 +936,9 @@
         1.1261,
         1.2446
       ],
-      "robust": true
+      "robust": true,
+      "authored_by": "LM",
+      "attribution_source": "v2_discovery"
     },
     "rmsnorm_gemma": {
       "verdict": "DISCOVERY (beats max-autotune, robust)",
@@ -850,7 +954,9 @@
         1.2551,
         1.2651
       ],
-      "robust": true
+      "robust": true,
+      "authored_by": "LM",
+      "attribution_source": "v2_discovery"
     },
     "rmsnorm_hardtanh": {
       "verdict": "DISCOVERY (beats max-autotune, robust)",
@@ -866,7 +972,9 @@
         1.2936,
         1.2551
       ],
-      "robust": true
+      "robust": true,
+      "authored_by": "LM",
+      "attribution_source": "v2_discovery"
     },
     "rmsnorm_leaky_relu": {
       "verdict": "DISCOVERY (beats max-autotune, robust)",
@@ -882,7 +990,9 @@
         1.2646,
         1.2674
       ],
-      "robust": true
+      "robust": true,
+      "authored_by": "LM",
+      "attribution_source": "v2_discovery"
     },
     "rmsnorm_mish": {
       "verdict": "DISCOVERY (beats max-autotune, robust)",
@@ -898,7 +1008,9 @@
         1.5441,
         1.5526
       ],
-      "robust": true
+      "robust": true,
+      "authored_by": "LM",
+      "attribution_source": "v2_discovery"
     },
     "rmsnorm_relu": {
       "verdict": "DISCOVERY (beats max-autotune, robust)",
@@ -914,7 +1026,9 @@
         1.2969,
         1.3387
       ],
-      "robust": true
+      "robust": true,
+      "authored_by": "LM",
+      "attribution_source": "v1_newops"
     },
     "rmsnorm_relu6": {
       "verdict": "DISCOVERY (beats max-autotune, robust)",
@@ -930,7 +1044,9 @@
         1.3286,
         1.2877
       ],
-      "robust": true
+      "robust": true,
+      "authored_by": "LM",
+      "attribution_source": "v2_discovery"
     },
     "rmsnorm_selu": {
       "verdict": "DISCOVERY (beats max-autotune, robust)",
@@ -946,7 +1062,9 @@
         1.3497,
         1.3064
       ],
-      "robust": true
+      "robust": true,
+      "authored_by": "LM",
+      "attribution_source": "v2_discovery"
     },
     "rmsnorm_sigmoid": {
       "verdict": "DISCOVERY (beats max-autotune, robust)",
@@ -962,7 +1080,9 @@
         1.2889,
         1.3636
       ],
-      "robust": true
+      "robust": true,
+      "authored_by": "LM",
+      "attribution_source": "v1_newops"
     },
     "rmsnorm_silu": {
       "verdict": "DISCOVERY (beats max-autotune, robust)",
@@ -978,7 +1098,9 @@
         1.3127,
         1.3294
       ],
-      "robust": true
+      "robust": true,
+      "authored_by": "LM",
+      "attribution_source": "v1_original"
     },
     "rmsnorm_softplus": {
       "verdict": "DISCOVERY (beats max-autotune, robust)",
@@ -994,7 +1116,9 @@
         1.3947,
         1.4047
       ],
-      "robust": true
+      "robust": true,
+      "authored_by": "LM",
+      "attribution_source": "v2_discovery"
     },
     "rmsnorm_square": {
       "verdict": "DISCOVERY (beats max-autotune, robust)",
@@ -1010,7 +1134,9 @@
         1.3236,
         1.2768
       ],
-      "robust": true
+      "robust": true,
+      "authored_by": "LM",
+      "attribution_source": "v1_newops"
     },
     "rmsnorm_tanh": {
       "verdict": "DISCOVERY (beats max-autotune, robust)",
@@ -1026,7 +1152,9 @@
         1.4351,
         1.4164
       ],
-      "robust": true
+      "robust": true,
+      "authored_by": "LM",
+      "attribution_source": "v1_newops"
     },
     "rope_interleaved": {
       "verdict": "DISCOVERY (beats max-autotune, robust)",
@@ -1042,7 +1170,9 @@
         1.2039,
         1.2293
       ],
-      "robust": true
+      "robust": true,
+      "authored_by": "seed",
+      "attribution_source": "v2_discovery"
     },
     "softcap_softmax": {
       "verdict": "DISCOVERY (beats max-autotune, robust)",
@@ -1058,7 +1188,9 @@
         1.7565,
         1.7896
       ],
-      "robust": true
+      "robust": true,
+      "authored_by": "seed",
+      "attribution_source": "v2_discovery"
     },
     "softmax": {
       "verdict": "DISCOVERY (beats max-autotune, robust)",
@@ -1074,7 +1206,9 @@
         1.8292,
         1.8983
       ],
-      "robust": true
+      "robust": true,
+      "authored_by": "LM",
+      "attribution_source": "v1_original"
     },
     "softmax_scale": {
       "verdict": "DISCOVERY (beats max-autotune, robust)",
@@ -1090,7 +1224,9 @@
         1.458,
         1.4394
       ],
-      "robust": true
+      "robust": true,
+      "authored_by": "seed",
+      "attribution_source": "v1_original"
     },
     "swiglu": {
       "verdict": "DISCOVERY (beats max-autotune, robust)",
@@ -1106,7 +1242,25 @@
         1.2714,
         1.2436
       ],
-      "robust": true
+      "robust": true,
+      "authored_by": "LM",
+      "attribution_source": "v1_original"
     }
+  },
+  "attribution": {
+    "model_authored": 65,
+    "seed_authored": 4,
+    "seed_ops": [
+      "qknorm_rope",
+      "rope_interleaved",
+      "softcap_softmax",
+      "softmax_scale"
+    ],
+    "source_reports": {
+      "v1_original": "reports/modal_volume/kernelsmith_rl.json",
+      "v1_newops": "reports/modal_volume/kernelsmith_newops.json",
+      "v2_discovery": "reports/kernelsmith_v2.json"
+    },
+    "note": "Attribution is copied from the upstream search reports; the stability gate re-runs timing and correctness for the final kernels."
   }
 }

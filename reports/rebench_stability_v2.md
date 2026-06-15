@@ -13,8 +13,9 @@ lucky sample. H200. Raw 5-sample data per op: `rebench_stability_v2.json`.
   `softcap_softmax` 1.777 ± 0.018, `rmsnorm_mish` 1.556 ± 0.008.
 - Weakest (still clears the bar): `add_layernorm_gelu_erf` 1.113 ± 0.015,
   `add_layernorm_silu` 1.121 ± 0.004.
-- 67/69 winning kernels are model-authored (`softcap_softmax`, `rope_interleaved` are
-  gold-seed-owned; stated, not hidden).
+- 65/69 winning kernels are model-authored by upstream search-report attribution. The
+  gold-seed-owned winners are `qknorm_rope`, `softmax_scale`, `softcap_softmax`, and
+  `rope_interleaved`; the JSON carries `authored_by` for each op.
 
 ## Provenance note (why this run exists)
 
