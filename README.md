@@ -147,6 +147,9 @@ ouroboros/
 
 reports/
   Recorded H200, 4090, stability, shape-grid, ablation, and expert-comparison outputs.
+
+artifacts/best_kernels/
+  The 69 stability-gated Triton kernels from `reports/rebench_stability_v2.json`.
 ```
 
 ## Integrity Notes
@@ -164,6 +167,7 @@ reports/
 
 ## Artifacts
 
+- Best kernels in this repo: `artifacts/best_kernels/`
 - Model and reports: `YMRohit/ouroboros-kernelsmith-qwen3.6-27b`
 - Verified corpus: `YMRohit/ouroboros-kernel-corpus`
 - License: MIT

@@ -66,6 +66,9 @@ HF repo `YMRohit/ouroboros-kernelsmith-qwen3.6-27b`:
 - `datasets/` (corpus, also `YMRohit/ouroboros-kernel-corpus`) · `reports/` (the 4 below)
 - Reports: `cold_baseline`, `rebench_stability`, `headtohead_experts`, `discovery_newops` (.md)
 
+GitHub carries the public curated kernel artifact at `artifacts/best_kernels/`: the 69
+stability-gated kernels from `reports/rebench_stability_v2.json`.
+
 ## Reproduce (Modal entrypoints in `modal_app.py`)
 ```bash
 .venv-modal/bin/modal run modal_app.py::verify_fastpath   # prove tilelang GDN backward on Hopper
