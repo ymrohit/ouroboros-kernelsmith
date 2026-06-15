@@ -1,0 +1,36 @@
+OUROBOROS harness self-test on NVIDIA GeForce RTX 4090
+======================================================================
+  OK rmsnorm      GOLD                               -> ok            0.1592ms  8.15x eager  1.12x compile  1.13x max-autotune
+  OK softmax      GOLD                               -> ok            0.1557ms  4.67x eager  1.15x compile  1.14x max-autotune
+  OK swiglu       GOLD                               -> ok            0.2304ms  6.02x eager  1.08x compile  1.09x max-autotune
+  OK add_rmsnorm  GOLD                               -> ok            0.2303ms  8.50x eager  1.09x compile  1.10x max-autotune
+  OK rope         GOLD                               -> ok            0.0511ms  3.47x eager  0.92x compile  0.84x max-autotune
+  OK layernorm    GOLD                               -> ok            0.1604ms  13.43x eager  1.13x compile  1.12x max-autotune
+  OK add_layernorm GOLD                               -> ok            0.2271ms  12.41x eager  1.11x compile  1.12x max-autotune
+  OK geglu        GOLD                               -> ok            0.2314ms  18.52x eager  1.08x compile  1.11x max-autotune
+  OK qknorm_rope  GOLD (fusion chain)                -> ok            0.0408ms  5.77x eager  1.36x compile  1.40x max-autotune
+  OK rmsnorm      NEGATIVE-CONTROL (no rsqrt)        -> incorrect   
+        feedback: max abs err inf on (37, 4097)/torch.float16 scale~304 (151588 elems over tol 2.0e-03/2.0e-02) — likely a reduction/stability bug, not a shape bug
+  OK softmax      NEGATIVE-CONTROL (no max-subtract) -> incorrect   
+        feedback: max abs err nan on (37, 4097)/torch.float16 scale~304 (0 elems over tol 2.0e-03/2.0e-02) — likely a reduction/stability bug, not a shape bug
+  OK add_rmsnorm  NEGATIVE-CONTROL (drops residual in stat) -> incorrect   
+        feedback: max abs err 4.477e+00 on (37, 4097)/torch.float16 scale~304 (148483 elems over tol 2.0e-03/2.0e-02) — likely a reduction/stability bug, not a shape bug
+  OK rope         NEGATIVE-CONTROL (drops rotate_half negation) -> incorrect   
+        feedback: max abs err 4.041e+02 on (37, 128)/torch.float16 scale~223 (2303 elems over tol 2.0e-03/2.0e-02) — likely a reduction/stability bug, not a shape bug
+  OK layernorm    NEGATIVE-CONTROL (no mean-subtraction) -> incorrect   
+        feedback: max abs err 1.470e-01 on (37, 4097)/torch.float16 scale~304 (29879 elems over tol 2.0e-03/2.0e-02) — likely a reduction/stability bug, not a shape bug
+  OK add_layernorm NEGATIVE-CONTROL (drops residual in stat) -> incorrect   
+        feedback: max abs err 4.320e+00 on (37, 4097)/torch.float16 scale~304 (134154 elems over tol 2.0e-03/2.0e-02) — likely a reduction/stability bug, not a shape bug
+  OK geglu        NEGATIVE-CONTROL (SiLU instead of GELU) -> incorrect   
+        feedback: max abs err 5.812e+00 on (37, 4097)/torch.float16 scale~304 (12779 elems over tol 2.0e-03/2.0e-02) — likely a reduction/stability bug, not a shape bug
+  OK qknorm_rope  NEGATIVE-CONTROL (rms scale dropped on rotated half) -> incorrect   
+        feedback: max abs err 3.147e+02 on (37, 128)/torch.float16 scale~220 (4705 elems over tol 2.0e-03/2.0e-02) — likely a reduction/stability bug, not a shape bug
+  OK softmax      ANTI-GAMING (special-cases bench shape) -> incorrect   
+        feedback: max abs err 5.120e+02 on (8192, 4096)/torch.float16 scale~6 (29374580 elems over tol 2.0e-03/2.0e-02) — likely a reduction/stability bug, not a shape bug
+  OK softmax      ANTI-GAMING (memoizes by input pointer) -> incorrect   
+        feedback: bench-output verification FAILED: the timed output does not match the reference on the live input state (memoization/caching suspected)
+  OK silu         ANTI-GAMING (mutates input in-place) -> incorrect   
+        feedback: kernel MUTATES its input ((37, 4097)/torch.float16) — run() must write a fresh output tensor
+======================================================================
+ALL GREEN — moat proven
+report -> /home/tihor/webllm/verifier-self-distillation-loop/domains/hackathon-build-small/ouroboros-modal/ouroboros/reports/harness_selftest.json

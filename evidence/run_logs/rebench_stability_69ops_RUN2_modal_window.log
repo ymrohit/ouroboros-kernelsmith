@@ -1,0 +1,88 @@
+
+  add_rmsnorm_softplus vs max-autotune: mean 1.185 ± 0.013  (min 1.166, max 1.199) | vs compile 1.219 | DISCOVERY (beats max-autotune, robust)
+               raw: [1.174, 1.199, 1.188, 1.166, 1.198]
+  add_rmsnorm_square vs max-autotune: mean 1.205 ± 0.008  (min 1.191, max 1.217) | vs compile 1.207 | DISCOVERY (beats max-autotune, robust)
+               raw: [1.206, 1.217, 1.205, 1.191, 1.207]
+  add_rmsnorm_tanh vs max-autotune: mean 1.245 ± 0.023  (min 1.221, max 1.282) | vs compile 1.293 | DISCOVERY (beats max-autotune, robust)
+               raw: [1.282, 1.243, 1.221, 1.258, 1.223]
+  cross_entropy vs max-autotune: mean 2.038 ± 0.031  (min 2.003, max 2.095) | vs compile 2.659 | DISCOVERY (beats max-autotune, robust)
+               raw: [2.095, 2.003, 2.034, 2.032, 2.026]
+  geglu        vs max-autotune: mean 1.250 ± 0.026  (min 1.224, max 1.289) | vs compile 1.252 | DISCOVERY (beats max-autotune, robust)
+               raw: [1.289, 1.224, 1.273, 1.229, 1.234]
+  glu          vs max-autotune: mean 1.254 ± 0.014  (min 1.237, max 1.274) | vs compile 1.254 | DISCOVERY (beats max-autotune, robust)
+               raw: [1.274, 1.243, 1.25, 1.267, 1.237]
+  layernorm_elu vs max-autotune: mean 1.299 ± 0.024  (min 1.277, max 1.346) | vs compile 1.479 | DISCOVERY (beats max-autotune, robust)
+               raw: [1.293, 1.277, 1.283, 1.297, 1.346]
+  layernorm_gelu vs max-autotune: mean 1.427 ± 0.016  (min 1.418, max 1.459) | vs compile 1.484 | DISCOVERY (beats max-autotune, robust)
+               raw: [1.419, 1.423, 1.418, 1.459, 1.418]
+  layernorm_gelu_erf vs max-autotune: mean 1.231 ± 0.047  (min 1.138, max 1.262) | vs compile 1.266 | DISCOVERY (beats max-autotune, robust)
+               raw: [1.262, 1.249, 1.252, 1.254, 1.138]
+  layernorm_hardtanh vs max-autotune: mean 1.299 ± 0.007  (min 1.290, max 1.310) | vs compile 1.458 | DISCOVERY (beats max-autotune, robust)
+               raw: [1.301, 1.29, 1.291, 1.304, 1.31]
+  layernorm_leaky_relu vs max-autotune: mean 1.273 ± 0.016  (min 1.252, max 1.290) | vs compile 1.412 | DISCOVERY (beats max-autotune, robust)
+               raw: [1.258, 1.29, 1.282, 1.286, 1.252]
+  layernorm_mish vs max-autotune: mean 1.468 ± 0.005  (min 1.459, max 1.471) | vs compile 1.500 | DISCOVERY (beats max-autotune, robust)
+               raw: [1.471, 1.471, 1.459, 1.471, 1.466]
+  layernorm_relu vs max-autotune: mean 1.285 ± 0.024  (min 1.261, max 1.328) | vs compile 1.425 | DISCOVERY (beats max-autotune, robust)
+               raw: [1.261, 1.328, 1.287, 1.285, 1.264]
+  layernorm_relu6 vs max-autotune: mean 1.276 ± 0.011  (min 1.264, max 1.292) | vs compile 1.439 | DISCOVERY (beats max-autotune, robust)
+               raw: [1.292, 1.268, 1.287, 1.27, 1.264]
+  layernorm_selu vs max-autotune: mean 1.302 ± 0.028  (min 1.274, max 1.355) | vs compile 1.487 | DISCOVERY (beats max-autotune, robust)
+               raw: [1.355, 1.298, 1.302, 1.283, 1.274]
+  layernorm_sigmoid vs max-autotune: mean 1.251 ± 0.007  (min 1.242, max 1.261) | vs compile 1.417 | DISCOVERY (beats max-autotune, robust)
+               raw: [1.261, 1.246, 1.242, 1.25, 1.254]
+  layernorm_softplus vs max-autotune: mean 1.356 ± 0.021  (min 1.336, max 1.398) | vs compile 1.478 | DISCOVERY (beats max-autotune, robust)
+               raw: [1.353, 1.35, 1.345, 1.336, 1.398]
+  layernorm_square vs max-autotune: mean 1.298 ± 0.018  (min 1.266, max 1.317) | vs compile 1.432 | DISCOVERY (beats max-autotune, robust)
+               raw: [1.309, 1.266, 1.317, 1.304, 1.296]
+  layernorm_tanh vs max-autotune: mean 1.450 ± 0.008  (min 1.441, max 1.461) | vs compile 1.520 | DISCOVERY (beats max-autotune, robust)
+               raw: [1.45, 1.442, 1.457, 1.441, 1.461]
+  qknorm_rope  vs max-autotune: mean 1.259 ± 0.041  (min 1.194, max 1.317) | vs compile 1.254 | DISCOVERY (beats max-autotune, robust)
+               raw: [1.268, 1.238, 1.279, 1.317, 1.194]
+  reglu        vs max-autotune: mean 1.265 ± 0.017  (min 1.245, max 1.290) | vs compile 1.261 | DISCOVERY (beats max-autotune, robust)
+               raw: [1.29, 1.25, 1.261, 1.278, 1.245]
+  rmsnorm_elu  vs max-autotune: mean 1.307 ± 0.020  (min 1.287, max 1.344) | vs compile 1.430 | DISCOVERY (beats max-autotune, robust)
+               raw: [1.344, 1.287, 1.305, 1.303, 1.296]
+  rmsnorm_gelu vs max-autotune: mean 1.494 ± 0.027  (min 1.453, max 1.526) | vs compile 1.541 | DISCOVERY (beats max-autotune, robust)
+               raw: [1.453, 1.519, 1.477, 1.526, 1.496]
+  rmsnorm_gelu_erf vs max-autotune: mean 1.166 ± 0.041  (min 1.126, max 1.245) | vs compile 1.333 | DISCOVERY (beats max-autotune, robust)
+               raw: [1.151, 1.143, 1.166, 1.126, 1.245]
+  rmsnorm_gemma vs max-autotune: mean 1.266 ± 0.014  (min 1.255, max 1.294) | vs compile 1.341 | DISCOVERY (beats max-autotune, robust)
+               raw: [1.259, 1.259, 1.294, 1.255, 1.265]
+  rmsnorm_hardtanh vs max-autotune: mean 1.275 ± 0.020  (min 1.255, max 1.304) | vs compile 1.437 | DISCOVERY (beats max-autotune, robust)
+               raw: [1.304, 1.262, 1.262, 1.294, 1.255]
+  rmsnorm_leaky_relu vs max-autotune: mean 1.281 ± 0.022  (min 1.265, max 1.325) | vs compile 1.369 | DISCOVERY (beats max-autotune, robust)
+               raw: [1.325, 1.276, 1.274, 1.265, 1.267]
+  rmsnorm_mish vs max-autotune: mean 1.556 ± 0.008  (min 1.544, max 1.570) | vs compile 1.557 | DISCOVERY (beats max-autotune, robust)
+               raw: [1.558, 1.554, 1.57, 1.544, 1.553]
+  rmsnorm_relu vs max-autotune: mean 1.319 ± 0.014  (min 1.297, max 1.339) | vs compile 1.413 | DISCOVERY (beats max-autotune, robust)
+               raw: [1.318, 1.329, 1.313, 1.297, 1.339]
+  rmsnorm_relu6 vs max-autotune: mean 1.308 ± 0.026  (min 1.276, max 1.348) | vs compile 1.455 | DISCOVERY (beats max-autotune, robust)
+               raw: [1.348, 1.301, 1.276, 1.329, 1.288]
+  rmsnorm_selu vs max-autotune: mean 1.330 ± 0.018  (min 1.306, max 1.350) | vs compile 1.443 | DISCOVERY (beats max-autotune, robust)
+               raw: [1.313, 1.349, 1.333, 1.35, 1.306]
+  rmsnorm_sigmoid vs max-autotune: mean 1.310 ± 0.035  (min 1.268, max 1.364) | vs compile 1.464 | DISCOVERY (beats max-autotune, robust)
+               raw: [1.292, 1.268, 1.337, 1.289, 1.364]
+  rmsnorm_silu vs max-autotune: mean 1.289 ± 0.027  (min 1.263, max 1.329) | vs compile 1.444 | DISCOVERY (beats max-autotune, robust)
+               raw: [1.275, 1.266, 1.263, 1.313, 1.329]
+  rmsnorm_softplus vs max-autotune: mean 1.420 ± 0.020  (min 1.395, max 1.447) | vs compile 1.505 | DISCOVERY (beats max-autotune, robust)
+               raw: [1.447, 1.44, 1.411, 1.395, 1.405]
+  rmsnorm_square vs max-autotune: mean 1.277 ± 0.024  (min 1.259, max 1.324) | vs compile 1.358 | DISCOVERY (beats max-autotune, robust)
+               raw: [1.261, 1.259, 1.264, 1.324, 1.277]
+  rmsnorm_tanh vs max-autotune: mean 1.449 ± 0.040  (min 1.416, max 1.528) | vs compile 1.561 | DISCOVERY (beats max-autotune, robust)
+               raw: [1.528, 1.428, 1.435, 1.435, 1.416]
+  rope_interleaved vs max-autotune: mean 1.230 ± 0.031  (min 1.188, max 1.274) | vs compile 1.242 | DISCOVERY (beats max-autotune, robust)
+               raw: [1.188, 1.252, 1.274, 1.204, 1.229]
+  softcap_softmax vs max-autotune: mean 1.776 ± 0.018  (min 1.756, max 1.805) | vs compile 1.928 | DISCOVERY (beats max-autotune, robust)
+               raw: [1.805, 1.765, 1.766, 1.756, 1.79]
+  softmax      vs max-autotune: mean 1.848 ± 0.028  (min 1.826, max 1.898) | vs compile 2.045 | DISCOVERY (beats max-autotune, robust)
+               raw: [1.859, 1.826, 1.826, 1.829, 1.898]
+  softmax_scale vs max-autotune: mean 1.458 ± 0.014  (min 1.439, max 1.482) | vs compile 1.693 | DISCOVERY (beats max-autotune, robust)
+               raw: [1.482, 1.457, 1.453, 1.458, 1.439]
+  swiglu       vs max-autotune: mean 1.274 ± 0.018  (min 1.244, max 1.293) | vs compile 1.275 | DISCOVERY (beats max-autotune, robust)
+               raw: [1.29, 1.293, 1.272, 1.271, 1.244]
+========================================================================
+69/69 DISCOVERIES (mean - spread > 1.0 vs max-autotune) | report -> /root/ouroboros/reports/rebench_stability.json
+Discovery bar: the model beat the incumbent scheduling search reproducibly.
+Anything ~1.0 = ceiling on these bandwidth-bound ops. Failures recorded, never hidden.
+[saved] artifacts committed to volume 'ouroboros-outputs'

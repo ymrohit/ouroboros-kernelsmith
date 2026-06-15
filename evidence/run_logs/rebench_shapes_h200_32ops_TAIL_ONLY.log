@@ -1,0 +1,20 @@
+  swiglu                     4096x4096   fp16  -> ok           1.466x MA  1.394x compile  [WIN ]
+  swiglu                     4096x4096   bf16  -> ok           1.387x MA  1.388x compile  [WIN ]
+  swiglu                     8192x4096   fp16  -> ok           1.260x MA  1.286x compile  [WIN ]
+  swiglu                     8192x4096   bf16  -> ok           1.244x MA  1.266x compile  [WIN ]
+  swiglu                     4096x8192   fp16  -> ok           1.283x MA  1.300x compile  [WIN ]
+  swiglu                     4096x8192   bf16  -> ok           1.267x MA  1.257x compile  [WIN ]
+  swiglu                    16384x2048   fp16  -> ok           1.291x MA  1.244x compile  [WIN ]
+  swiglu                    16384x2048   bf16  -> ok           1.286x MA  1.291x compile  [WIN ]
+  swiglu                      256x16384  fp16  -> ok           1.721x MA  1.960x compile  [WIN ]
+  swiglu                      256x16384  bf16  -> ok           2.081x MA  2.051x compile  [WIN ]
+  swiglu                   headline ROTATED (cache-cold) -> 1.285x MA
+  swiglu                   GEOMEAN 1.485x MA | win-rate 100% (12/12) | losses: none
+==========================================================================================
+OVERALL geomean vs max-autotune: 1.494x | 32/32 ops geomean > 1.0 | -> /root/ouroboros/reports/rebench_shapes.json
+Honest read: an op whose geomean > 1.0 wins ACROSS the regime, not at one point;
+losses are listed per-cell above and in the report — they are part of the result.
+[saved] artifacts committed to volume 'ouroboros-outputs'
+[hf] pushed shape-grid rebench -> https://huggingface.co/YMRohit/ouroboros-kernelsmith-qwen3.6-27b
+✓ App completed. View run at 
+https://modal.com/apps/ymrohit/main/ap-DqG3nqrbmniXyvBKgsjfxj

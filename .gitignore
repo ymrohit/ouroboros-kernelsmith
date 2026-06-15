@@ -7,6 +7,8 @@ external/
 docs/
 volume_backup/
 *.log
+!evidence/run_logs/
+!evidence/run_logs/*.log
 .hf-cache/
 .claude/
 CLAUDE.md

@@ -1,0 +1,89 @@
+
+  rmsnorm_silu               4096x4096   fp16  -> ok           1.448x MA  1.508x compile  [WIN ]
+  rmsnorm_silu               4096x4096   bf16  -> ok           1.388x MA  1.471x compile  [WIN ]
+  rmsnorm_silu               8192x4096   fp16  -> ok           1.289x MA  1.401x compile  [WIN ]
+  rmsnorm_silu               8192x4096   bf16  -> ok           1.229x MA  1.355x compile  [WIN ]
+  rmsnorm_silu               4096x8192   fp16  -> ok           1.176x MA  1.142x compile  [WIN ]
+  rmsnorm_silu               4096x8192   bf16  -> ok           1.106x MA  1.105x compile  [WIN ]
+  rmsnorm_silu              16384x2048   fp16  -> ok           0.928x MA  1.101x compile  [loss]
+  rmsnorm_silu              16384x2048   bf16  -> ok           0.895x MA  1.024x compile  [loss]
+  rmsnorm_silu                256x16384  fp16  -> ok           2.558x MA  2.703x compile  [WIN ]
+  rmsnorm_silu                256x16384  bf16  -> ok           2.385x MA  2.513x compile  [WIN ]
+  rmsnorm_silu             headline ROTATED (cache-cold) -> 1.294x MA
+  rmsnorm_silu             GEOMEAN 1.441x MA | win-rate 83% (10/12) | losses: 16384x2048/fp16=0.93, 16384x2048/bf16=0.89
+  rmsnorm_square             1024x4096   fp16  -> ok           1.858x MA  1.834x compile  [WIN ]
+  rmsnorm_square             1024x4096   bf16  -> ok           1.852x MA  1.910x compile  [WIN ]
+  rmsnorm_square             4096x4096   fp16  -> ok           1.437x MA  1.453x compile  [WIN ]
+  rmsnorm_square             4096x4096   bf16  -> ok           1.398x MA  1.482x compile  [WIN ]
+  rmsnorm_square             8192x4096   fp16  -> ok           1.294x MA  1.332x compile  [WIN ]
+  rmsnorm_square             8192x4096   bf16  -> ok           1.298x MA  1.452x compile  [WIN ]
+  rmsnorm_square             4096x8192   fp16  -> ok           1.125x MA  1.096x compile  [WIN ]
+  rmsnorm_square             4096x8192   bf16  -> ok           1.122x MA  1.081x compile  [WIN ]
+  rmsnorm_square            16384x2048   fp16  -> ok           1.445x MA  1.438x compile  [WIN ]
+  rmsnorm_square            16384x2048   bf16  -> ok           1.342x MA  1.448x compile  [WIN ]
+  rmsnorm_square              256x16384  fp16  -> ok           2.753x MA  2.517x compile  [WIN ]
+  rmsnorm_square              256x16384  bf16  -> ok           2.740x MA  2.817x compile  [WIN ]
+  rmsnorm_square           headline ROTATED (cache-cold) -> 1.273x MA
+  rmsnorm_square           GEOMEAN 1.564x MA | win-rate 100% (12/12) | losses: none
+  rmsnorm_tanh               1024x4096   fp16  -> ok           2.089x MA  2.061x compile  [WIN ]
+  rmsnorm_tanh               1024x4096   bf16  -> ok           2.001x MA  1.811x compile  [WIN ]
+  rmsnorm_tanh               4096x4096   fp16  -> ok           1.537x MA  1.613x compile  [WIN ]
+  rmsnorm_tanh               4096x4096   bf16  -> ok           1.589x MA  1.611x compile  [WIN ]
+  rmsnorm_tanh               8192x4096   fp16  -> ok           1.459x MA  1.571x compile  [WIN ]
+  rmsnorm_tanh               8192x4096   bf16  -> ok           1.401x MA  1.562x compile  [WIN ]
+  rmsnorm_tanh               4096x8192   fp16  -> ok           1.435x MA  1.419x compile  [WIN ]
+  rmsnorm_tanh               4096x8192   bf16  -> ok           1.350x MA  1.343x compile  [WIN ]
+  rmsnorm_tanh              16384x2048   fp16  -> ok           1.093x MA  1.223x compile  [WIN ]
+  rmsnorm_tanh              16384x2048   bf16  -> ok           1.002x MA  1.136x compile  [WIN ]
+  rmsnorm_tanh                256x16384  fp16  -> ok           2.590x MA  2.735x compile  [WIN ]
+  rmsnorm_tanh                256x16384  bf16  -> ok           2.837x MA  2.805x compile  [WIN ]
+  rmsnorm_tanh             headline ROTATED (cache-cold) -> 1.457x MA
+  rmsnorm_tanh             GEOMEAN 1.619x MA | win-rate 100% (12/12) | losses: none
+  softmax                    1024x4096   fp16  -> ok           1.783x MA  1.673x compile  [WIN ]
+  softmax                    1024x4096   bf16  -> ok           1.670x MA  1.681x compile  [WIN ]
+  softmax                    4096x4096   fp16  -> ok           1.705x MA  1.821x compile  [WIN ]
+  softmax                    4096x4096   bf16  -> ok           1.816x MA  1.917x compile  [WIN ]
+  softmax                    8192x4096   fp16  -> ok           1.881x MA  2.063x compile  [WIN ]
+  softmax                    8192x4096   bf16  -> ok           1.899x MA  2.054x compile  [WIN ]
+  softmax                    4096x8192   fp16  -> ok           1.852x MA  2.127x compile  [WIN ]
+  softmax                    4096x8192   bf16  -> ok           1.853x MA  2.088x compile  [WIN ]
+  softmax                   16384x2048   fp16  -> ok           1.712x MA  1.927x compile  [WIN ]
+  softmax                   16384x2048   bf16  -> ok           1.718x MA  1.963x compile  [WIN ]
+  softmax                     256x16384  fp16  -> ok           2.947x MA  2.953x compile  [WIN ]
+  softmax                     256x16384  bf16  -> ok           2.671x MA  2.794x compile  [WIN ]
+  softmax                  headline ROTATED (cache-cold) -> 1.833x MA
+  softmax                  GEOMEAN 1.927x MA | win-rate 100% (12/12) | losses: none
+  softmax_scale              1024x4096   fp16  -> ok           1.645x MA  1.889x compile  [WIN ]
+  softmax_scale              1024x4096   bf16  -> ok           1.807x MA  1.577x compile  [WIN ]
+  softmax_scale              4096x4096   fp16  -> ok           1.561x MA  1.640x compile  [WIN ]
+  softmax_scale              4096x4096   bf16  -> ok           1.593x MA  1.721x compile  [WIN ]
+  softmax_scale              8192x4096   fp16  -> ok           1.462x MA  1.687x compile  [WIN ]
+  softmax_scale              8192x4096   bf16  -> ok           1.500x MA  1.774x compile  [WIN ]
+  softmax_scale              4096x8192   fp16  -> ok           1.463x MA  1.505x compile  [WIN ]
+  softmax_scale              4096x8192   bf16  -> ok           1.530x MA  1.539x compile  [WIN ]
+  softmax_scale             16384x2048   fp16  -> ok           1.556x MA  1.760x compile  [WIN ]
+  softmax_scale             16384x2048   bf16  -> ok           1.552x MA  1.742x compile  [WIN ]
+  softmax_scale               256x16384  fp16  -> ok           2.770x MA  2.653x compile  [WIN ]
+  softmax_scale               256x16384  bf16  -> ok           3.014x MA  3.116x compile  [WIN ]
+  softmax_scale            headline ROTATED (cache-cold) -> 1.518x MA
+  softmax_scale            GEOMEAN 1.732x MA | win-rate 100% (12/12) | losses: none
+  swiglu                     1024x4096   fp16  -> ok           1.945x MA  1.928x compile  [WIN ]
+  swiglu                     1024x4096   bf16  -> ok           1.915x MA  1.951x compile  [WIN ]
+  swiglu                     4096x4096   fp16  -> ok           1.466x MA  1.394x compile  [WIN ]
+  swiglu                     4096x4096   bf16  -> ok           1.387x MA  1.388x compile  [WIN ]
+  swiglu                     8192x4096   fp16  -> ok           1.260x MA  1.286x compile  [WIN ]
+  swiglu                     8192x4096   bf16  -> ok           1.244x MA  1.266x compile  [WIN ]
+  swiglu                     4096x8192   fp16  -> ok           1.283x MA  1.300x compile  [WIN ]
+  swiglu                     4096x8192   bf16  -> ok           1.267x MA  1.257x compile  [WIN ]
+  swiglu                    16384x2048   fp16  -> ok           1.291x MA  1.244x compile  [WIN ]
+  swiglu                    16384x2048   bf16  -> ok           1.286x MA  1.291x compile  [WIN ]
+  swiglu                      256x16384  fp16  -> ok           1.721x MA  1.960x compile  [WIN ]
+  swiglu                      256x16384  bf16  -> ok           2.081x MA  2.051x compile  [WIN ]
+  swiglu                   headline ROTATED (cache-cold) -> 1.285x MA
+  swiglu                   GEOMEAN 1.485x MA | win-rate 100% (12/12) | losses: none
+==========================================================================================
+OVERALL geomean vs max-autotune: 1.494x | 32/32 ops geomean > 1.0 | -> /root/ouroboros/reports/rebench_shapes.json
+Honest read: an op whose geomean > 1.0 wins ACROSS the regime, not at one point;
+losses are listed per-cell above and in the report — they are part of the result.
+[saved] artifacts committed to volume 'ouroboros-outputs'
+[hf] pushed shape-grid rebench -> https://huggingface.co/YMRohit/ouroboros-kernelsmith-qwen3.6-27b

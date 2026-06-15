@@ -1,0 +1,87 @@
+  add_rmsnorm_gelu_erf     GEOMEAN 1.325x MA | win-rate 83% (10/12) | losses: 16384x2048/fp16=0.76, 16384x2048/bf16=0.72
+  add_layernorm_gelu_erf     1024x4096   fp16  -> ok           1.716x MA  1.729x compile  [WIN ]
+  add_layernorm_gelu_erf     1024x4096   bf16  -> ok           1.709x MA  1.703x compile  [WIN ]
+  add_layernorm_gelu_erf     4096x4096   fp16  -> ok           1.310x MA  1.400x compile  [WIN ]
+  add_layernorm_gelu_erf     4096x4096   bf16  -> ok           1.333x MA  1.332x compile  [WIN ]
+  add_layernorm_gelu_erf     8192x4096   fp16  -> ok           1.121x MA  1.246x compile  [WIN ]
+  add_layernorm_gelu_erf     8192x4096   bf16  -> ok           1.100x MA  1.213x compile  [WIN ]
+  add_layernorm_gelu_erf     4096x8192   fp16  -> ok           1.108x MA  1.223x compile  [WIN ]
+  add_layernorm_gelu_erf     4096x8192   bf16  -> ok           1.152x MA  1.210x compile  [WIN ]
+  add_layernorm_gelu_erf    16384x2048   fp16  -> ok           0.642x MA  0.713x compile  [loss]
+  add_layernorm_gelu_erf    16384x2048   bf16  -> ok           0.655x MA  0.706x compile  [loss]
+  add_layernorm_gelu_erf      256x16384  fp16  -> ok           3.074x MA  2.946x compile  [WIN ]
+  add_layernorm_gelu_erf      256x16384  bf16  -> ok           2.952x MA  2.924x compile  [WIN ]
+  add_layernorm_gelu_erf   headline ROTATED (cache-cold) -> 1.114x MA
+  add_layernorm_gelu_erf   GEOMEAN 1.331x MA | win-rate 83% (10/12) | losses: 16384x2048/fp16=0.64, 16384x2048/bf16=0.66
+  softcap_softmax            1024x4096   fp16  -> ok           1.680x MA  1.697x compile  [WIN ]
+  softcap_softmax            1024x4096   bf16  -> ok           1.736x MA  1.731x compile  [WIN ]
+  softcap_softmax            4096x4096   fp16  -> ok           1.802x MA  1.832x compile  [WIN ]
+  softcap_softmax            4096x4096   bf16  -> ok           1.760x MA  1.796x compile  [WIN ]
+  softcap_softmax            8192x4096   fp16  -> ok           1.863x MA  1.918x compile  [WIN ]
+  softcap_softmax            8192x4096   bf16  -> ok           1.804x MA  1.937x compile  [WIN ]
+  softcap_softmax            4096x8192   fp16  -> ok           1.336x MA  1.341x compile  [WIN ]
+  softcap_softmax            4096x8192   bf16  -> ok           1.339x MA  1.341x compile  [WIN ]
+  softcap_softmax           16384x2048   fp16  -> ok           1.826x MA  1.888x compile  [WIN ]
+  softcap_softmax           16384x2048   bf16  -> ok           1.815x MA  1.870x compile  [WIN ]
+  softcap_softmax             256x16384  fp16  -> ok           2.887x MA  2.833x compile  [WIN ]
+  softcap_softmax             256x16384  bf16  -> ok           2.821x MA  2.802x compile  [WIN ]
+  softcap_softmax          headline ROTATED (cache-cold) -> 1.854x MA
+  softcap_softmax          GEOMEAN 1.840x MA | win-rate 100% (12/12) | losses: none
+  rmsnorm_gemma              1024x4096   fp16  -> ok           1.998x MA  1.968x compile  [WIN ]
+  rmsnorm_gemma              1024x4096   bf16  -> ok           1.961x MA  1.912x compile  [WIN ]
+  rmsnorm_gemma              4096x4096   fp16  -> ok           1.423x MA  1.489x compile  [WIN ]
+  rmsnorm_gemma              4096x4096   bf16  -> ok           1.516x MA  1.532x compile  [WIN ]
+  rmsnorm_gemma              8192x4096   fp16  -> ok           1.292x MA  1.358x compile  [WIN ]
+  rmsnorm_gemma              8192x4096   bf16  -> ok           1.270x MA  1.343x compile  [WIN ]
+  rmsnorm_gemma              4096x8192   fp16  -> ok           1.186x MA  1.183x compile  [WIN ]
+  rmsnorm_gemma              4096x8192   bf16  -> ok           1.220x MA  1.212x compile  [WIN ]
+  rmsnorm_gemma             16384x2048   fp16  -> ok           1.255x MA  1.367x compile  [WIN ]
+  rmsnorm_gemma             16384x2048   bf16  -> ok           1.167x MA  1.251x compile  [WIN ]
+  rmsnorm_gemma               256x16384  fp16  -> ok           2.620x MA  2.593x compile  [WIN ]
+  rmsnorm_gemma               256x16384  bf16  -> ok           2.627x MA  2.638x compile  [WIN ]
+  rmsnorm_gemma            headline ROTATED (cache-cold) -> 1.263x MA
+  rmsnorm_gemma            GEOMEAN 1.556x MA | win-rate 100% (12/12) | losses: none
+  glu                        1024x4096   fp16  -> ok           1.844x MA  1.871x compile  [WIN ]
+  glu                        1024x4096   bf16  -> ok           1.857x MA  1.854x compile  [WIN ]
+  glu                        4096x4096   fp16  -> ok           1.388x MA  1.383x compile  [WIN ]
+  glu                        4096x4096   bf16  -> ok           1.378x MA  1.376x compile  [WIN ]
+  glu                        8192x4096   fp16  -> ok           1.252x MA  1.254x compile  [WIN ]
+  glu                        8192x4096   bf16  -> ok           1.278x MA  1.262x compile  [WIN ]
+  glu                        4096x8192   fp16  -> ok           1.234x MA  1.244x compile  [WIN ]
+  glu                        4096x8192   bf16  -> ok           1.260x MA  1.262x compile  [WIN ]
+  glu                       16384x2048   fp16  -> ok           1.256x MA  1.263x compile  [WIN ]
+  glu                       16384x2048   bf16  -> ok           1.241x MA  1.246x compile  [WIN ]
+  glu                         256x16384  fp16  -> ok           1.897x MA  1.906x compile  [WIN ]
+  glu                         256x16384  bf16  -> ok           1.956x MA  1.964x compile  [WIN ]
+  glu                      headline ROTATED (cache-cold) -> 1.258x MA
+  glu                      GEOMEAN 1.460x MA | win-rate 100% (12/12) | losses: none
+  rope_interleaved           8192x128    fp16  -> ok           1.652x MA  1.633x compile  [WIN ]
+  rope_interleaved           8192x128    bf16  -> ok           1.637x MA  1.617x compile  [WIN ]
+  rope_interleaved          32768x128    fp16  -> ok           1.185x MA  1.182x compile  [WIN ]
+  rope_interleaved          32768x128    bf16  -> ok           1.181x MA  1.179x compile  [WIN ]
+  rope_interleaved          65536x64     fp16  -> ok           0.881x MA  0.876x compile  [loss]
+  rope_interleaved          65536x64     bf16  -> ok           0.805x MA  0.816x compile  [loss]
+  rope_interleaved          16384x256    fp16  -> ok           1.545x MA  1.579x compile  [WIN ]
+  rope_interleaved          16384x256    bf16  -> ok           1.625x MA  1.643x compile  [WIN ]
+  rope_interleaved         headline ROTATED (cache-cold) -> 1.187x MA
+  rope_interleaved         GEOMEAN 1.269x MA | win-rate 75% (6/8) | losses: 65536x64/fp16=0.88, 65536x64/bf16=0.81
+  cross_entropy              1024x4096   fp16  -> ok           1.817x MA  1.805x compile  [WIN ]
+  cross_entropy              1024x4096   bf16  -> ok           1.821x MA  1.819x compile  [WIN ]
+  cross_entropy              4096x4096   fp16  -> ok           2.054x MA  2.439x compile  [WIN ]
+  cross_entropy              4096x4096   bf16  -> ok           2.050x MA  2.456x compile  [WIN ]
+  cross_entropy              8192x4096   fp16  -> ok           2.021x MA  2.635x compile  [WIN ]
+  cross_entropy              8192x4096   bf16  -> ok           1.968x MA  2.593x compile  [WIN ]
+  cross_entropy              4096x8192   fp16  -> ok           1.808x MA  2.063x compile  [WIN ]
+  cross_entropy              4096x8192   bf16  -> ok           1.745x MA  2.096x compile  [WIN ]
+  cross_entropy             16384x2048   fp16  -> ok           1.489x MA  2.052x compile  [WIN ]
+  cross_entropy             16384x2048   bf16  -> ok           1.483x MA  2.051x compile  [WIN ]
+  cross_entropy               256x16384  fp16  -> ok           3.008x MA  2.936x compile  [WIN ]
+  cross_entropy               256x16384  bf16  -> ok           2.976x MA  2.975x compile  [WIN ]
+  cross_entropy            headline ROTATED (cache-cold) -> 2.094x MA
+  cross_entropy            GEOMEAN 1.972x MA | win-rate 100% (12/12) | losses: none
+==========================================================================================
+OVERALL geomean vs max-autotune: 1.480x | 37/37 ops geomean > 1.0 | -> /root/ouroboros/reports/rebench_shapes.json
+Honest read: an op whose geomean > 1.0 wins ACROSS the regime, not at one point;
+losses are listed per-cell above and in the report — they are part of the result.
+[saved] artifacts committed to volume 'ouroboros-outputs'
+[hf] pushed shape-grid rebench -> https://huggingface.co/YMRohit/ouroboros-kernelsmith-qwen3.6-27b

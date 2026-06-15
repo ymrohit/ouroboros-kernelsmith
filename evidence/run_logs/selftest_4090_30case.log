@@ -1,0 +1,45 @@
+  OK rope         GOLD                               -> ok            0.0284ms  6.23x eager  1.51x compile  1.50x max-autotune
+  OK layernorm    GOLD                               -> ok            0.1649ms  13.06x eager  1.09x compile  1.09x max-autotune
+  OK add_layernorm GOLD                               -> ok            0.2344ms  12.00x eager  1.07x compile  1.07x max-autotune
+  OK geglu        GOLD                               -> ok            0.2335ms  18.39x eager  1.07x compile  1.09x max-autotune
+  OK qknorm_rope  GOLD (fusion chain)                -> ok            0.0376ms  6.34x eager  1.50x compile  1.47x max-autotune
+  OK softcap_softmax GOLD (Gemma2 softcap)              -> ok            0.1602ms  10.01x eager  1.32x compile  1.13x max-autotune
+  OK rmsnorm_gemma GOLD (Gemma 1+w)                   -> ok            0.1576ms  9.19x eager  1.26x compile  1.17x max-autotune
+  OK glu          GOLD (original GLU)                -> ok            0.2304ms  6.02x eager  1.09x compile  1.10x max-autotune
+  OK rope_interleaved GOLD (GPT-J RoPE)                  -> ok            0.0287ms  6.36x eager  1.50x compile  1.94x max-autotune
+  OK cross_entropy GOLD (fused CE)                    -> ok            0.0378ms  13.81x eager  2.63x compile  2.60x max-autotune
+  OK rmsnorm      NEGATIVE-CONTROL (no rsqrt)        -> incorrect   
+        feedback: max abs err inf on (37, 4097)/torch.float16 scale~304 (151588 elems over tol 2.0e-03/2.0e-02) — likely a reduction/stability bug, not a shape bug
+  OK softmax      NEGATIVE-CONTROL (no max-subtract) -> incorrect   
+        feedback: max abs err nan on (37, 4097)/torch.float16 scale~304 (0 elems over tol 2.0e-03/2.0e-02) — likely a reduction/stability bug, not a shape bug
+  OK add_rmsnorm  NEGATIVE-CONTROL (drops residual in stat) -> incorrect   
+        feedback: max abs err 4.477e+00 on (37, 4097)/torch.float16 scale~304 (148483 elems over tol 2.0e-03/2.0e-02) — likely a reduction/stability bug, not a shape bug
+  OK rope         NEGATIVE-CONTROL (drops rotate_half negation) -> incorrect   
+        feedback: max abs err 4.041e+02 on (37, 128)/torch.float16 scale~223 (2303 elems over tol 2.0e-03/2.0e-02) — likely a reduction/stability bug, not a shape bug
+  OK layernorm    NEGATIVE-CONTROL (no mean-subtraction) -> incorrect   
+        feedback: max abs err 1.470e-01 on (37, 4097)/torch.float16 scale~304 (29879 elems over tol 2.0e-03/2.0e-02) — likely a reduction/stability bug, not a shape bug
+  OK add_layernorm NEGATIVE-CONTROL (drops residual in stat) -> incorrect   
+        feedback: max abs err 4.320e+00 on (37, 4097)/torch.float16 scale~304 (134154 elems over tol 2.0e-03/2.0e-02) — likely a reduction/stability bug, not a shape bug
+  OK geglu        NEGATIVE-CONTROL (SiLU instead of GELU) -> incorrect   
+        feedback: max abs err 5.812e+00 on (37, 4097)/torch.float16 scale~304 (12779 elems over tol 2.0e-03/2.0e-02) — likely a reduction/stability bug, not a shape bug
+  OK qknorm_rope  NEGATIVE-CONTROL (rms scale dropped on rotated half) -> incorrect   
+        feedback: max abs err 3.147e+02 on (37, 128)/torch.float16 scale~220 (4705 elems over tol 2.0e-03/2.0e-02) — likely a reduction/stability bug, not a shape bug
+  OK softcap_softmax NEGATIVE-CONTROL (no softcap)      -> incorrect   
+        feedback: max abs err 9.985e-01 on (37, 4097)/torch.float16 scale~304 (53 elems over tol 2.0e-03/2.0e-02) — likely a reduction/stability bug, not a shape bug
+  OK rmsnorm_gemma NEGATIVE-CONTROL (drops the +1)    -> incorrect   
+        feedback: max abs err 4.754e+00 on (37, 4097)/torch.float16 scale~304 (151339 elems over tol 2.0e-03/2.0e-02) — likely a reduction/stability bug, not a shape bug
+  OK glu          NEGATIVE-CONTROL (silu not sigmoid) -> incorrect   
+        feedback: max abs err 4.818e+03 on (37, 4097)/torch.float16 scale~288 (84947 elems over tol 2.0e-03/2.0e-02) — likely a reduction/stability bug, not a shape bug
+  OK rope_interleaved NEGATIVE-CONTROL (drops negation)  -> incorrect   
+        feedback: max abs err 4.062e+02 on (37, 128)/torch.float16 scale~260 (2306 elems over tol 2.0e-03/2.0e-02) — likely a reduction/stability bug, not a shape bug
+  OK cross_entropy NEGATIVE-CONTROL (no max-subtract) -> incorrect   
+        feedback: max abs err inf on (37, 4097)/torch.float16 scale~282 (37 elems over tol 2.0e-03/2.0e-02) — likely a reduction/stability bug, not a shape bug
+  OK softmax      ANTI-GAMING (special-cases bench shape) -> incorrect   
+        feedback: max abs err 5.120e+02 on (8192, 4096)/torch.float16 scale~6 (29374580 elems over tol 2.0e-03/2.0e-02) — likely a reduction/stability bug, not a shape bug
+  OK softmax      ANTI-GAMING (memoizes by input pointer) -> incorrect   
+        feedback: bench-output verification FAILED: the timed output does not match the reference on the live input state (memoization/caching suspected)
+  OK silu         ANTI-GAMING (mutates input in-place) -> incorrect   
+        feedback: kernel MUTATES its input ((37, 4097)/torch.float16) — run() must write a fresh output tensor
+======================================================================
+ALL GREEN — moat proven
+report -> /home/tihor/webllm/verifier-self-distillation-loop/domains/hackathon-build-small/ouroboros-modal/ouroboros/reports/harness_selftest.json

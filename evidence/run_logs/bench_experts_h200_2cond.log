@@ -1,0 +1,25 @@
+  unsloth/geglu_exact          [geglu       ] -> runtime_fail TypeError on shape (37, 4097)/torch.float16: dynamic_func() 
+  unsloth/rms_layernorm        [rmsnorm     ] -> ok           
+  unsloth/layernorm            [layernorm   ] -> ok           
+
+harvested 6 REAL kernels (verified vs our reference) -> /root/ouroboros/datasets/real_kernels
+[h2h] condition 2: library public API (Liger as shipped) ...
+  liger_api/rms_norm           [rmsnorm     ] -> ok           
+  liger_api/layer_norm         [layernorm   ] -> ok           
+  liger_api/swiglu             [swiglu      ] -> ok           
+  liger_api/geglu              [geglu       ] -> ok           
+  liger_api/cross_entropy      [cross_entropy] -> ok           
+
+library-API condition: 5/5 verified -> /root/ouroboros/datasets/api_kernels
+[h2h] cross_entropy: ours={'author': 'gold_seed', 'latency_ms': 0.0482, 'vs_maxauto': 1.711, 'vs_compile': 2.237, 'status': 'ok'} | experts={'liger_api/cross_entropy': {'condition': 'library_api', 'latency_ms': 0.2257, 'vs_maxauto': 0.358, 'vs_compile': 0.471, 'status': 'ok'}}
+[h2h] geglu: ours={'author': 'MODEL', 'latency_ms': 0.0658, 'vs_maxauto': 1.246, 'vs_compile': 1.242, 'status': 'ok'} | experts={'liger_api/geglu': {'condition': 'library_api', 'latency_ms': 0.0817, 'vs_maxauto': 0.998, 'vs_compile': 1.004, 'status': 'ok'}}
+[h2h] layernorm: ours={'author': 'gold_seed', 'latency_ms': 0.0625, 'vs_maxauto': 1.111, 'vs_compile': 1.228, 'status': 'ok'} | experts={'tutorial/layernorm': {'condition': 'fixed_schedule', 'latency_ms': 0.0657, 'vs_maxauto': 1.048, 'vs_compile': 1.166, 'status': 'ok'}, 'unsloth/layernorm': {'condition': 'fixed_schedule', 'latency_ms': 0.0617, 'vs_maxauto': 1.111, 'vs_compile': 1.23, 'status': 'ok'}, 'liger_api/layer_norm': {'condition': 'library_api', 'latency_ms': 0.0827, 'vs_maxauto': 0.829, 'vs_compile': 0.919, 'status': 'ok'}}
+[h2h] relu2: ours={'author': 'gold_seed', 'latency_ms': 0.0525, 'vs_maxauto': 1.264, 'vs_compile': 1.261, 'status': 'ok'} | experts={'liger/relu_squared': {'condition': 'fixed_schedule', 'latency_ms': 0.0563, 'vs_maxauto': 1.217, 'vs_compile': 1.221, 'status': 'ok'}}
+[h2h] rmsnorm: ours={'author': 'gold_seed', 'latency_ms': 0.0537, 'vs_maxauto': 1.337, 'vs_compile': 1.401, 'status': 'ok'} | experts={'unsloth/rms_layernorm': {'condition': 'fixed_schedule', 'latency_ms': 0.0597, 'vs_maxauto': 1.139, 'vs_compile': 1.201, 'status': 'ok'}, 'liger_api/rms_norm': {'condition': 'library_api', 'latency_ms': 0.0821, 'vs_maxauto': 0.816, 'vs_compile': 0.868, 'status': 'ok'}}
+[h2h] softmax: ours={'author': 'MODEL', 'latency_ms': 0.0562, 'vs_maxauto': 1.833, 'vs_compile': 2.041, 'status': 'ok'} | experts={'tutorial/softmax': {'condition': 'fixed_schedule', 'latency_ms': 0.0555, 'vs_maxauto': 1.782, 'vs_compile': 2.013, 'status': 'ok'}}
+[h2h] swiglu: ours={'author': 'MODEL', 'latency_ms': 0.0665, 'vs_maxauto': 1.229, 'vs_compile': 1.235, 'status': 'ok'} | experts={'liger/swiglu': {'condition': 'fixed_schedule', 'latency_ms': 0.0697, 'vs_maxauto': 1.175, 'vs_compile': 1.185, 'status': 'ok'}, 'liger_api/swiglu': {'condition': 'library_api', 'latency_ms': 0.0871, 'vs_maxauto': 0.985, 'vs_compile': 0.986, 'status': 'ok'}}
+[saved] artifacts committed to volume 'ouroboros-outputs'
+[hf] pushed head-to-head vs Liger/Unsloth/Triton experts (2 conditions) -> https://huggingface.co/YMRohit/ouroboros-kernelsmith-qwen3.6-27b
+[h2h] done + pushed ✓
+✓ App completed. View run at 
+https://modal.com/apps/ymrohit/main/ap-xMZ4EGULRrGJ3ATytHQevA

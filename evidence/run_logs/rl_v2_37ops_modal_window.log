@@ -1,0 +1,149 @@
+
+
+[1A
+[1ANew Data Upload               :  99%|█████████▊| 2.52GB / 2.55GB,  137MB/s  [A
+
+
+[1A
+[1A  ...adapter_model.safetensors: 100%|█████████▉| 2.54GB / 2.55GB            [A[A
+
+
+
+[1A
+[1A  ...adapter_model.safetensors: 100%|██████████| 2.55GB / 2.55GB            [A[A[A
+
+
+
+
+[1A
+[1A  ...adapter_model.safetensors: 100%|██████████| 2.55GB / 2.55GB            [A[A[A[A
+
+
+
+
+
+[1A
+[1A  ...adapter_model.safetensors: 100%|██████████| 2.55GB / 2.55GB            [A[A[A[A[A
+[1AProcessing Files (3 / 4)      : 100%|█████████▉| 10.2GB / 10.2GB,  385MB/s  
+
+[1A
+[1ANew Data Upload               : 100%|█████████▉| 2.54GB / 2.55GB,  137MB/s  [A
+
+
+[1A
+[1A  ...adapter_model.safetensors: 100%|█████████▉| 2.55GB / 2.55GB            [A[A
+
+
+
+[1A
+[1A  ...adapter_model.safetensors: 100%|██████████| 2.55GB / 2.55GB            [A[A[A
+
+
+
+
+[1A
+[1A  ...adapter_model.safetensors: 100%|██████████| 2.55GB / 2.55GB            [A[A[A[A
+
+
+
+
+
+[1A
+[1A  ...adapter_model.safetensors: 100%|██████████| 2.55GB / 2.55GB            [A[A[A[A[A
+[1AProcessing Files (3 / 4)      : 100%|█████████▉| 10.2GB / 10.2GB,  378MB/s  
+
+[1A
+[1ANew Data Upload               : 100%|█████████▉| 2.55GB / 2.55GB,  135MB/s  [A
+
+
+[1A
+[1A  ...adapter_model.safetensors: 100%|█████████▉| 2.55GB / 2.55GB            [A[A
+
+
+
+[1A
+[1A  ...adapter_model.safetensors: 100%|██████████| 2.55GB / 2.55GB            [A[A[A
+
+
+
+
+[1A
+[1A  ...adapter_model.safetensors: 100%|██████████| 2.55GB / 2.55GB            [A[A[A[A
+
+
+
+
+
+[1A
+[1A  ...adapter_model.safetensors: 100%|██████████| 2.55GB / 2.55GB            [A[A[A[A[A
+[1AProcessing Files (3 / 4)      : 100%|█████████▉| 10.2GB / 10.2GB,  363MB/s  
+
+[1A
+[1ANew Data Upload               : 100%|█████████▉| 2.55GB / 2.55GB,  130MB/s  [A
+
+
+[1A
+[1A  ...adapter_model.safetensors: 100%|█████████▉| 2.55GB / 2.55GB            [A[A
+
+
+
+[1A
+[1A  ...adapter_model.safetensors: 100%|██████████| 2.55GB / 2.55GB            [A[A[A
+
+
+
+
+[1A
+[1A  ...adapter_model.safetensors: 100%|██████████| 2.55GB / 2.55GB            [A[A[A[A
+
+
+
+
+
+[1A
+[1A  ...adapter_model.safetensors: 100%|██████████| 2.55GB / 2.55GB            [A[A[A[A[A
+[1AProcessing Files (3 / 4)      : 100%|█████████▉| 10.2GB / 10.2GB,  357MB/s  
+
+[1A
+[1ANew Data Upload               : 100%|█████████▉| 2.55GB / 2.55GB,  127MB/s  [A
+
+
+[1A
+[1A  ...adapter_model.safetensors: 100%|██████████| 2.55GB / 2.55GB            [A[A
+
+
+
+[1A
+[1A  ...adapter_model.safetensors: 100%|██████████| 2.55GB / 2.55GB            [A[A[A
+
+
+
+
+[1A
+[1A  ...adapter_model.safetensors: 100%|██████████| 2.55GB / 2.55GB            [A[A[A[A
+
+
+
+
+
+[1A
+[1A  ...adapter_model.safetensors: 100%|██████████| 2.55GB / 2.55GB            [A[A[A[A[A
+[1AProcessing Files (4 / 4)      : 100%|██████████| 10.2GB / 10.2GB,  350MB/s  
+
+[1A
+[1ANew Data Upload               : 100%|██████████| 2.55GB / 2.55GB,  125MB/s  [A
+[1AProcessing Files (4 / 4)      : 100%|██████████| 10.2GB / 10.2GB,  350MB/s  
+
+[1ANew Data Upload               : 100%|██████████| 2.55GB / 2.55GB,  125MB/s  
+
+[1A  ...adapter_model.safetensors: 100%|██████████| 2.55GB / 2.55GB            
+
+[1A  ...adapter_model.safetensors: 100%|██████████| 2.55GB / 2.55GB            
+
+[1A  ...adapter_model.safetensors: 100%|██████████| 2.55GB / 2.55GB            
+
+[1A  ...adapter_model.safetensors: 100%|██████████| 2.55GB / 2.55GB            
+[hf] pushed RL adapter (outputs/rl_adapter_v2) + best kernels -> https://huggingface.co/YMRohit/ouroboros-kernelsmith-qwen3.6-27b
+[hf] pushed RL reports -> https://huggingface.co/YMRohit/ouroboros-kernelsmith-qwen3.6-27b
+[rl] RL adapter + kernels + reports pushed ✓
+Runner terminated.

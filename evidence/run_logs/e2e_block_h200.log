@@ -1,0 +1,20 @@
+  triton_mm_47 1.7098 ms 54.1% ACC_TYPE='tl.float32', ALLOW_TF32=False, BLOCK_K=32, BLOCK_M=64, BLOCK_N=128, EVEN_K=True, GROUP_M=8, USE_FAST_ACCUM=False, num_stages=3, num_warps=4
+  triton_mm_48 1.7232 ms 53.7% ACC_TYPE='tl.float32', ALLOW_TF32=False, BLOCK_K=32, BLOCK_M=64, BLOCK_N=128, EVEN_K=True, GROUP_M=8, USE_FAST_ACCUM=False, num_stages=4, num_warps=8
+  triton_mm_51 1.7763 ms 52.1% ACC_TYPE='tl.float32', ALLOW_TF32=False, BLOCK_K=32, BLOCK_M=128, BLOCK_N=64, EVEN_K=True, GROUP_M=8, USE_FAST_ACCUM=False, num_stages=3, num_warps=4
+  triton_mm_52 1.7792 ms 52.0% ACC_TYPE='tl.float32', ALLOW_TF32=False, BLOCK_K=32, BLOCK_M=128, BLOCK_N=64, EVEN_K=True, GROUP_M=8, USE_FAST_ACCUM=False, num_stages=4, num_warps=8
+SingleProcess AUTOTUNE benchmarking takes 4.5310 seconds and 0.0009 seconds precompiling for 20 choices
+
+E2E MLP block | rows=8192 hidden=4096 ffn=11008 fp16 | NVIDIA H200
+==============================================================================
+  eager              : 4.0631 ms   (2.02M tok/s)
+  torch.compile (MA) : 3.5548 ms   (2.30M tok/s)
+  OURS               : 3.5406 ms   (2.31M tok/s)
+  -> vs eager  1.148x | vs compile-MA 1.004x
+  non-GEMM (norm) sub-path: eager 0.6933 ms -> ours 0.0689 ms (10.07x)
+  HONEST BOUND: GEMMs are ~83% of the eager block and identical across paths;
+  the max possible block-level win from our kernels is ~1.182x (Amdahl).
+  report -> /root/ouroboros/reports/e2e_block.json
+[saved] artifacts committed to volume 'ouroboros-outputs'
+[hf] pushed e2e block bench -> https://huggingface.co/YMRohit/ouroboros-kernelsmith-qwen3.6-27b
+✓ App completed. View run at 
+https://modal.com/apps/ymrohit/main/ap-OyjLNjSqnBDyFk5Fv7AG12

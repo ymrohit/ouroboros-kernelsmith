@@ -1,0 +1,30 @@
+  PASS layernorm_elu            variants_ok=[True, True]
+  PASS layernorm_selu           variants_ok=[True, True]
+  PASS layernorm_softplus       variants_ok=[True, True]
+  PASS layernorm_mish           variants_ok=[True, True]
+  PASS layernorm_gelu_erf       variants_ok=[True, True]
+  PASS add_layernorm_tanh       variants_ok=[True, True]
+  PASS add_layernorm_sigmoid    variants_ok=[True, True]
+  PASS add_layernorm_relu       variants_ok=[True, True]
+  PASS add_layernorm_square     variants_ok=[True, True]
+  PASS add_layernorm_abs        variants_ok=[True, True]
+  PASS add_layernorm_softsign   variants_ok=[True, True]
+  PASS add_layernorm_hardsigmoid variants_ok=[True, True]
+  PASS add_layernorm_hardswish  variants_ok=[True, True]
+  PASS add_layernorm_leaky_relu variants_ok=[True, True]
+  PASS add_layernorm_relu6      variants_ok=[True, True]
+  PASS add_layernorm_hardtanh   variants_ok=[True, True]
+  PASS add_layernorm_elu        variants_ok=[True, True]
+  PASS add_layernorm_selu       variants_ok=[True, True]
+  PASS add_layernorm_softplus   variants_ok=[True, True]
+  PASS add_layernorm_mish       variants_ok=[True, True]
+  PASS add_layernorm_gelu_erf   variants_ok=[True, True]
+  WRONG-REJECT (rmsnorm_tanh kernel ⇒ rmsnorm_sigmoid): status=incorrect → REJECTED ✓
+  WRONG-REJECT (rmsnorm_mish kernel ⇒ rmsnorm_softplus): status=incorrect → REJECTED ✓
+  WRONG-REJECT (layernorm_elu kernel ⇒ layernorm_selu): status=incorrect → REJECTED ✓
+  WRONG-REJECT (add_rmsnorm_relu6 kernel ⇒ add_rmsnorm_hardtanh): status=incorrect → REJECTED ✓
+  WRONG-REJECT (rmsnorm_gelu_erf kernel ⇒ rmsnorm_gelu): status=incorrect → REJECTED ✓
+>>> CHAINS_GRAMMAR_VERIFIED = True  (64/64 gold-pass, wrong-reject=True)
+Stopping app - local entrypoint completed.
+✓ App completed. View run at 
+https://modal.com/apps/ymrohit/main/ap-Rway9Fked7ESXnRRpkacqb
