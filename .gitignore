@@ -4,8 +4,12 @@ __pycache__/
 trained/
 outputs/
 external/
+docs/
+volume_backup/
 *.log
 .hf-cache/
 .claude/
+CLAUDE.md
+ouroboros/tmp*.py
 ouroboros/datasets/
 ouroboros/external/

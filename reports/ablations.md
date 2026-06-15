@@ -52,4 +52,4 @@ control outright (1.340 vs 1.338 — ~100%, post-correction; the pre-correction 
    against the referee is the dominant force where competence already exists.*
 
 _2026-06-10 · H200 · single seed per arm · all numbers winner's-curse-corrected exit
-validations · prediction adjudicated against docs/KEY_FINDINGS.md ledger._
+validations · prediction adjudicated against the internal findings ledger._

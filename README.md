@@ -144,14 +144,9 @@ ouroboros/
     Expert-kernel comparison harness.
   e2e_block_bench.py
     Composed transformer-block benchmark.
-  CLAUDE.md
-    Project notes and guardrails for this experiment.
 
 reports/
   Recorded H200, 4090, stability, shape-grid, ablation, and expert-comparison outputs.
-
-volume_backup/
-  Snapshot of relevant Modal volume artifacts.
 ```
 
 ## Integrity Notes

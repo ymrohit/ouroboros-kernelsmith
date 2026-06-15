@@ -1,6 +1,6 @@
 """Kernel canonicalization + dedup for the search loop.
 
-The advisor's correction (recorded in CLAUDE.md): in `discovery_specialist`, diversity IS
+The advisor's correction from the project notes: in `discovery_specialist`, diversity IS
 the objective and `mech_of` powers a novelty-or-die REWARD. Here the objective is the
 single FASTEST CORRECT kernel — diversity is just search exploration. So the analog of
 `mech_of` lives HERE as **dedup**, NOT as a reward:

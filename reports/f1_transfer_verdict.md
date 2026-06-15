@@ -1,6 +1,6 @@
 # F1 — does the loss-regime fix TRANSFER? (pre-registered, adjudicated)
 
-**Pre-registered prediction** (`docs/KEY_FINDINGS.md` slate, written before the run):
+**Pre-registered prediction** (internal prediction slate, written before the run):
 resuming from `rl_adapter_invent`, the whole-row schedule style transfers immediately and
 **≥8/10** of the worst remaining loss-cell ops flip to wins at 16384×2048.
 

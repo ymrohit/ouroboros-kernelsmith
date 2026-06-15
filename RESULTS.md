@@ -5,7 +5,7 @@ harness as the only arbiter. **Correctness is a boolean (allclose vs PyTorch, ad
 shapes/dtypes/magnitudes); speed is a number (CUDA-event median vs `torch.compile` max-autotune).**
 Everything below is verified by that harness — no self-reported numbers.
 
-Artifacts (private): 🤗 `YMRohit/ouroboros-kernelsmith-qwen3.6-27b` + local `./volume_backup/`.
+Artifacts (private): 🤗 `YMRohit/ouroboros-kernelsmith-qwen3.6-27b`.
 
 ---
 
@@ -60,7 +60,7 @@ stopped). The verifier's reward beats corpus-imitation for teaching new ops.
 ---
 
 ## Where everything lives
-HF repo `YMRohit/ouroboros-kernelsmith-qwen3.6-27b` (and mirrored in `./volume_backup/`):
+HF repo `YMRohit/ouroboros-kernelsmith-qwen3.6-27b`:
 - `sft_adapter/`, `rl_adapter/` (orig 16/16), `rl_adapter_newops/` (new 16) — LoRA, 2.55 GB each
 - `best_kernels/` — 32 model-authored fast Triton kernels (THE product)
 - `datasets/` (corpus, also `YMRohit/ouroboros-kernel-corpus`) · `reports/` (the 4 below)
@@ -163,9 +163,9 @@ the human carry-loop gold by 47% (invention-lite: primitive selection, labeled p
 problems vs ~69% familiar. Product → **76 kernels** (69 stability-gated + the 7 invention
 kernels, which stay a **single-shot probe vs max-autotune** — deliberately NOT folded into
 the reproducibility set; the paper states this protocol split explicitly).
-→ `reports/invention_verdict.md` · the referee-overruled-the-human catalog:
-`docs/KEY_FINDINGS.md` (running tally as of 2026-06-11: 10 falsifications + 2
-partial-mixed + 1 ratified prediction).
+→ `reports/invention_verdict.md`. The referee-overruled-the-human catalog is summarized
+there as of 2026-06-11: 10 falsifications, 2 partial-mixed results, and 1 ratified
+prediction.
 
 ## V2.8 The repair transfers ✅ (pre-registered prediction — HELD)
 Resumed from the invention adapter on the **10 worst remaining loss-cell operators**, pinned
@@ -200,8 +200,7 @@ contradiction). Code + paper: `github.com/ymrohit/ouroboros-kernelsmith` (privat
 ## V2.11 Hygiene (so the integrity is inspectable)
 Git history (v1 snapshot → every V2 change), top-level README (claim→evidence→bounds→repro),
 MIT LICENSE, CI + 11 CPU tests, `_2068` dataset naming fixed to actual counts, pseudo-KL
-relabeled as the |Δ seq-logprob| drift penalty it is, README_MODAL marked historical,
-docs/FRAMEWORK_VISION.md + docs/PAPER_PLAN.md.
+relabeled as the |Δ seq-logprob| drift penalty it is, README_MODAL marked historical.
 
 ## Integrity notes (what we refused)
 - Stopped the full continue-SFT when it interfered with proven ops (didn't burn epochs chasing it).

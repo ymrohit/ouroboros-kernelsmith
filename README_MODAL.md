@@ -20,7 +20,7 @@ ouroboros-modal/
     ├── rl_kernelsmith.py # PHASE 2 — RL / self-distill (reward = measured speedup)
     ├── rebench_stability.py
     ├── seed_kernels/     # gold kernels + deliberately-wrong negative controls
-    └── CLAUDE.md RESULTS.md   # reference (the doctrine + the recorded run)
+    └── RESULTS.md        # recorded run notes
 ```
 
 ## 1. One-time setup
